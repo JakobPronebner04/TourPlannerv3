@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.jp.tourplanner.view.TourMenuView">
+    <Button fx:id="addButton" onAction="#onAddTourClicked" text="%addTour.button"/>
+    <Button fx:id="editButton" onAction="#onEditTourClicked" text="%editTour.button"/>
+    <!--<Button fx:id="removeButton" onAction="#onRemoveTourClicked" text="%search.button"/>-->
+</HBox>

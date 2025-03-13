@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="360" prefWidth="640" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.jp.tourplanner.view.NewTourView">
+
+    <HBox VBox.vgrow="ALWAYS">
+
+        <VBox>
+            <Label text="%NewTour.label" style="-fx-font-weight: bold;"/>
+
+            <Label text="%TourName.label">
+                <VBox.margin>
+                    <Insets top="20"/>
+                </VBox.margin>
+            </Label>
+            <TextField fx:id="tourName"/>
+            <Label text="%TourDesc.label"/>
+            <TextField fx:id="tourDescription"/>
+            <Label text="%TourSrc.label"/>
+            <TextField fx:id="tourStart"/>
+            <Label text="%TourDest.label"/>
+            <TextField fx:id="tourDestination"/>
+            <Button onAction="#onAddNewTour"/>
+        </VBox>
+
+
+
+
+    </HBox>
+</VBox>
