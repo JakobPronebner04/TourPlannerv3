@@ -10,9 +10,10 @@ import java.util.Locale;
 
 public class WindowManager {
     private static WindowManager windowManager;
-    private WindowManager() {
+    private Stage currentStage;
+    private final String windowFolder = "dialogs/";
 
-    }
+    private WindowManager() {}
 
     public static WindowManager getInstance() {
         if (windowManager == null) {
@@ -21,30 +22,40 @@ public class WindowManager {
         return windowManager;
     }
 
-    public void openWindow(Windows window)  {
+    public void openWindow(Windows window) {
         String fxmlFile = "";
-        switch(window)
-        {
+        switch(window) {
             case Windows.NEW_TOUR_WINDOW:
                 fxmlFile = "newtour-view.fxml";
+                break;
+            case Windows.EDIT_TOUR_WINDOW:
+                fxmlFile = "edittour-view.fxml";
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported window: " + window);
         }
 
-        Parent view = null;
         try {
-            view = FXMLDependencyInjector.load(fxmlFile, Locale.ENGLISH);
+            Parent view = FXMLDependencyInjector.load(windowFolder+fxmlFile, Locale.ENGLISH);
+            if (view != null) {
+                Stage stage = new Stage();
+                stage.setScene(new Scene(view));
+                stage.show();
+                this.currentStage = stage;
+            } else {
+                throw new RuntimeException("Failed to load FXML file: " + fxmlFile);
+            }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error loading FXML: " + fxmlFile, e);
         }
+    }
 
-        if (view != null) {
-            Stage stage = new Stage();
-            stage.setScene(new Scene(view));
-            stage.show();
-        }else {
-            throw new RuntimeException("Failed to load FXML file: " + fxmlFile);
+    public void closeWindow() {
+        if (currentStage != null) {
+            currentStage.close();
+            currentStage = null;
+        } else {
+            System.out.println("Failed to close window.");
         }
     }
 }

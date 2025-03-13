@@ -3,10 +3,8 @@ package at.jp.tourplanner;
 
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.service.TourService;
-import at.jp.tourplanner.view.MainView;
-import at.jp.tourplanner.view.TourHistoryView;
-import at.jp.tourplanner.view.TourMenuView;
-import at.jp.tourplanner.view.NewTourView;
+import at.jp.tourplanner.view.*;
+import at.jp.tourplanner.viewmodel.EditTourViewModel;
 import at.jp.tourplanner.viewmodel.TourHistoryViewModel;
 import at.jp.tourplanner.viewmodel.TourMenuViewModel;
 import at.jp.tourplanner.viewmodel.NewTourViewModel;
@@ -46,10 +44,13 @@ public class ViewFactory {
         }
 
         if(NewTourView.class == viewClass) {
-            return new NewTourView(new NewTourViewModel(tourService));
+            return new NewTourView(new NewTourViewModel(tourService,windowManager));
         }
         if(TourHistoryView.class == viewClass) {
             return new TourHistoryView(new TourHistoryViewModel(eventManager,tourService));
+        }
+        if(EditTourView.class == viewClass) {
+            return new EditTourView(new EditTourViewModel(tourService,windowManager));
         }
 
         throw new IllegalArgumentException(

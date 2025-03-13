@@ -1,5 +1,6 @@
 package at.jp.tourplanner.window;
 
 public enum Windows {
-    NEW_TOUR_WINDOW
+    NEW_TOUR_WINDOW,
+    EDIT_TOUR_WINDOW
 }

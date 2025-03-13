@@ -4,6 +4,7 @@ import at.jp.tourplanner.viewmodel.NewTourViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,6 +22,9 @@ public class NewTourView implements Initializable {
     @FXML
     private TextField tourDestination;
 
+    @FXML
+    private Text errorMessage;
+
     public NewTourView(NewTourViewModel viewModel) {
         this.viewModel = viewModel;
     }
@@ -31,6 +35,7 @@ public class NewTourView implements Initializable {
         tourDescription.textProperty().bindBidirectional(viewModel.tourDescriptionProperty());
         tourStart.textProperty().bindBidirectional(viewModel.tourStartProperty());
         tourDestination.textProperty().bindBidirectional(viewModel.tourDestinationProperty());
+        errorMessage.textProperty().bindBidirectional(viewModel.errorMessageProperty());
     }
 
     public void onAddNewTour()
