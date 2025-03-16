@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.jp.tourplanner.view.TourMenuView">
+<HBox xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.jp.tourplanner.view.tour.TourMenuView">
     <Button fx:id="addButton" onAction="#onAddTourClicked" text="%addTour.button"/>
     <Button fx:id="editButton" onAction="#onEditTourClicked" text="%editTour.button"/>
     <Button fx:id="removeButton" onAction="#onRemoveTourClicked" text="%removeTour.button"/>

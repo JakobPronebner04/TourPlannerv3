@@ -6,14 +6,24 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class WindowManager {
     private static WindowManager windowManager;
     private Stage currentStage;
     private final String windowFolder = "dialogs/";
+    private final Map<Windows,String> windowMap;
 
-    private WindowManager() {}
+    private WindowManager() {
+        windowMap = new HashMap<>();
+        windowMap.put(Windows.NEW_TOUR_WINDOW       ,"newtour-view");
+        windowMap.put(Windows.EDIT_TOUR_WINDOW      ,"edittour-view");
+        windowMap.put(Windows.NEW_TOURLOG_WINDOW    ,"newtourlog-view");
+        windowMap.put(Windows.EDIT_TOURLOG_WINDOW   ,"edittourlog-view");
+        windowMap.put(Windows.DETAILS_TOURLOG_WINDOW,"detailedtourlog-view");
+    }
 
     public static WindowManager getInstance() {
         if (windowManager == null) {
@@ -23,20 +33,14 @@ public class WindowManager {
     }
 
     public void openWindow(Windows window) {
-        String fxmlFile = "";
-        switch(window) {
-            case Windows.NEW_TOUR_WINDOW:
-                fxmlFile = "newtour-view.fxml";
-                break;
-            case Windows.EDIT_TOUR_WINDOW:
-                fxmlFile = "edittour-view.fxml";
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported window: " + window);
-        }
+       if(!windowMap.containsKey(window))
+       {
+           throw new IllegalArgumentException("Window does not exist: " + window);
+       }
+       String fxmlFile = windowMap.get(window);
 
         try {
-            Parent view = FXMLDependencyInjector.load(windowFolder+fxmlFile, Locale.ENGLISH);
+            Parent view = FXMLDependencyInjector.load(windowFolder + fxmlFile +".fxml", Locale.ENGLISH);
             if (view != null) {
                 Stage stage = new Stage();
                 stage.setScene(new Scene(view));

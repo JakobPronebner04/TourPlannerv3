@@ -3,9 +3,8 @@ package at.jp.tourplanner.service;
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
 import at.jp.tourplanner.model.Tour;
+import at.jp.tourplanner.repository.StateRepository;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -14,14 +13,14 @@ import java.util.List;
 public class TourService {
 
     private final EventManager eventManager;
+    private final StateRepository stateRepository;
 
     private final List<Tour> tours;
-    private Tour selectedTour;
 
-    public TourService(EventManager eventManager) {
+    public TourService(EventManager eventManager, StateRepository stateRepository) {
         this.eventManager = eventManager;
+        this.stateRepository = stateRepository;
         this.tours = new ArrayList<>();
-        selectedTour = new Tour();
     }
     public List<Tour> getTours() {
         return tours;
@@ -32,25 +31,32 @@ public class TourService {
         this.tours.add(t);
         eventManager.publish(Events.TOURS_CHANGED, "NEW_TOUR");
     }
+    public void updateSelectedTour(Tour t) {
+        stateRepository.updateSelectedTour(t);
+    }
+    public void updateSelectedTourPrev(Tour prevTour) {
+        stateRepository.updateSelectedTourPrev(prevTour);
+    }
 
-    public void addAndChange(Tour editedTour) throws IllegalAccessException
+
+    public Tour getSelectedTour()
+    {
+        return stateRepository.getSelectedTour();
+    }
+
+    public void Change(Tour editedTour) throws IllegalAccessException
     {
         hasNullProperties(editedTour);
-        int index = tours.indexOf(selectedTour);
+        int index = tours.indexOf(stateRepository.getSelectedTour());
         tours.set(index, editedTour);
-        eventManager.publish(Events.TOURS_CHANGED, "EDITED_TOUR");
-    }
-
-    public void setSelectedTour(Tour t) {
-        this.selectedTour = t;
-    }
-    public Tour getSelectedTour() {
-        return this.selectedTour;
+        stateRepository.updateSelectedTourPrev(stateRepository.getSelectedTour());
+        stateRepository.updateSelectedTour(editedTour);
+        eventManager.publish(Events.TOURS_EDITED, "UPDATE_TOURLOGS");
     }
 
     public void remove() {
-        this.tours.remove(selectedTour);
-        eventManager.publish(Events.TOURS_CHANGED, "NEW_TOUR");
+        this.tours.remove(stateRepository.getSelectedTour());
+        eventManager.publish(Events.TOURS_CHANGED, "REMOVE_TOUR");
     }
 
     private void hasNullProperties(Tour tour) throws IllegalAccessException {

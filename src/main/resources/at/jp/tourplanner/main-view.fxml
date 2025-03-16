@@ -4,10 +4,27 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="720" prefWidth="1280" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.jp.tourplanner.view.MainView">
+<HBox prefHeight="720" prefWidth="1280" spacing="20" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1">
 
-    <fx:include source="menu-view.fxml" />
+        <VBox>
+                <HBox alignment="CENTER" style="-fx-font-weight: bold;">
+                        <Label text="%HeaderTours.label" />
+                </HBox>
+                <VBox style="-fx-padding: 10 0 0 0;">
+                        <fx:include source="tourmenu-view.fxml" />
+                        <fx:include source="tourhistory-view.fxml"/>
+                </VBox>
+        </VBox>
 
-    <fx:include source="tourlist-history.fxml"/>
+        <VBox>
+                <HBox alignment="CENTER" style="-fx-font-weight: bold;">
+                        <Label text="%HeaderTourLogs.label"/>
+                </HBox>
+                <VBox style="-fx-padding: 10 0 0 0;">
+                        <fx:include source="tourlogmenu-view.fxml"/>
+                        <fx:include source="tourloghistory-view.fxml"/>
+                </VBox>
+        </VBox>
 
-</VBox>
+</HBox>
+

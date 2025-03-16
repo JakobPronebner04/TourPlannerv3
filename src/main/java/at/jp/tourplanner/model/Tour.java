@@ -3,6 +3,8 @@ package at.jp.tourplanner.model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.awt.*;
+
 public class Tour {
     private final StringProperty tourName;
 
@@ -11,12 +13,14 @@ public class Tour {
     private final StringProperty tourStart;
 
     private final StringProperty tourDestination;
+    private final Image tourImage;
 
     public Tour() {
         this.tourName = new SimpleStringProperty("");
         this.tourDescription = new SimpleStringProperty("");
         this.tourStart = new SimpleStringProperty("");
         this.tourDestination = new SimpleStringProperty("");
+        this.tourImage = null;
     }
 
     public StringProperty tourNameProperty()

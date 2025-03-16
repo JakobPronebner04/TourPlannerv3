@@ -1,4 +1,4 @@
-package at.jp.tourplanner.viewmodel;
+package at.jp.tourplanner.viewmodel.tour;
 
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
@@ -9,6 +9,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.util.Objects;
 
 public class TourHistoryViewModel {
     private final EventManager eventManager;
@@ -31,8 +33,9 @@ public class TourHistoryViewModel {
 
     private void onSelectedTourChanged(Observable observable, Tour oldTour, Tour newTour) {
         boolean isDisabled = (newTour == null);
-        this.eventManager.publish(Events.TOUR_SELECTED, String.valueOf(isDisabled));
-        tourService.setSelectedTour(newTour);
+        tourService.updateSelectedTour(newTour);
+        tourService.updateSelectedTourPrev(oldTour);
+        this.eventManager.publish(Events.TOUR_SELECTED, isDisabled);
     }
 
     private void onToursChanged(String message) {

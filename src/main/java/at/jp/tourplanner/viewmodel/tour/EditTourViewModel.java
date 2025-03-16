@@ -1,6 +1,7 @@
-package at.jp.tourplanner.viewmodel;
+package at.jp.tourplanner.viewmodel.tour;
 
 import at.jp.tourplanner.model.Tour;
+import at.jp.tourplanner.service.TourLogService;
 import at.jp.tourplanner.service.TourService;
 import at.jp.tourplanner.window.WindowManager;
 import javafx.beans.property.SimpleStringProperty;
@@ -33,8 +34,7 @@ public class EditTourViewModel {
     {
         try
         {
-            tourService.addAndChange(editedTour);
-            windowManager.closeWindow();
+            tourService.Change(editedTour);
         } catch (IllegalAccessException e) {
             errorMessageProperty.set("Some inputs might be empty!");
         }

@@ -1,12 +1,11 @@
-package at.jp.tourplanner.view;
+package at.jp.tourplanner.view.tour;
 
 import at.jp.tourplanner.model.Tour;
-import at.jp.tourplanner.viewmodel.TourHistoryViewModel;
+import at.jp.tourplanner.viewmodel.tour.TourHistoryViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -16,7 +15,7 @@ public class TourHistoryView implements Initializable {
     private final TourHistoryViewModel viewModel;
 
     @FXML
-    private TableView<Tour> searchHistoryTable;
+    private TableView<Tour> tourHistoryTable;
 
     @FXML
     private TableColumn<Tour, String> colName;
@@ -37,8 +36,7 @@ public class TourHistoryView implements Initializable {
         colDescription.setCellValueFactory(cellData -> cellData.getValue().tourDescriptionProperty());
         colStart.setCellValueFactory(cellData -> cellData.getValue().tourStartProperty());
         colDestination.setCellValueFactory(cellData -> cellData.getValue().tourDestinationProperty());
-        viewModel.selectedTour()
-                .bind(searchHistoryTable.getSelectionModel().selectedItemProperty());
-        if(searchHistoryTable!=null) searchHistoryTable.setItems(viewModel.getTourHistory());
+        viewModel.selectedTour().bind(tourHistoryTable.getSelectionModel().selectedItemProperty());
+        if(tourHistoryTable!=null) tourHistoryTable.setItems(viewModel.getTourHistory());
     }
 }

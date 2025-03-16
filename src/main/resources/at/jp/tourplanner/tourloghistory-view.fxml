@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.util.Callback?>
+<HBox xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="at.jp.tourplanner.view.tourlog.TourLogHistoryView">
+
+    <TableView fx:id="tourLogHistoryTable">
+        <columns>
+            <TableColumn fx:id="comment" text="%TourLogComment.label" prefWidth="280"/>
+            <TableColumn fx:id="rating" text="%TourLogRating.label" prefWidth="80"/>
+        </columns>
+    </TableView>
+
+</HBox>
+

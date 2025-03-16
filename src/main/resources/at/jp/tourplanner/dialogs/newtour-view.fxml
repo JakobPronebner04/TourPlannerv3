@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.text.Text?>
-<VBox prefHeight="360" prefWidth="640" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.jp.tourplanner.view.NewTourView">
+<VBox prefHeight="360" prefWidth="640" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.jp.tourplanner.view.tour.NewTourView">
 
     <HBox VBox.vgrow="ALWAYS">
 
@@ -24,7 +24,7 @@
             <TextField fx:id="tourStart"/>
             <Label text="%TourDest.label"/>
             <TextField fx:id="tourDestination"/>
-            <Button onAction="#onAddNewTour"/>
+            <Button onAction="#onAddNewTour" text="%confirmAdd.button"/>
             <Text fx:id="errorMessage"/>
         </VBox>
     </HBox>

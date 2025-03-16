@@ -1,7 +1,6 @@
-package at.jp.tourplanner.view;
+package at.jp.tourplanner.view.tour;
 
-import at.jp.tourplanner.viewmodel.EditTourViewModel;
-import at.jp.tourplanner.viewmodel.NewTourViewModel;
+import at.jp.tourplanner.viewmodel.tour.EditTourViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;

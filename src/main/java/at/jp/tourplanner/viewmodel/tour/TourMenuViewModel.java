@@ -1,4 +1,4 @@
-package at.jp.tourplanner.viewmodel;
+package at.jp.tourplanner.viewmodel.tour;
 
 
 import at.jp.tourplanner.event.EventManager;
@@ -8,8 +8,6 @@ import at.jp.tourplanner.window.WindowManager;
 import at.jp.tourplanner.window.Windows;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-
-import java.sql.SQLOutput;
 
 public class TourMenuViewModel {
 
@@ -29,10 +27,9 @@ public class TourMenuViewModel {
         );
     }
 
-    public void onTourSelectedChanged(String message) {
-        boolean isDisabled = Boolean.parseBoolean(message);
-        editDisabled.set(isDisabled);
-        removeDisabled.set(isDisabled);
+    public void onTourSelectedChanged(Boolean state) {
+        editDisabled.set(state);
+        removeDisabled.set(state);
     }
     public void openNewTourWindow(Windows window){
             windowManager.openWindow(window);

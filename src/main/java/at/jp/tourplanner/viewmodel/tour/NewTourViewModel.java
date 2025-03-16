@@ -1,4 +1,4 @@
-package at.jp.tourplanner.viewmodel;
+package at.jp.tourplanner.viewmodel.tour;
 
 import at.jp.tourplanner.model.Tour;
 import at.jp.tourplanner.service.TourService;
