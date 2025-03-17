@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.text.Text;
 
 import java.net.URL;
@@ -16,6 +17,10 @@ public class EditTourLogView implements Initializable {
     private final EditTourLogViewModel viewModel;
     @FXML
     private TextArea commentInputEdit;
+    @FXML
+    private TextField actualTimeInput;
+    @FXML
+    private TextField actualDistanceInput;
     @FXML
     private Slider ratingSliderEdit;
     @FXML
@@ -28,6 +33,8 @@ public class EditTourLogView implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         commentInputEdit.textProperty().bindBidirectional(viewModel.tourLogCommentProperty());
+        actualTimeInput.textProperty().bindBidirectional(viewModel.tourLogActualTimeProperty());
+        actualDistanceInput.textProperty().bindBidirectional(viewModel.tourLogActualDistanceProperty());
         ratingSliderEdit.valueProperty().bindBidirectional(viewModel.tourLogRatingProperty());
         errorMessage.textProperty().bind(viewModel.errorMessageProperty());
     }

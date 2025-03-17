@@ -5,6 +5,8 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.text.Text?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <VBox prefHeight="360" prefWidth="640" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.jp.tourplanner.view.tour.NewTourView">
 
     <HBox VBox.vgrow="ALWAYS">
@@ -24,6 +26,16 @@
             <TextField fx:id="tourStart"/>
             <Label text="%TourDest.label"/>
             <TextField fx:id="tourDestination"/>
+            <Label text="%TourTransport.label"/>
+            <ChoiceBox fx:id="transportChoiceBox" prefWidth="150" value="Car">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Car"/>
+                        <String fx:value="Bicycle"/>
+                        <String fx:value="Walking"/>
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
             <Button onAction="#onAddNewTour" text="%confirmAdd.button"/>
             <Text fx:id="errorMessage"/>
         </VBox>

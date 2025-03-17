@@ -5,9 +5,7 @@ import at.jp.tourplanner.model.TourLog;
 import at.jp.tourplanner.service.TourLogService;
 import at.jp.tourplanner.service.TourService;
 import at.jp.tourplanner.window.WindowManager;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 public class EditTourViewModel {
     private final TourService tourService;
@@ -17,6 +15,8 @@ public class EditTourViewModel {
     private final StringProperty tourDescriptionProperty;
     private final StringProperty tourStartProperty;
     private final StringProperty tourDestinationProperty;
+    private final ObjectProperty<String> tourTransportTypeProperty;
+    private final Tour updatedTour;
 
     public EditTourViewModel(TourService tourService, WindowManager windowManager) {
         this.tourService = tourService;
@@ -26,23 +26,29 @@ public class EditTourViewModel {
         this.tourNameProperty = new SimpleStringProperty(selectedTour.getTourName());
         this.tourDescriptionProperty = new SimpleStringProperty(selectedTour.getTourDescription());
         this.tourStartProperty = new SimpleStringProperty(selectedTour.getTourStart());
-        this.tourDestinationProperty = new SimpleStringProperty(selectedTour.getTourDescription());
+        this.tourDestinationProperty = new SimpleStringProperty(selectedTour.getTourDestination());
+        this.tourTransportTypeProperty = new SimpleObjectProperty<>(selectedTour.getTourTransportType());
+        this.updatedTour = new Tour();
     }
+
 
     public StringProperty tourNameProperty() { return tourNameProperty; }
     public StringProperty tourDescriptionProperty() { return tourDescriptionProperty; }
     public StringProperty tourStartProperty() { return tourStartProperty; }
     public StringProperty tourDestinationProperty() { return tourDestinationProperty; }
     public StringProperty errorMessageProperty() {return errorMessageProperty;}
+    public ObjectProperty<String> tourTransportTypeProperty() { return tourTransportTypeProperty; }
+
+
     public void editSelectedTour()
     {
         try
         {
-            Tour updatedTour = new Tour();
-            updatedTour.setTourName(tourNameProperty().get());
-            updatedTour.setTourDescription(tourDescriptionProperty().get());
-            updatedTour.setTourStart(tourStartProperty().get());
-            updatedTour.setTourDescription(tourDescriptionProperty().get());
+            updatedTour.setTourName(tourNameProperty.getValue());
+            updatedTour.setTourDescription(tourDescriptionProperty.getValue());
+            updatedTour.setTourStart(tourStartProperty.getValue());
+            updatedTour.setTourDestination(tourDestinationProperty.getValue());
+            updatedTour.setTourTransportType(tourTransportTypeProperty.getValue());
 
             tourService.Change(updatedTour);
         } catch (IllegalAccessException e) {

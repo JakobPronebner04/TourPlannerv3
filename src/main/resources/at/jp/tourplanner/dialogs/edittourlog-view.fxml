@@ -22,6 +22,10 @@
                 </VBox.margin>
             </Label>
             <TextArea fx:id="commentInputEdit" prefWidth="200" prefHeight="150" wrapText="true"/>
+            <Label text="%TourLogActualTime.label"/>
+            <TextField fx:id="actualTimeInput" prefWidth="100" prefHeight="30"/>
+            <Label text="%TourLogActualDistance.label"/>
+            <TextField fx:id="actualDistanceInput" prefWidth="100" prefHeight="30"/>
             <Label text="%TourLogRating.label"/>
             <Slider fx:id="ratingSliderEdit" min="0" max="5" value="0" blockIncrement="1" majorTickUnit="1" minorTickCount="0" snapToTicks="true" showTickMarks="true" showTickLabels="true"/>
             <Button onAction="#onEditSelectedTourLog" text="%confirmAdd.button"/>

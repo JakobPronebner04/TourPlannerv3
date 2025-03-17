@@ -87,9 +87,17 @@ public class TourLogService {
             field.setAccessible(true);
             Object value = field.get(tourLog);
 
-            if (value instanceof StringProperty) {
-                StringProperty property = (StringProperty) value;
-                if (property == null || property.get() == null || property.get().isEmpty()) {
+            if (value instanceof String) {
+                String stringValue = (String) value;
+                if (stringValue == null || stringValue.isEmpty()) {
+                    throw new IllegalAccessException();
+                }
+            }
+            else if(value instanceof Float)
+            {
+                float floatValue = (float) value;
+                if(floatValue == 0.0f)
+                {
                     throw new IllegalAccessException();
                 }
             }

@@ -7,6 +7,7 @@ public class Tour {
     private String tourDescription;
     private String tourStart;
     private String tourDestination;
+    private String tourTransportType;
     private Image tourImage;
 
     public Tour() {
@@ -14,6 +15,7 @@ public class Tour {
         this.tourDescription = "";
         this.tourStart = "";
         this.tourDestination = "";
+        this.tourTransportType = "Car";
         this.tourImage = null;
     }
 
@@ -47,6 +49,13 @@ public class Tour {
 
     public void setTourDestination(String tourDestination) {
         this.tourDestination = tourDestination;
+    }
+
+    public String getTourTransportType() {
+        return tourTransportType;
+    }
+    public void setTourTransportType(String tourTransportType) {
+        this.tourTransportType = tourTransportType;
     }
 
     public Image getTourImage() {

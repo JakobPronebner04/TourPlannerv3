@@ -26,6 +26,8 @@ public class TourHistoryView implements Initializable {
     private TableColumn<Tour, String> colDestination;
     @FXML
     private TableColumn<Tour, String> colDescription;
+    @FXML
+    private TableColumn<Tour, String> colTransportType;
 
     public TourHistoryView(TourHistoryViewModel viewModel) {
         this.viewModel = viewModel;
@@ -37,6 +39,7 @@ public class TourHistoryView implements Initializable {
         colDescription.setCellValueFactory(new PropertyValueFactory<>("tourDescription"));
         colStart.setCellValueFactory(new PropertyValueFactory<>("tourStart"));
         colDestination.setCellValueFactory(new PropertyValueFactory<>("tourDestination"));
+        colTransportType.setCellValueFactory(new PropertyValueFactory<>("tourTransportType"));
 
         viewModel.selectedTour().bind(tourHistoryTable.getSelectionModel().selectedItemProperty());
 

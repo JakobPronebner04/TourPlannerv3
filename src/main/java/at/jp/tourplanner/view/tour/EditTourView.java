@@ -3,6 +3,7 @@ package at.jp.tourplanner.view.tour;
 import at.jp.tourplanner.viewmodel.tour.EditTourViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
@@ -21,6 +22,8 @@ public class EditTourView implements Initializable {
     private TextField tourStartEdit;
     @FXML
     private TextField tourDestinationEdit;
+    @FXML
+    private ChoiceBox<String> transportChoiceBox;
 
     @FXML
     private Text errorMessage;
@@ -31,6 +34,7 @@ public class EditTourView implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        transportChoiceBox.valueProperty().bindBidirectional(viewModel.tourTransportTypeProperty());
         tourNameEdit.textProperty().bindBidirectional(viewModel.tourNameProperty());
         tourDescriptionEdit.textProperty().bindBidirectional(viewModel.tourDescriptionProperty());
         tourStartEdit.textProperty().bindBidirectional(viewModel.tourStartProperty());

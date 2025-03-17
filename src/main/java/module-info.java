@@ -19,4 +19,5 @@ module at.jp.tourplanner {
     opens at.jp.tourplanner.view.tourlog to javafx.fxml;
     exports at.jp.tourplanner.repository;
     opens at.jp.tourplanner.repository to javafx.fxml;
+    exports at.jp.tourplanner.utils;
 }

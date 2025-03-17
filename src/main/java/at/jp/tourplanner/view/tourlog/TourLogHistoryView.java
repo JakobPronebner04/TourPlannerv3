@@ -10,6 +10,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class TourLogHistoryView implements Initializable {
@@ -23,6 +24,12 @@ public class TourLogHistoryView implements Initializable {
     private TableColumn<TourLog, String> comment;
     @FXML
     private TableColumn<TourLog, Integer> rating;
+    @FXML
+    private TableColumn<TourLog, Date> dateTime;
+    @FXML
+    private TableColumn<TourLog, String> actualTime;
+    @FXML
+    private TableColumn<TourLog, String> actualDistance;
 
     public TourLogHistoryView(TourLogHistoryViewModel viewModel) {
         this.viewModel = viewModel;
@@ -30,7 +37,12 @@ public class TourLogHistoryView implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        dateTime.setCellValueFactory(new PropertyValueFactory<>("dateTime"));
+        actualTime.setCellValueFactory(new PropertyValueFactory<>("actualTime"));
+        actualDistance.setCellValueFactory(new PropertyValueFactory<>("actualDistance"));
         comment.setCellValueFactory(new PropertyValueFactory<>("comment"));
+        rating.setCellValueFactory(new PropertyValueFactory<>("rating"));
+
         comment.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -42,8 +54,6 @@ public class TourLogHistoryView implements Initializable {
                 }
             }
         });
-
-        rating.setCellValueFactory(new PropertyValueFactory<>("rating"));
 
         tourLogHistoryTable.disableProperty().bind(viewModel.tourLogTableDisabledProperty());
         viewModel.selectedTourLog().bind(tourLogHistoryTable.getSelectionModel().selectedItemProperty());

@@ -8,6 +8,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Text?>
+<?import javafx.collections.FXCollections?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="at.jp.tourplanner.view.tour.EditTourView"
@@ -29,6 +30,15 @@
             <TextField fx:id="tourStartEdit"/>
             <Label text="%TourDest.label"/>
             <TextField fx:id="tourDestinationEdit"/>
+            <ChoiceBox fx:id="transportChoiceBox" prefWidth="150" value="Car">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Car"/>
+                        <String fx:value="Bicycle"/>
+                        <String fx:value="Walking"/>
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
             <Button onAction="#onEditSelectedTour" focusTraversable="false"/>
             <Text fx:id="errorMessage" text="%confirmEdit.button"/>
         </VBox>

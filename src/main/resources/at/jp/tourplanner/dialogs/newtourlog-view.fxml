@@ -15,13 +15,16 @@
     <HBox VBox.vgrow="ALWAYS">
         <VBox>
             <Label text="%NewTourLog.label" style="-fx-font-weight: bold;"/>
-
             <Label text="%TourLogComment.label">
                 <VBox.margin>
                     <Insets top="20"/>
                 </VBox.margin>
             </Label>
             <TextArea fx:id="commentInput" prefWidth="200" prefHeight="150" wrapText="true"/>
+            <Label text="%TourLogActualTime.label"/>
+            <TextField fx:id="actualTimeInput" prefWidth="100" prefHeight="30"/>
+            <Label text="%TourLogActualDistance.label"/>
+            <TextField fx:id="actualDistanceInput" prefWidth="100" prefHeight="30"/>
             <Label text="%TourLogRating.label"/>
             <Slider fx:id="ratingSlider" min="0" max="5" value="0" blockIncrement="1" majorTickUnit="1" minorTickCount="0" snapToTicks="true" showTickMarks="true" showTickLabels="true"/>
             <Button onAction="#onAddNewTourLogEntry" text="%confirmAdd.button"/>
