@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -29,7 +30,7 @@ public class TourLogHistoryView implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        comment.setCellValueFactory(cellData -> cellData.getValue().tourLogCommentProperty());
+        comment.setCellValueFactory(new PropertyValueFactory<>("comment"));
         comment.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -42,9 +43,13 @@ public class TourLogHistoryView implements Initializable {
             }
         });
 
-        rating.setCellValueFactory(cellData -> cellData.getValue().tourLogRatingProperty().asObject());
+        rating.setCellValueFactory(new PropertyValueFactory<>("rating"));
+
         tourLogHistoryTable.disableProperty().bind(viewModel.tourLogTableDisabledProperty());
         viewModel.selectedTourLog().bind(tourLogHistoryTable.getSelectionModel().selectedItemProperty());
-        if(tourLogHistoryTable!=null) tourLogHistoryTable.setItems(viewModel.getTourLogHistory());
+
+        if (tourLogHistoryTable != null) {
+            tourLogHistoryTable.setItems(viewModel.getTourLogHistory());
+        }
     }
 }

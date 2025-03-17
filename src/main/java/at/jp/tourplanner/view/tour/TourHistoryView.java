@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -32,11 +33,15 @@ public class TourHistoryView implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        colName.setCellValueFactory(cellData -> cellData.getValue().tourNameProperty());
-        colDescription.setCellValueFactory(cellData -> cellData.getValue().tourDescriptionProperty());
-        colStart.setCellValueFactory(cellData -> cellData.getValue().tourStartProperty());
-        colDestination.setCellValueFactory(cellData -> cellData.getValue().tourDestinationProperty());
+        colName.setCellValueFactory(new PropertyValueFactory<>("tourName"));
+        colDescription.setCellValueFactory(new PropertyValueFactory<>("tourDescription"));
+        colStart.setCellValueFactory(new PropertyValueFactory<>("tourStart"));
+        colDestination.setCellValueFactory(new PropertyValueFactory<>("tourDestination"));
+
         viewModel.selectedTour().bind(tourHistoryTable.getSelectionModel().selectedItemProperty());
-        if(tourHistoryTable!=null) tourHistoryTable.setItems(viewModel.getTourHistory());
+
+        if (tourHistoryTable != null) {
+            tourHistoryTable.setItems(viewModel.getTourHistory());
+        }
     }
 }

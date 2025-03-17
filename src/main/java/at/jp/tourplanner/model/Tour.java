@@ -1,42 +1,59 @@
 package at.jp.tourplanner.model;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 import java.awt.*;
 
 public class Tour {
-    private final StringProperty tourName;
-
-    private final StringProperty tourDescription;
-
-    private final StringProperty tourStart;
-
-    private final StringProperty tourDestination;
-    private final Image tourImage;
+    private String tourName;
+    private String tourDescription;
+    private String tourStart;
+    private String tourDestination;
+    private Image tourImage;
 
     public Tour() {
-        this.tourName = new SimpleStringProperty("");
-        this.tourDescription = new SimpleStringProperty("");
-        this.tourStart = new SimpleStringProperty("");
-        this.tourDestination = new SimpleStringProperty("");
+        this.tourName = "";
+        this.tourDescription = "";
+        this.tourStart = "";
+        this.tourDestination = "";
         this.tourImage = null;
     }
 
-    public StringProperty tourNameProperty()
-    {
-        return this.tourName;
+    public String getTourName() {
+        return tourName;
     }
-    public StringProperty tourDescriptionProperty()
-    {
-        return this.tourDescription;
+
+    public void setTourName(String tourName) {
+        this.tourName = tourName;
     }
-    public StringProperty tourStartProperty()
-    {
-        return this.tourStart;
+
+    public String getTourDescription() {
+        return tourDescription;
     }
-    public StringProperty tourDestinationProperty()
-    {
-        return this.tourDestination;
+
+    public void setTourDescription(String tourDescription) {
+        this.tourDescription = tourDescription;
+    }
+
+    public String getTourStart() {
+        return tourStart;
+    }
+
+    public void setTourStart(String tourStart) {
+        this.tourStart = tourStart;
+    }
+
+    public String getTourDestination() {
+        return tourDestination;
+    }
+
+    public void setTourDestination(String tourDestination) {
+        this.tourDestination = tourDestination;
+    }
+
+    public Image getTourImage() {
+        return tourImage;
+    }
+
+    public void setTourImage(Image tourImage) {
+        this.tourImage = tourImage;
     }
 }

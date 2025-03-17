@@ -1,26 +1,27 @@
 package at.jp.tourplanner.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 public class TourLog {
-    private final StringProperty comment;
-
-    private final IntegerProperty rating;
+    private String comment;
+    private int rating;
 
     public TourLog() {
-        this.comment = new SimpleStringProperty("");
-        this.rating = new SimpleIntegerProperty(0);
+        this.comment = "";
+        this.rating = 0;
     }
 
-    public StringProperty tourLogCommentProperty()
-    {
-        return this.comment;
+    public String getComment() {
+        return comment;
     }
-    public IntegerProperty tourLogRatingProperty()
-    {
-        return this.rating;
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }

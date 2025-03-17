@@ -30,6 +30,7 @@ public class NewTourLogView implements Initializable {
         errorMessage.textProperty().bind(viewModel.errorMessageProperty());
     }
 
+
     public void onAddNewTourLogEntry()
     {
         viewModel.addTourLog();
