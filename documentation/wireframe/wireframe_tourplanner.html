@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Wireframe - Tourplanner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        header {
+            background-color: #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        header input[type="text"] {
+            width: 80%;
+            padding: 8px;
+            font-size: 16px;
+        }
+        .container {
+            display: flex;
+            padding: 10px;
+        }
+        .column {
+            flex: 1;
+            margin: 10px;
+            background-color: #fff;
+            border: 2px dashed #999;
+            padding: 20px;
+            text-align: center;
+        }
+        .map-placeholder {
+            margin: 10px;
+            background-color: #fff;
+            border: 2px dashed #999;
+            padding: 20px;
+            text-align: center;
+            height: 200px;
+        }
+        footer {
+            background-color: #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        footer button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <input type="text" placeholder="Suche...">
+</header>
+<div class="container">
+    <div class="column">
+        <h2>Tours</h2>
+    </div>
+    <div class="column">
+        <h2>Tourlog</h2>
+    </div>
+</div>
+<div class="map-placeholder">
+    <h2>Map</h2>
+</div>
+<footer>
+    <button>Add</button>
+    <button>Edit</button>
+    <button>Delete</button>
+</footer>
+</body>
+</html>

@@ -1,0 +1,374 @@
+classDiagram
+    %% ===== Core Klassen =====
+    class FXMLDependencyInjector {
+      +load(location: String, locale: Locale) : Parent
+      +loader(location: String, locale: Locale) : FXMLLoader
+    }
+
+    class SearchApplication {
+      +start(stage: Stage) : void
+      +main(args: String[]) : void
+    }
+    SearchApplication --|> Application
+
+    class ViewFactory {
+      <<singleton>>
+      -instance: ViewFactory
+      -eventManager: EventManager
+      -tourService: TourService
+      -tourLogService: TourLogService
+      -windowManager: WindowManager
+      -stateRepository: StateRepository
+      +getInstance() : ViewFactory
+      +create(viewClass: Class<?>) : Object
+    }
+
+    %% ===== Model Klassen =====
+    class Tour {
+      -tourName: String
+      -tourDescription: String
+      -tourStart: String
+      -tourDestination: String
+      -tourImage: Image
+      +getTourName() : String
+      +setTourName(String) : void
+      +getTourDescription() : String
+      +setTourDescription(String) : void
+      +getTourStart() : String
+      +setTourStart(String) : void
+      +getTourDestination() : String
+      +setTourDestination(String) : void
+      +getTourImage() : Image
+      +setTourImage(Image) : void
+    }
+
+    class TourLog {
+      -comment: String
+      -rating: int
+      +getComment() : String
+      +setComment(String) : void
+      +getRating() : int
+      +setRating(int) : void
+    }
+
+    %% ===== ViewModel Klassen (Tour) =====
+    class TourHistoryViewModel {
+      -eventManager: EventManager
+      -tourService: TourService
+      -tourHistory: ObservableList~Tour~
+      -selectedTour: ObjectProperty~Tour~
+      +onSelectedTourChanged(...): void
+      +onToursChanged(String) : void
+      +getTourHistory() : ObservableList~Tour~
+      +selectedTour() : ObjectProperty~Tour~
+    }
+
+    class NewTourViewModel {
+      -tourService: TourService
+      -windowManager: WindowManager
+      -errorMessageProperty: StringProperty
+      -tourNameProperty: StringProperty
+      -tourDescriptionProperty: StringProperty
+      -tourStartProperty: StringProperty
+      -tourDestinationProperty: StringProperty
+      +tourNameProperty() : StringProperty
+      +tourDescriptionProperty() : StringProperty
+      +tourStartProperty() : StringProperty
+      +tourDestinationProperty() : StringProperty
+      +errorMessageProperty() : StringProperty
+      +addTour() : void
+    }
+
+    class EditTourViewModel {
+      -tourService: TourService
+      -windowManager: WindowManager
+      -errorMessageProperty: StringProperty
+      -tourNameProperty: StringProperty
+      -tourDescriptionProperty: StringProperty
+      -tourStartProperty: StringProperty
+      -tourDestinationProperty: StringProperty
+      +tourNameProperty() : StringProperty
+      +tourDescriptionProperty() : StringProperty
+      +tourStartProperty() : StringProperty
+      +tourDestinationProperty() : StringProperty
+      +errorMessageProperty() : StringProperty
+      +editSelectedTour() : void
+    }
+
+    class TourMenuViewModel {
+      -tourService: TourService
+      -windowManager: WindowManager
+      -eventManager: EventManager
+      -editDisabled: BooleanProperty
+      -removeDisabled: BooleanProperty
+      +onTourSelectedChanged(Boolean) : void
+      +openNewTourWindow(window: Windows) : void
+      +editDisabledProperty() : BooleanProperty
+      +removeDisabledProperty() : BooleanProperty
+      +deleteTour() : void
+    }
+
+    %% ===== ViewModel Klassen (TourLog) =====
+    class TourLogHistoryViewModel {
+      -eventManager: EventManager
+      -tourLogService: TourLogService
+      -windowManager: WindowManager
+      -tourLogTableDisabled: BooleanProperty
+      -selectedTourLog: ObjectProperty~TourLog~
+      -tourLogHistory: ObservableList~TourLog~
+      +onSelectedTourLogChanged(...): void
+      +onTourLogsChanged(String): void
+      +onTourSelectedChanged(boolean): void
+      +onToursChanged(String): void
+      +tourLogTableDisabledProperty() : BooleanProperty
+      +getTourLogHistory() : ObservableList~TourLog~
+      +selectedTourLog() : ObjectProperty~TourLog~
+    }
+
+    class NewTourLogViewModel {
+      -tourLogService: TourLogService
+      -windowManager: WindowManager
+      -commentProperty: StringProperty
+      -ratingProperty: IntegerProperty
+      -errorMessageProperty: StringProperty
+      +tourLogCommentProperty() : StringProperty
+      +tourLogRatingProperty() : IntegerProperty
+      +errorMessageProperty() : StringProperty
+      +addTourLog() : void
+    }
+
+    class EditTourLogViewModel {
+      -tourLogService: TourLogService
+      -windowManager: WindowManager
+      -commentProperty: StringProperty
+      -ratingProperty: IntegerProperty
+      -errorMessageProperty: StringProperty
+      +tourLogCommentProperty() : StringProperty
+      +tourLogRatingProperty() : IntegerProperty
+      +errorMessageProperty() : StringProperty
+      +editSelectedTourLog() : void
+    }
+
+    class DetailedTourLogViewModel {
+      -tourLogService: TourLogService
+      -windowManager: WindowManager
+      -commentProperty: StringProperty
+      +tourLogCommentProperty() : StringProperty
+      +close() : void
+    }
+
+    class TourLogMenuViewModel {
+      -tourLogService: TourLogService
+      -windowManager: WindowManager
+      -eventManager: EventManager
+      -addDisabled: BooleanProperty
+      -editDisabled: BooleanProperty
+      -removeDisabled: BooleanProperty
+      -detailsDisabled: BooleanProperty
+      +onTourSelectedChanged(boolean) : void
+      +onTourLogSelectedChanged(boolean) : void
+      +addDisabledProperty() : BooleanProperty
+      +editDisabledProperty() : BooleanProperty
+      +removeDisabledProperty() : BooleanProperty
+      +detailsDisabledProperty() : BooleanProperty
+      +openNewTourLogWindow(window: Windows) : void
+      +removeTourLog() : void
+    }
+
+    %% ===== View Klassen =====
+    class TourHistoryView {
+      <<view>>
+      +initialize(url: URL, resourceBundle: ResourceBundle) : void
+    }
+    TourHistoryView ..> TourHistoryViewModel : uses
+
+    class NewTourView {
+      <<view>>
+      +initialize(url: URL, resourceBundle: ResourceBundle) : void
+      +onAddNewTour() : void
+    }
+    NewTourView ..> NewTourViewModel : uses
+
+    class TourMenuView {
+      <<view>>
+      +initialize(url: URL, resourceBundle: ResourceBundle) : void
+      +onAddTourClicked() : void
+      +onEditTourClicked() : void
+      +onRemoveTourClicked() : void
+    }
+    TourMenuView ..> TourMenuViewModel : uses
+
+    class EditTourView {
+      <<view>>
+      +initialize(url: URL, resourceBundle: ResourceBundle) : void
+      +onEditSelectedTour() : void
+    }
+    EditTourView ..> EditTourViewModel : uses
+
+    class NewTourLogView {
+      <<view>>
+      +initialize(url: URL, resourceBundle: ResourceBundle) : void
+      +onAddNewTourLogEntry() : void
+    }
+    NewTourLogView ..> NewTourLogViewModel : uses
+
+    class EditTourLogView {
+      <<view>>
+      +initialize(url: URL, resourceBundle: ResourceBundle) : void
+      +onEditSelectedTourLog() : void
+    }
+    EditTourLogView ..> EditTourLogViewModel : uses
+
+    class TourLogMenuView {
+      <<view>>
+      +initialize(url: URL, resourceBundle: ResourceBundle) : void
+      +onTourLogAdd() : void
+      +onTourLogEdit() : void
+      +onTourLogRemove() : void
+      +onTourLogDetails() : void
+    }
+    TourLogMenuView ..> TourLogMenuViewModel : uses
+
+    class TourLogHistoryView {
+      <<view>>
+      +initialize(url: URL, resourceBundle: ResourceBundle) : void
+    }
+    TourLogHistoryView ..> TourLogHistoryViewModel : uses
+
+    class DetailedTourLogView {
+      <<view>>
+      +initialize(url: URL, resourceBundle: ResourceBundle) : void
+      +onBackClicked() : void
+    }
+    DetailedTourLogView ..> DetailedTourLogViewModel : uses
+
+    %% ===== Window & Service =====
+    class Windows {
+      <<enumeration>>
+      NEW_TOUR_WINDOW
+      EDIT_TOUR_WINDOW
+      NEW_TOURLOG_WINDOW
+      EDIT_TOURLOG_WINDOW
+      DETAILS_TOURLOG_WINDOW
+    }
+
+    class WindowManager {
+      <<singleton>>
+      -currentStage: Stage
+      -windowFolder: String
+      -windowMap: Map~Windows, String~
+      +getInstance() : WindowManager
+      +openWindow(window: Windows) : void
+      +closeWindow() : void
+    }
+
+    class TourLogService {
+      -eventManager: EventManager
+      -stateRepository: StateRepository
+      -tourLogsMap: Map~Tour, List~TourLog~~
+      +updateSelectedTourLog(tl: TourLog) : void
+      +getSelectedTourLog() : TourLog
+      +getTourLogs() : List~TourLog~
+      +add(tl: TourLog) : void
+      +update() : void
+      +changeAndAdd(tl: TourLog) : void
+      +remove() : void
+    }
+
+    class TourService {
+      -eventManager: EventManager
+      -stateRepository: StateRepository
+      -tours: List~Tour~
+      +getTours() : List~Tour~
+      +add(t: Tour) : void
+      +updateSelectedTour(t: Tour) : void
+      +updateSelectedTourPrev(t: Tour) : void
+      +getSelectedTour() : Tour
+      +Change(editedTour: Tour) : void
+      +remove() : void
+    }
+
+    %% ===== Repository =====
+    class StateRepository {
+      <<singleton>>
+      -selectedTourLog: TourLog
+      -selectedTour: Tour
+      -prevTour: Tour
+      +getSelectedTourLog() : TourLog
+      +getSelectedTour() : Tour
+      +getPrevSelectedTour() : Tour
+      +updateSelectedTour(newTour: Tour) : void
+      +updateSelectedTourPrev(prevTour: Tour) : void
+      +updateSelectedTourLog(newTourLog: TourLog) : void
+    }
+
+    %% ===== Event System =====
+    class EventManager {
+      -eventListeners: Map~Events, List~EventListener<>
+      +subscribe(event: Events, listener: EventListener) : void
+      +publish(event: Events, value: T) : void
+    }
+
+    class EventListener {
+      <<interface>>
+      +event(value: T) : void
+    }
+
+    class Events {
+      <<enumeration>>
+      TOURS_CHANGED
+      TOUR_SELECTED
+      TOURLOG_SELECTED
+      TOURLOGS_CHANGED
+      TOURS_EDITED
+    }
+
+    %% ===== Beziehungen =====
+    FXMLDependencyInjector ..> ViewFactory : "nutzt"
+    SearchApplication --> FXMLDependencyInjector : "lädt FXML"
+    WindowManager ..> FXMLDependencyInjector : "ruft load() auf"
+
+    ViewFactory ..> EventManager
+    ViewFactory ..> TourService
+    ViewFactory ..> TourLogService
+    ViewFactory ..> WindowManager
+    ViewFactory ..> StateRepository
+
+    TourLogHistoryViewModel ..> EventManager
+    TourLogHistoryViewModel ..> TourLogService
+    TourLogHistoryViewModel ..> WindowManager
+
+    NewTourLogViewModel ..> TourLogService
+    NewTourLogViewModel ..> WindowManager
+
+    EditTourLogViewModel ..> TourLogService
+    EditTourLogViewModel ..> WindowManager
+
+    DetailedTourLogViewModel ..> TourLogService
+    DetailedTourLogViewModel ..> WindowManager
+
+    TourLogMenuViewModel ..> TourLogService
+    TourLogMenuViewModel ..> WindowManager
+    TourLogMenuViewModel ..> EventManager
+
+    TourMenuViewModel ..> TourService
+    TourMenuViewModel ..> WindowManager
+    TourMenuViewModel ..> EventManager
+
+    TourHistoryViewModel ..> EventManager
+    TourHistoryViewModel ..> TourService
+
+    NewTourViewModel ..> TourService
+    NewTourViewModel ..> WindowManager
+
+    EditTourViewModel ..> TourService
+    EditTourViewModel ..> WindowManager
+
+    TourLogService ..> EventManager
+    TourLogService ..> StateRepository
+
+    TourService ..> EventManager
+    TourService ..> StateRepository
+
+    EventManager ..> EventListener
+    EventManager ..> Events
