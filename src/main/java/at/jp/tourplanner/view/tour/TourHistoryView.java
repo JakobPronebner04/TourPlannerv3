@@ -1,6 +1,7 @@
 package at.jp.tourplanner.view.tour;
 
 import at.jp.tourplanner.model.Tour;
+import at.jp.tourplanner.utils.ControlsFormatter;
 import at.jp.tourplanner.viewmodel.tour.TourHistoryViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -40,7 +41,7 @@ public class TourHistoryView implements Initializable {
         colStart.setCellValueFactory(new PropertyValueFactory<>("tourStart"));
         colDestination.setCellValueFactory(new PropertyValueFactory<>("tourDestination"));
         colTransportType.setCellValueFactory(new PropertyValueFactory<>("tourTransportType"));
-
+        ControlsFormatter.setTableColumnCutOff(colDescription);
         viewModel.selectedTour().bind(tourHistoryTable.getSelectionModel().selectedItemProperty());
 
         if (tourHistoryTable != null) {

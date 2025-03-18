@@ -5,6 +5,7 @@ import at.jp.tourplanner.event.Events;
 import at.jp.tourplanner.model.Tour;
 import at.jp.tourplanner.repository.StateRepository;
 import javafx.beans.property.StringProperty;
+import javafx.scene.image.Image;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -57,6 +58,11 @@ public class TourService {
     public void remove() {
         this.tours.remove(stateRepository.getSelectedTour());
         eventManager.publish(Events.TOURS_CHANGED, "REMOVE_TOUR");
+    }
+
+    public Image getPlaceHolderImage()
+    {
+        return new Image(getClass().getResource("/at/jp/tourplanner/images/mapplaceholder.png").toExternalForm());
     }
 
     private void hasNullProperties(Tour tour) throws IllegalAccessException {

@@ -5,15 +5,9 @@ import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.repository.StateRepository;
 import at.jp.tourplanner.service.TourLogService;
 import at.jp.tourplanner.service.TourService;
-import at.jp.tourplanner.view.tour.EditTourView;
-import at.jp.tourplanner.view.tour.NewTourView;
-import at.jp.tourplanner.view.tour.TourHistoryView;
-import at.jp.tourplanner.view.tour.TourMenuView;
+import at.jp.tourplanner.view.tour.*;
 import at.jp.tourplanner.view.tourlog.*;
-import at.jp.tourplanner.viewmodel.tour.EditTourViewModel;
-import at.jp.tourplanner.viewmodel.tour.NewTourViewModel;
-import at.jp.tourplanner.viewmodel.tour.TourHistoryViewModel;
-import at.jp.tourplanner.viewmodel.tour.TourMenuViewModel;
+import at.jp.tourplanner.viewmodel.tour.*;
 import at.jp.tourplanner.viewmodel.tourlog.*;
 import at.jp.tourplanner.window.WindowManager;
 
@@ -75,6 +69,12 @@ public class ViewFactory {
         }
         if(DetailedTourLogView.class == viewClass) {
             return new DetailedTourLogView(new DetailedTourLogViewModel(tourLogService,windowManager));
+        }
+        if(DetailedTourView.class == viewClass) {
+            return new DetailedTourView(new DetailedTourViewModel(tourService,windowManager));
+        }
+        if(TourImageView.class == viewClass){
+            return new TourImageView(new TourImageViewModel(tourService,eventManager));
         }
 
         throw new IllegalArgumentException(

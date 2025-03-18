@@ -2,6 +2,7 @@ package at.jp.tourplanner.view.tour;
 
 import at.jp.tourplanner.viewmodel.tour.TourMenuViewModel;
 import at.jp.tourplanner.window.Windows;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -18,6 +19,8 @@ public class TourMenuView implements Initializable {
     private Button editButton;
     @FXML
     private Button removeButton;
+    @FXML
+    private Button detailsButton;
 
     public TourMenuView(TourMenuViewModel viewModel) {
         this.viewModel = viewModel;
@@ -27,6 +30,7 @@ public class TourMenuView implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         editButton.disableProperty().bind(viewModel.editDisabledProperty());
         removeButton.disableProperty().bind(viewModel.removeDisabledProperty());
+        detailsButton.disableProperty().bind(viewModel.detailsDisabledProperty());
     }
 
     public void onAddTourClicked(){
@@ -38,5 +42,9 @@ public class TourMenuView implements Initializable {
     }
     public void onRemoveTourClicked(){
         viewModel.deleteTour();
+    }
+
+    public void onTourDetails() {
+        viewModel.openNewTourWindow(Windows.DETAILS_TOUR_WINDOW);
     }
 }

@@ -25,7 +25,7 @@
             </Label>
             <TextField fx:id="tourNameEdit"/>
             <Label text="%TourDesc.label"/>
-            <TextField fx:id="tourDescriptionEdit"/>
+            <TextArea fx:id="tourDescriptionEdit"/>
             <Label text="%TourSrc.label"/>
             <TextField fx:id="tourStartEdit"/>
             <Label text="%TourDest.label"/>
@@ -39,8 +39,8 @@
                     </FXCollections>
                 </items>
             </ChoiceBox>
-            <Button onAction="#onEditSelectedTour" focusTraversable="false"/>
-            <Text fx:id="errorMessage" text="%confirmEdit.button"/>
+            <Button onAction="#onEditSelectedTour" text="%confirmEdit.button" focusTraversable="false"/>
+            <Text fx:id="errorMessage"/>
         </VBox>
     </HBox>
 </VBox>

@@ -23,6 +23,7 @@ public class WindowManager {
         windowMap.put(Windows.NEW_TOURLOG_WINDOW    ,"newtourlog-view");
         windowMap.put(Windows.EDIT_TOURLOG_WINDOW   ,"edittourlog-view");
         windowMap.put(Windows.DETAILS_TOURLOG_WINDOW,"detailedtourlog-view");
+        windowMap.put(Windows.DETAILS_TOUR_WINDOW   ,"detailedtour-view");
     }
 
     public static WindowManager getInstance() {

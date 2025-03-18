@@ -1,6 +1,8 @@
 package at.jp.tourplanner.model;
 
-import java.awt.*;
+import javafx.scene.image.Image;
+
+import javax.swing.*;
 
 public class Tour {
     private String tourName;
@@ -15,8 +17,8 @@ public class Tour {
         this.tourDescription = "";
         this.tourStart = "";
         this.tourDestination = "";
-        this.tourTransportType = "Car";
-        this.tourImage = null;
+        this.tourTransportType = "";
+        this.tourImage = new Image(getClass().getResource("/at/jp/tourplanner/images/map.png").toExternalForm());
     }
 
     public String getTourName() {

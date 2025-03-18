@@ -4,6 +4,7 @@ import at.jp.tourplanner.viewmodel.tour.EditTourViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
@@ -17,7 +18,7 @@ public class EditTourView implements Initializable {
     @FXML
     private TextField tourNameEdit;
     @FXML
-    private TextField tourDescriptionEdit;
+    private TextArea tourDescriptionEdit;
     @FXML
     private TextField tourStartEdit;
     @FXML

@@ -14,11 +14,13 @@ public class NewTourViewModel {
     private final TourService tourService;
     private final WindowManager windowManager;
     private final StringProperty errorMessageProperty;
+
     private final StringProperty tourNameProperty;
     private final StringProperty tourDescriptionProperty;
     private final StringProperty tourStartProperty;
     private final StringProperty tourDestinationProperty;
     private final ObjectProperty<String> selectedTransportType;
+
     private final Tour newTour;
 
     public NewTourViewModel(TourService tourService, WindowManager windowManager) {
@@ -30,7 +32,7 @@ public class NewTourViewModel {
         tourDescriptionProperty = new SimpleStringProperty("");
         tourStartProperty = new SimpleStringProperty("");
         tourDestinationProperty = new SimpleStringProperty("");
-        selectedTransportType = new SimpleObjectProperty<>(newTour.getTourTransportType());
+        selectedTransportType = new SimpleObjectProperty<>("Car");
 
     }
 

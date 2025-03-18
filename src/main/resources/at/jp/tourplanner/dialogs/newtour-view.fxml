@@ -21,7 +21,7 @@
             </Label>
             <TextField fx:id="tourName"/>
             <Label text="%TourDesc.label"/>
-            <TextField fx:id="tourDescription"/>
+            <TextArea fx:id="tourDescription"/>
             <Label text="%TourSrc.label"/>
             <TextField fx:id="tourStart"/>
             <Label text="%TourDest.label"/>
@@ -37,7 +37,7 @@
                 </items>
             </ChoiceBox>
             <Button onAction="#onAddNewTour" text="%confirmAdd.button"/>
-            <Text fx:id="errorMessage"/>
+            <Text fx:id="errorMessage" text="%confirmRemove.button"/>
         </VBox>
     </HBox>
 </VBox>

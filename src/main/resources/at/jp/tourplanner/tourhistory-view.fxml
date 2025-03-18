@@ -6,6 +6,9 @@
 
 <HBox xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.jp.tourplanner.view.tour.TourHistoryView">
     <TableView fx:id="tourHistoryTable">
+        <placeholder>
+            <Label text="%tourHistoryPlaceHolder.label" />
+        </placeholder>
         <columns>
             <TableColumn fx:id="colName" text="%TourName.label" prefWidth="120"/>
             <TableColumn fx:id="colDescription" text="%TourDesc.label" prefWidth="200"/>

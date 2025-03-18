@@ -9,6 +9,9 @@
       fx:controller="at.jp.tourplanner.view.tourlog.TourLogHistoryView">
 
     <TableView fx:id="tourLogHistoryTable">
+        <placeholder>
+            <Label text="%tourLogHistoryPlaceHolder.label" />
+        </placeholder>
         <columns>
             <TableColumn fx:id="dateTime" text="%TourLogDateTime.label" prefWidth="120"/>
             <TableColumn fx:id="actualTime" text="%TourLogActualTime.label" prefWidth="100"/>

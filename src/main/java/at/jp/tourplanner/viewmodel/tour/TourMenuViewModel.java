@@ -16,7 +16,7 @@ public class TourMenuViewModel {
     private final EventManager eventManager;
     private final BooleanProperty editDisabled = new SimpleBooleanProperty(true);
     private final BooleanProperty removeDisabled = new SimpleBooleanProperty(true);
-    //private final BooleanProperty removeDisabled = new SimpleBooleanProperty(true);
+    private final BooleanProperty detailsDisabled = new SimpleBooleanProperty(true);
 
     public TourMenuViewModel(EventManager eventManager, TourService tourService, WindowManager windowManager) {
         this.tourService = tourService;
@@ -30,6 +30,7 @@ public class TourMenuViewModel {
     public void onTourSelectedChanged(Boolean state) {
         editDisabled.set(state);
         removeDisabled.set(state);
+        detailsDisabled.set(state);
     }
     public void openNewTourWindow(Windows window){
             windowManager.openWindow(window);
@@ -40,6 +41,7 @@ public class TourMenuViewModel {
     public BooleanProperty removeDisabledProperty() {
         return removeDisabled;
     }
+    public BooleanProperty detailsDisabledProperty() { return detailsDisabled;}
 
     public void deleteTour()
     {

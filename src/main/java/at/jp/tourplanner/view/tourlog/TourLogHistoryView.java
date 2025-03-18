@@ -1,6 +1,7 @@
 package at.jp.tourplanner.view.tourlog;
 
 import at.jp.tourplanner.model.TourLog;
+import at.jp.tourplanner.utils.ControlsFormatter;
 import at.jp.tourplanner.viewmodel.tourlog.TourLogHistoryViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -43,17 +44,7 @@ public class TourLogHistoryView implements Initializable {
         comment.setCellValueFactory(new PropertyValueFactory<>("comment"));
         rating.setCellValueFactory(new PropertyValueFactory<>("rating"));
 
-        comment.setCellFactory(column -> new TableCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.split("\n")[0]);
-                }
-            }
-        });
+        ControlsFormatter.setTableColumnCutOff(comment);
 
         tourLogHistoryTable.disableProperty().bind(viewModel.tourLogTableDisabledProperty());
         viewModel.selectedTourLog().bind(tourLogHistoryTable.getSelectionModel().selectedItemProperty());

@@ -1,5 +1,6 @@
 package at.jp.tourplanner.view.tourlog;
 
+import at.jp.tourplanner.utils.ControlsFormatter;
 import at.jp.tourplanner.viewmodel.tourlog.NewTourLogViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,8 +11,6 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import static at.jp.tourplanner.utils.TextFieldFormatter.setTextFieldFormatFloat;
 
 public class NewTourLogView implements Initializable {
     private final NewTourLogViewModel viewModel;
@@ -37,8 +36,8 @@ public class NewTourLogView implements Initializable {
         actualDistanceInput.textProperty().bindBidirectional(viewModel.tourLogActualDistanceProperty());
         ratingSlider.valueProperty().bindBidirectional(viewModel.tourLogRatingProperty());
         errorMessage.textProperty().bind(viewModel.errorMessageProperty());
-        setTextFieldFormatFloat(actualTimeInput);
-        setTextFieldFormatFloat(actualDistanceInput);
+        ControlsFormatter.setTextFieldFormatFloat(actualTimeInput);
+        ControlsFormatter.setTextFieldFormatFloat(actualDistanceInput);
     }
 
 
