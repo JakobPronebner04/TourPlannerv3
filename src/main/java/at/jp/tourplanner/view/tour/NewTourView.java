@@ -39,6 +39,7 @@ public class NewTourView implements Initializable {
         tourDescription.textProperty().bindBidirectional(viewModel.tourDescriptionProperty());
         tourStart.textProperty().bindBidirectional(viewModel.tourStartProperty());
         tourDestination.textProperty().bindBidirectional(viewModel.tourDestinationProperty());
+
         errorMessage.textProperty().bind(viewModel.errorMessageProperty());
     }
 

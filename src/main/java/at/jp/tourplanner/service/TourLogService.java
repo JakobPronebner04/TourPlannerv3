@@ -31,13 +31,13 @@ public class TourLogService {
     public List<TourLog> getTourLogs() {
 
         if (!tourLogsMap.containsKey(this.stateRepository.getSelectedTour())) {
-            return Collections.emptyList();
+            return new ArrayList<>();
         }
 
         List<TourLog> logs = tourLogsMap.get(this.stateRepository.getSelectedTour());
 
         if (logs == null || logs.isEmpty()) {
-            return Collections.emptyList();
+            return new ArrayList<>();
         }
 
         return logs;
