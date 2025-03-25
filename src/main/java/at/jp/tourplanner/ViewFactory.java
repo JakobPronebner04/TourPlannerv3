@@ -3,6 +3,8 @@ package at.jp.tourplanner;
 
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.repository.StateRepository;
+import at.jp.tourplanner.repository.TourRepository;
+import at.jp.tourplanner.repository.TourRepositoryORM;
 import at.jp.tourplanner.service.TourLogService;
 import at.jp.tourplanner.service.TourService;
 import at.jp.tourplanner.view.tour.*;
@@ -21,12 +23,15 @@ public class ViewFactory {
     private final TourLogService tourLogService;
 
     private final WindowManager windowManager;
+
     private final StateRepository stateRepository;
+    private final TourRepositoryORM tourRepository;
 
     private ViewFactory() {
         this.eventManager = new EventManager();
+        this.tourRepository = new TourRepositoryORM();
         this.stateRepository = StateRepository.getInstance();
-        this.tourService = new TourService(eventManager,stateRepository);
+        this.tourService = new TourService(eventManager,stateRepository, tourRepository);
         this.tourLogService = new TourLogService(eventManager,stateRepository);
         this.windowManager = WindowManager.getInstance();
     }

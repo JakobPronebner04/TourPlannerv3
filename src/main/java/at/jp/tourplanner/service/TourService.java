@@ -1,37 +1,50 @@
 package at.jp.tourplanner.service;
 
+import at.jp.tourplanner.entity.TourEntity;
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
 import at.jp.tourplanner.model.Tour;
 import at.jp.tourplanner.repository.StateRepository;
+import at.jp.tourplanner.repository.TourRepository;
+import at.jp.tourplanner.repository.TourRepositoryORM;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
 import java.lang.reflect.Field;
+import java.rmi.AlreadyBoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class TourService {
 
     private final EventManager eventManager;
     private final StateRepository stateRepository;
-
+    private final TourRepositoryORM tourRepository;
     private final List<Tour> tours;
 
-    public TourService(EventManager eventManager, StateRepository stateRepository) {
+    public TourService(EventManager eventManager, StateRepository stateRepository, TourRepositoryORM tourRepository) {
         this.eventManager = eventManager;
         this.stateRepository = stateRepository;
+        this.tourRepository = tourRepository;
         this.tours = new ArrayList<>();
     }
     public List<Tour> getTours() {
-        return tours;
+        return tourRepository.findAll().stream().map(this::mapEntityToModel).toList();
     }
 
-    public void add(Tour t) throws IllegalAccessException {
+    public void add(Tour t) throws IllegalAccessException, AlreadyBoundException {
         hasNullProperties(t);
-        this.tours.add(t);
+
+        if(tourRepository.findByName(t.getTourName()).isPresent()) {
+            throw new AlreadyBoundException("Tour name already exists");
+        }
+
+        TourEntity te = mapModelToEntity(t);
+        tourRepository.save(te);
         eventManager.publish(Events.TOURS_CHANGED, "NEW_TOUR");
     }
+
     public void updateSelectedTour(Tour t) {
         stateRepository.updateSelectedTour(t);
     }
@@ -56,7 +69,11 @@ public class TourService {
     }
 
     public void remove() {
-        this.tours.remove(stateRepository.getSelectedTour());
+        Optional<TourEntity> te = this.tourRepository.findByName(stateRepository.getSelectedTour().getTourName());
+        if(!te.isPresent()) {
+            return;
+        }
+        this.tourRepository.delete(te.get());
         eventManager.publish(Events.TOURS_CHANGED, "REMOVE_TOUR");
     }
 
@@ -88,4 +105,27 @@ public class TourService {
             }
         }
     }
+
+    private TourEntity mapModelToEntity(Tour t)
+    {
+        TourEntity te = new TourEntity();
+        te.setName(t.getTourName());
+        te.setDescription(t.getTourDescription());
+        te.setStart(t.getTourStart());
+        te.setDestination(t.getTourDestination());
+        te.setTransportType(t.getTourTransportType());
+        return te;
+    }
+
+    private Tour mapEntityToModel(TourEntity entity) {
+        Tour t = new Tour();
+        t.setTourName(entity.getName());
+        t.setTourDescription(entity.getDescription());
+        t.setTourStart(entity.getStart());
+        t.setTourDestination(entity.getDestination());
+        t.setTourTransportType(entity.getTransportType());
+        return t;
+    }
+
+
 }

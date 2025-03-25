@@ -2,14 +2,13 @@ services:
   swen2-db:
     image: postgres:17
     ports:
-      - "5432:5432"
+      - "1234:5432"
     environment:
       POSTGRES_USER: swen2
       POSTGRES_PASSWORD: swen2
       POSTGRES_DB: tourplanner
     volumes:
       - "swen2-data:/var/lib/postgresql/data"
-      - "./init-scripts:/docker-entrypoint-initdb.d"
 
 volumes:
   swen2-data:

@@ -12,10 +12,10 @@
                         <fx:include source="tourmenu-view.fxml" />
                         <fx:include source="tourhistory-view.fxml"/>
                 </VBox>
-                <fx:include source="tourimage-view.fxml"/>
+                <!--<fx:include source="tourimage-view.fxml"/>-->
         </VBox>
 
-        <VBox>
+        <!--<VBox>
                 <HBox alignment="CENTER" style="-fx-font-weight: bold;">
                         <Label text="%HeaderTourLogs.label"/>
                 </HBox>
@@ -23,7 +23,7 @@
                         <fx:include source="tourlogmenu-view.fxml"/>
                         <fx:include source="tourloghistory-view.fxml"/>
                 </VBox>
-        </VBox>
+        </VBox>-->
 
 </HBox>
 

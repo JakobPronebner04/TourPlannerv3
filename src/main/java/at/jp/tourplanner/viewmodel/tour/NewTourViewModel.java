@@ -10,6 +10,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.rmi.AlreadyBoundException;
+
 public class NewTourViewModel {
     private final TourService tourService;
     private final WindowManager windowManager;
@@ -53,7 +55,11 @@ public class NewTourViewModel {
 
             tourService.add(newTour);
             windowManager.closeWindow();
-        }catch(IllegalAccessException ex){
+        }catch(IllegalAccessException | AlreadyBoundException e){
+            if(e.getClass() == AlreadyBoundException.class){
+                errorMessageProperty.set("Tour already exists");
+                return;
+            }
             errorMessageProperty.set("Some inputs might be empty!");
         }
     }

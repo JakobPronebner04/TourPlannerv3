@@ -1,2 +1,0 @@
--- init.sql
--- sql statement init when starting docker compose
