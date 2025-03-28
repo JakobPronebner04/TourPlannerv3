@@ -34,7 +34,6 @@ public class TourHistoryViewModel {
     private void onSelectedTourChanged(Observable observable, Tour oldTour, Tour newTour) {
         boolean isDisabled = (newTour == null);
         tourService.updateSelectedTour(newTour);
-        tourService.updateSelectedTourPrev(oldTour);
         this.eventManager.publish(Events.TOUR_SELECTED, isDisabled);
     }
 

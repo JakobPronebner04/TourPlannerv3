@@ -7,12 +7,10 @@ public class StateDataAccess {
     private static StateDataAccess stateDataAccess;
     private TourLog selectedTourLog;
     private Tour selectedTour;
-    private Tour prevTour;
 
     private StateDataAccess() {
         selectedTourLog = new TourLog();
         selectedTour = new Tour();
-        prevTour = new Tour();
     }
     public static StateDataAccess getInstance() {
         if (stateDataAccess == null) {
@@ -28,17 +26,9 @@ public class StateDataAccess {
         return selectedTour;
     }
 
-    public Tour getPrevSelectedTour() {
-        return prevTour;
-    }
-
     public void updateSelectedTour(Tour newSelectedTour)
     {
         selectedTour = newSelectedTour;
-    }
-    public void updateSelectedTourPrev(Tour prevTour)
-    {
-        this.prevTour = prevTour;
     }
     public void updateSelectedTourLog(TourLog newSelectedTourLog)
     {

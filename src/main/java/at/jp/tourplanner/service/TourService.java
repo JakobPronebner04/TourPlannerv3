@@ -43,9 +43,6 @@ public class TourService {
     public void updateSelectedTour(Tour t) {
         stateDataAccess.updateSelectedTour(t);
     }
-    public void updateSelectedTourPrev(Tour prevTour) {
-        stateDataAccess.updateSelectedTourPrev(prevTour);
-    }
     public Tour getSelectedTour()
     {
         return stateDataAccess.getSelectedTour();
