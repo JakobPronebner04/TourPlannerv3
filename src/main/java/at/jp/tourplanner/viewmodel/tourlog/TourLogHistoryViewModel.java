@@ -39,10 +39,6 @@ public class TourLogHistoryViewModel {
         this.eventManager.subscribe(
                 Events.TOUR_SELECTED, this::onTourSelectedChanged
         );
-
-        this.eventManager.subscribe(
-                Events.TOURS_EDITED,this::onToursChanged
-        );
     }
 
     public void onSelectedTourLogChanged(Observable observable, TourLog oldTourLog, TourLog newTourLog)
@@ -63,11 +59,6 @@ public class TourLogHistoryViewModel {
                 return;
             }
         tourLogHistory.setAll(tourLogService.getTourLogs());
-    }
-
-    public void onToursChanged(String message) {
-            tourLogService.update();
-            windowManager.closeWindow();
     }
     public BooleanProperty tourLogTableDisabledProperty() {
         return tourLogTableDisabled;

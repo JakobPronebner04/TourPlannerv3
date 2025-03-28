@@ -4,30 +4,25 @@ import at.jp.tourplanner.entity.TourEntity;
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
 import at.jp.tourplanner.model.Tour;
-import at.jp.tourplanner.repository.StateRepository;
-import at.jp.tourplanner.repository.TourRepository;
+import at.jp.tourplanner.da.StateDataAccess;
 import at.jp.tourplanner.repository.TourRepositoryORM;
-import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
 import java.lang.reflect.Field;
 import java.rmi.AlreadyBoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class TourService {
 
     private final EventManager eventManager;
-    private final StateRepository stateRepository;
+    private final StateDataAccess stateDataAccess;
     private final TourRepositoryORM tourRepository;
-    private final List<Tour> tours;
 
-    public TourService(EventManager eventManager, StateRepository stateRepository, TourRepositoryORM tourRepository) {
+    public TourService(EventManager eventManager, StateDataAccess stateDataAccess, TourRepositoryORM tourRepository) {
         this.eventManager = eventManager;
-        this.stateRepository = stateRepository;
+        this.stateDataAccess = stateDataAccess;
         this.tourRepository = tourRepository;
-        this.tours = new ArrayList<>();
     }
     public List<Tour> getTours() {
         return tourRepository.findAll().stream().map(this::mapEntityToModel).toList();
@@ -46,31 +41,40 @@ public class TourService {
     }
 
     public void updateSelectedTour(Tour t) {
-        stateRepository.updateSelectedTour(t);
+        stateDataAccess.updateSelectedTour(t);
     }
     public void updateSelectedTourPrev(Tour prevTour) {
-        stateRepository.updateSelectedTourPrev(prevTour);
+        stateDataAccess.updateSelectedTourPrev(prevTour);
     }
-
-
     public Tour getSelectedTour()
     {
-        return stateRepository.getSelectedTour();
+        return stateDataAccess.getSelectedTour();
     }
 
-    public void Change(Tour editedTour) throws IllegalAccessException
+    public void edit(Tour editedTour) throws IllegalAccessException, AlreadyBoundException
     {
         hasNullProperties(editedTour);
-        int index = tours.indexOf(stateRepository.getSelectedTour());
-        tours.set(index, editedTour);
-        stateRepository.updateSelectedTourPrev(stateRepository.getSelectedTour());
-        stateRepository.updateSelectedTour(editedTour);
-        eventManager.publish(Events.TOURS_EDITED, "UPDATE_TOURLOGS");
+
+        if(!editedTour.getTourName().equals(stateDataAccess.getSelectedTour().getTourName())
+                && tourRepository.findByName(editedTour.getTourName()).isPresent()) {
+            throw new AlreadyBoundException("Tour name already exists");
+        }
+
+        TourEntity te = tourRepository.findByName(this.stateDataAccess.getSelectedTour().getTourName()).get();
+
+        te.setName(editedTour.getTourName());
+        te.setDescription(editedTour.getTourDescription());
+        te.setStart(editedTour.getTourStart());
+        te.setDestination(editedTour.getTourDestination());
+        te.setTransportType(editedTour.getTourTransportType());
+
+        tourRepository.save(te);
+        eventManager.publish(Events.TOURS_CHANGED, "UPDATED_TOUR");
     }
 
     public void remove() {
-        Optional<TourEntity> te = this.tourRepository.findByName(stateRepository.getSelectedTour().getTourName());
-        if(!te.isPresent()) {
+        Optional<TourEntity> te = this.tourRepository.findByName(stateDataAccess.getSelectedTour().getTourName());
+        if(te.isEmpty()) {
             return;
         }
         this.tourRepository.delete(te.get());
@@ -89,8 +93,7 @@ public class TourService {
             field.setAccessible(true);
             Object value = field.get(tour);
 
-            if (value instanceof String) {
-                String stringValue = (String) value;
+            if (value instanceof String stringValue) {
                 if (stringValue == null || stringValue.isEmpty()) {
                     throw new IllegalAccessException();
                 }

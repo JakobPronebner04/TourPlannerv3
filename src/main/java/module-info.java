@@ -26,5 +26,7 @@ module at.jp.tourplanner {
     opens at.jp.tourplanner.repository to javafx.fxml;
     exports at.jp.tourplanner.utils;
     opens at.jp.tourplanner.entity to org.hibernate.orm.core;
+    exports at.jp.tourplanner.da;
+    opens at.jp.tourplanner.da to javafx.fxml;
 
 }

@@ -42,10 +42,9 @@ public class TourHistoryView implements Initializable {
         colDestination.setCellValueFactory(new PropertyValueFactory<>("tourDestination"));
         colTransportType.setCellValueFactory(new PropertyValueFactory<>("tourTransportType"));
         ControlsFormatter.setTableColumnCutOff(colDescription);
+
         viewModel.selectedTour().bind(tourHistoryTable.getSelectionModel().selectedItemProperty());
 
-        if (tourHistoryTable != null) {
-            tourHistoryTable.setItems(viewModel.getTourHistory());
-        }
+        tourHistoryTable.setItems(viewModel.getTourHistory());
     }
 }

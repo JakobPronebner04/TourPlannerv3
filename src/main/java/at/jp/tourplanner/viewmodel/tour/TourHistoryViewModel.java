@@ -24,7 +24,7 @@ public class TourHistoryViewModel {
     public TourHistoryViewModel(EventManager eventManager, TourService tourService) {
         this.eventManager = eventManager;
         this.tourService = tourService;
-
+        tourHistory.addAll(tourService.getTours());
         this.selectedTour.addListener(this::onSelectedTourChanged);
         this.eventManager.subscribe(
                 Events.TOURS_CHANGED, this::onToursChanged

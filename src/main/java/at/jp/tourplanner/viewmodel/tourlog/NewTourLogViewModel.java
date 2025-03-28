@@ -7,6 +7,8 @@ import javafx.beans.property.*;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 
+import java.rmi.NotBoundException;
+
 public class NewTourLogViewModel {
     private final TourLogService tourLogService;
     private final WindowManager windowManager;
@@ -53,7 +55,11 @@ public class NewTourLogViewModel {
 
             tourLogService.add(newTourLog);
             windowManager.closeWindow();
-        } catch (IllegalAccessException  | NumberFormatException e) {
+        } catch (IllegalAccessException | NumberFormatException | NotBoundException e) {
+            if(e.getClass() == NotBoundException.class) {
+                errorMessageProperty.set(e.getMessage());
+                return;
+            }
             errorMessageProperty.set("Some inputs might be empty!");
         }
     }

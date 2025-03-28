@@ -38,7 +38,7 @@ public class TourLogHistoryView implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        dateTime.setCellValueFactory(new PropertyValueFactory<>("dateTime"));
+        dateTime.setCellValueFactory(new PropertyValueFactory<>("dateTimeStr"));
         actualTime.setCellValueFactory(new PropertyValueFactory<>("actualTime"));
         actualDistance.setCellValueFactory(new PropertyValueFactory<>("actualDistance"));
         comment.setCellValueFactory(new PropertyValueFactory<>("comment"));

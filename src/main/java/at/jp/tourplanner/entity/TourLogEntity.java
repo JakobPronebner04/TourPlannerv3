@@ -10,13 +10,15 @@ public class TourLogEntity {
     @Id
     @GeneratedValue
     private UUID id;
-
     private String comment;
     private int rating;
     private float actualTime;
     private float actualDistance;
-
     private LocalDateTime dateTime;
+
+    @ManyToOne
+    @JoinColumn(name = "tour_id", nullable = false)
+    private TourEntity tour;
 
     @PrePersist
     @PreUpdate
@@ -77,5 +79,13 @@ public class TourLogEntity {
 
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public TourEntity getTour() {
+        return tour;
+    }
+
+    public void setTour(TourEntity tour) {
+        this.tour = tour;
     }
 }

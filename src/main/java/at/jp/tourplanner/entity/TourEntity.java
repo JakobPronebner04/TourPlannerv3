@@ -1,8 +1,9 @@
 package at.jp.tourplanner.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -16,6 +17,9 @@ public class TourEntity {
     private String tourDestination;
     private String tourTransportType;
     //private Image tourImage;
+
+    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TourLogEntity> tourLogs = new ArrayList<>();
 
     public TourEntity() {
         this.tourName = "";
@@ -66,6 +70,18 @@ public class TourEntity {
     }
     public void setTransportType(String tourTransportType) {
         this.tourTransportType = tourTransportType;
+    }
+
+    public void setTourLogs(List<TourLogEntity> tourLogs) {
+        this.tourLogs = tourLogs;
+    }
+    public List<TourLogEntity> getTourLogs() {
+        return tourLogs;
+    }
+
+    public void addTourLog(TourLogEntity log) {
+        tourLogs.add(log);
+        log.setTour(this);
     }
 
    /* public Image getTourImage() {

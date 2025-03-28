@@ -5,6 +5,8 @@ import at.jp.tourplanner.service.TourLogService;
 import at.jp.tourplanner.window.WindowManager;
 import javafx.beans.property.*;
 
+import java.rmi.NotBoundException;
+
 public class EditTourLogViewModel {
     private final TourLogService tourLogService;
     private final WindowManager windowManager;
@@ -48,10 +50,13 @@ public class EditTourLogViewModel {
             updatedTourLog.setActualDistance(Float.parseFloat(actualDistanceProperty.getValue()));
             updatedTourLog.setRating(ratingProperty.get());
 
-            tourLogService.changeAndAdd(updatedTourLog);
+            tourLogService.edit(updatedTourLog);
             windowManager.closeWindow();
-        } catch (IllegalAccessException | NumberFormatException e) {
-            errorMessageProperty.set("Some inputs might be empty!");
+        } catch (IllegalAccessException | NumberFormatException | NotBoundException e) {
+           if(e.getClass() == NotBoundException.class) {
+               errorMessageProperty.set(e.getMessage());
+           }
+           errorMessageProperty.set("Some inputs might be empty or not set!");
         }
     }
 }

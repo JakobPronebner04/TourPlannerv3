@@ -1,11 +1,11 @@
 package at.jp.tourplanner.viewmodel.tour;
 
 import at.jp.tourplanner.model.Tour;
-import at.jp.tourplanner.model.TourLog;
-import at.jp.tourplanner.service.TourLogService;
 import at.jp.tourplanner.service.TourService;
 import at.jp.tourplanner.window.WindowManager;
 import javafx.beans.property.*;
+
+import java.rmi.AlreadyBoundException;
 
 public class EditTourViewModel {
     private final TourService tourService;
@@ -50,8 +50,13 @@ public class EditTourViewModel {
             updatedTour.setTourDestination(tourDestinationProperty.getValue());
             updatedTour.setTourTransportType(tourTransportTypeProperty.getValue());
 
-            tourService.Change(updatedTour);
-        } catch (IllegalAccessException e) {
+            tourService.edit(updatedTour);
+            windowManager.closeWindow();
+        } catch (IllegalAccessException | AlreadyBoundException e) {
+            if(e.getClass() == AlreadyBoundException.class){
+                errorMessageProperty.set("Tour already exists");
+                return;
+            }
             errorMessageProperty.set("Some inputs might be empty!");
         }
     }

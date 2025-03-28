@@ -1,10 +1,9 @@
 package at.jp.tourplanner;
 
 
+import at.jp.tourplanner.da.StateDataAccess;
 import at.jp.tourplanner.event.EventManager;
-import at.jp.tourplanner.repository.StateRepository;
-import at.jp.tourplanner.repository.TourRepository;
-import at.jp.tourplanner.repository.TourRepositoryORM;
+import at.jp.tourplanner.repository.*;
 import at.jp.tourplanner.service.TourLogService;
 import at.jp.tourplanner.service.TourService;
 import at.jp.tourplanner.view.tour.*;
@@ -24,15 +23,18 @@ public class ViewFactory {
 
     private final WindowManager windowManager;
 
-    private final StateRepository stateRepository;
+    private final StateDataAccess stateDataAccess;
     private final TourRepositoryORM tourRepository;
+    private final TourLogRepositoryORM tourLogRepository;
 
     private ViewFactory() {
         this.eventManager = new EventManager();
         this.tourRepository = new TourRepositoryORM();
-        this.stateRepository = StateRepository.getInstance();
-        this.tourService = new TourService(eventManager,stateRepository, tourRepository);
-        this.tourLogService = new TourLogService(eventManager,stateRepository);
+        this.tourLogRepository = new TourLogRepositoryORM();
+        this.stateDataAccess = StateDataAccess.getInstance();
+
+        this.tourService = new TourService(eventManager, stateDataAccess, tourRepository);
+        this.tourLogService = new TourLogService(eventManager,tourLogRepository,tourRepository, stateDataAccess);
         this.windowManager = WindowManager.getInstance();
     }
 

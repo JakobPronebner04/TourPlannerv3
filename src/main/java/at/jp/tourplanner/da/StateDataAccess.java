@@ -1,24 +1,24 @@
-package at.jp.tourplanner.repository;
+package at.jp.tourplanner.da;
 
 import at.jp.tourplanner.model.Tour;
 import at.jp.tourplanner.model.TourLog;
 
-public class StateRepository {
-    private static StateRepository stateRepository;
+public class StateDataAccess {
+    private static StateDataAccess stateDataAccess;
     private TourLog selectedTourLog;
     private Tour selectedTour;
     private Tour prevTour;
 
-    private StateRepository() {
+    private StateDataAccess() {
         selectedTourLog = new TourLog();
         selectedTour = new Tour();
         prevTour = new Tour();
     }
-    public static StateRepository getInstance() {
-        if (stateRepository == null) {
-            stateRepository = new StateRepository();
+    public static StateDataAccess getInstance() {
+        if (stateDataAccess == null) {
+            stateDataAccess = new StateDataAccess();
         }
-        return stateRepository;
+        return stateDataAccess;
     }
 
     public TourLog getSelectedTourLog() {

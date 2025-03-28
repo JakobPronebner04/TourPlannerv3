@@ -40,6 +40,7 @@ public class TourMenuView implements Initializable {
     public void onEditTourClicked(){
         viewModel.openNewTourWindow(Windows.EDIT_TOUR_WINDOW);
     }
+
     public void onRemoveTourClicked(){
         viewModel.deleteTour();
     }
