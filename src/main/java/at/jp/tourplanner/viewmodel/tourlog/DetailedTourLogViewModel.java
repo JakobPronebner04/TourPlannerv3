@@ -1,6 +1,5 @@
 package at.jp.tourplanner.viewmodel.tourlog;
 
-import at.jp.tourplanner.model.TourLog;
 import at.jp.tourplanner.service.TourLogService;
 import at.jp.tourplanner.window.WindowManager;
 import javafx.beans.property.SimpleStringProperty;

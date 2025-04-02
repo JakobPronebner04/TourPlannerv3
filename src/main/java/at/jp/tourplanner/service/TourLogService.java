@@ -1,14 +1,15 @@
 package at.jp.tourplanner.service;
 
-import at.jp.tourplanner.da.StateDataAccess;
+import at.jp.tourplanner.dataaccess.StateDataAccess;
 import at.jp.tourplanner.entity.TourEntity;
 import at.jp.tourplanner.entity.TourLogEntity;
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
-import at.jp.tourplanner.model.TourLog;
+import at.jp.tourplanner.inputmodel.TourLog;
 import at.jp.tourplanner.repository.*;
+import at.jp.tourplanner.utils.PropertyValidator;
+import jakarta.validation.ValidationException;
 
-import java.lang.reflect.Field;
 import java.rmi.NotBoundException;
 import java.util.*;
 
@@ -44,24 +45,20 @@ public class TourLogService {
     }
 
 
-    public void add(TourLog tl) throws IllegalAccessException, NotBoundException {
-        hasNullProperties(tl);
+    public void add(TourLog tl) {
+        PropertyValidator.validateOrThrow(tl);
 
         Optional<TourEntity> selectedTourEntity =
                 tourRepository.findByName(stateDataAccess.getSelectedTour().getTourName());
-
         if (selectedTourEntity.isEmpty()) {
-            throw new NotBoundException("No tour has been selected!");
+            throw new RuntimeException("No tour has been selected!");
         }
 
         TourEntity tourEntity = selectedTourEntity.get();
 
         TourLogEntity entity = new TourLogEntity();
-        entity.setComment(tl.getComment());
-        entity.setRating(tl.getRating());
-        entity.setActualTime(tl.getActualTime());
-        entity.setActualDistance(tl.getActualDistance());
 
+        mapModelToEntity(entity,tl);
         entity.setTour(tourEntity);
 
         tourLogRepository.save(entity);
@@ -69,14 +66,13 @@ public class TourLogService {
         eventManager.publish(Events.TOURLOGS_CHANGED, "NEW_TOURLOG");
     }
 
-    public void edit(TourLog tl) throws IllegalAccessException, NotBoundException {
-        hasNullProperties(tl);
+    public void edit(TourLog tl) {
+        PropertyValidator.validateOrThrow(tl);
 
         Optional<TourLogEntity> selectedTourLogEntity =
                 tourLogRepository.findByLocalDate(stateDataAccess.getSelectedTourLog().getDateTime());
-
         if (selectedTourLogEntity.isEmpty()) {
-            throw new NotBoundException("No tour has been selected!");
+            throw new RuntimeException("No tour has been selected!");
         }
         mapModelToEntity(selectedTourLogEntity.get(), tl);
         tourLogRepository.save(selectedTourLogEntity.get());
@@ -92,29 +88,6 @@ public class TourLogService {
         eventManager.publish(Events.TOURLOGS_CHANGED, "EDITED_TOURLOG");
     }
 
-    private void hasNullProperties(TourLog tourLog) throws IllegalAccessException {
-        if (tourLog == null) throw new IllegalAccessException();
-
-        for (Field field : TourLog.class.getDeclaredFields()) {
-            field.setAccessible(true);
-            Object value = field.get(tourLog);
-
-            if (value instanceof String) {
-                String stringValue = (String) value;
-                if (stringValue == null || stringValue.isEmpty()) {
-                    throw new IllegalAccessException();
-                }
-            }
-            else if(value instanceof Float)
-            {
-                float floatValue = (float) value;
-                if(floatValue == 0.0f)
-                {
-                    throw new IllegalAccessException();
-                }
-            }
-        }
-    }
 
     public TourLog mapEntityToModel(TourLogEntity tle)
     {
@@ -123,7 +96,7 @@ public class TourLogService {
         tourLog.setActualTime(tle.getActualTime());
         tourLog.setComment(tle.getComment());
         tourLog.setRating(tle.getRating());
-        tourLog.setDateTimeStr(tle.getDateTime());
+        tourLog.setDateTime(tle.getDateTime());
         return tourLog;
     }
 

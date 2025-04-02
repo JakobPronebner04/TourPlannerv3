@@ -1,7 +1,7 @@
 package at.jp.tourplanner;
 
 
-import at.jp.tourplanner.da.StateDataAccess;
+import at.jp.tourplanner.dataaccess.StateDataAccess;
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.repository.*;
 import at.jp.tourplanner.service.TourLogService;
@@ -31,7 +31,7 @@ public class ViewFactory {
         this.eventManager = new EventManager();
         this.tourRepository = new TourRepositoryORM();
         this.tourLogRepository = new TourLogRepositoryORM();
-        this.stateDataAccess = StateDataAccess.getInstance();
+        this.stateDataAccess = new StateDataAccess();
 
         this.tourService = new TourService(eventManager, stateDataAccess, tourRepository);
         this.tourLogService = new TourLogService(eventManager,tourLogRepository,tourRepository, stateDataAccess);

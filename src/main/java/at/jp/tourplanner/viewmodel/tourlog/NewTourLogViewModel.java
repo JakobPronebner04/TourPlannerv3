@@ -1,11 +1,10 @@
 package at.jp.tourplanner.viewmodel.tourlog;
 
-import at.jp.tourplanner.model.TourLog;
+import at.jp.tourplanner.inputmodel.TourLog;
 import at.jp.tourplanner.service.TourLogService;
 import at.jp.tourplanner.window.WindowManager;
+import jakarta.validation.ValidationException;
 import javafx.beans.property.*;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 
 import java.rmi.NotBoundException;
 
@@ -55,12 +54,10 @@ public class NewTourLogViewModel {
 
             tourLogService.add(newTourLog);
             windowManager.closeWindow();
-        } catch (IllegalAccessException | NumberFormatException | NotBoundException e) {
-            if(e.getClass() == NotBoundException.class) {
-                errorMessageProperty.set(e.getMessage());
-                return;
-            }
-            errorMessageProperty.set("Some inputs might be empty!");
+        }catch(NumberFormatException e) {
+            errorMessageProperty.set("Time and Distance should not be emtpy!");
+        }catch(RuntimeException e) {
+            errorMessageProperty.set(e.getMessage());
         }
     }
 }

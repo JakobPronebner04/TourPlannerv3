@@ -2,7 +2,7 @@ package at.jp.tourplanner.viewmodel.tourlog;
 
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
-import at.jp.tourplanner.model.TourLog;
+import at.jp.tourplanner.inputmodel.TourLog;
 import at.jp.tourplanner.service.TourLogService;
 import at.jp.tourplanner.window.WindowManager;
 import javafx.beans.Observable;
@@ -12,8 +12,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import java.util.Objects;
 
 public class TourLogHistoryViewModel {
     private final EventManager eventManager;

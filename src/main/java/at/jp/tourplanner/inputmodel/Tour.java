@@ -1,14 +1,23 @@
-package at.jp.tourplanner.model;
+package at.jp.tourplanner.inputmodel;
 
+import jakarta.validation.constraints.NotBlank;
 import javafx.scene.image.Image;
 
-import javax.swing.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Tour {
+    @NotBlank(message = "tourName should not be blanked!")
     private String tourName;
+    @NotBlank(message = "tourDescription should not be blanked!")
     private String tourDescription;
+    @NotBlank(message = "tourStart should not be blanked!")
     private String tourStart;
+    @NotBlank(message = "tourDestination should not be blanked!")
     private String tourDestination;
+
     private String tourTransportType;
     private Image tourImage;
 

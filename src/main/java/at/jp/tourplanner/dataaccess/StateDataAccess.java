@@ -1,22 +1,13 @@
-package at.jp.tourplanner.da;
+package at.jp.tourplanner.dataaccess;
 
-import at.jp.tourplanner.model.Tour;
-import at.jp.tourplanner.model.TourLog;
+import at.jp.tourplanner.inputmodel.Tour;
+import at.jp.tourplanner.inputmodel.TourLog;
 
 public class StateDataAccess {
-    private static StateDataAccess stateDataAccess;
     private TourLog selectedTourLog;
     private Tour selectedTour;
 
-    private StateDataAccess() {
-        selectedTourLog = new TourLog();
-        selectedTour = new Tour();
-    }
-    public static StateDataAccess getInstance() {
-        if (stateDataAccess == null) {
-            stateDataAccess = new StateDataAccess();
-        }
-        return stateDataAccess;
+    public StateDataAccess() {
     }
 
     public TourLog getSelectedTourLog() {

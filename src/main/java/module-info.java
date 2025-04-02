@@ -6,14 +6,15 @@ module at.jp.tourplanner {
     requires java.desktop;
     requires jakarta.persistence;
     requires org.hibernate.orm.core;
+    requires jakarta.validation;
 
     opens at.jp.tourplanner to javafx.fxml;
-    opens at.jp.tourplanner.model;
+    opens at.jp.tourplanner.inputmodel;
     exports at.jp.tourplanner.entity;
     exports at.jp.tourplanner;
     exports at.jp.tourplanner.service;
     exports at.jp.tourplanner.event;
-    exports at.jp.tourplanner.model;
+    exports at.jp.tourplanner.inputmodel;
     exports at.jp.tourplanner.viewmodel.tour;
     exports at.jp.tourplanner.view.tour;
 
@@ -26,7 +27,7 @@ module at.jp.tourplanner {
     opens at.jp.tourplanner.repository to javafx.fxml;
     exports at.jp.tourplanner.utils;
     opens at.jp.tourplanner.entity to org.hibernate.orm.core;
-    exports at.jp.tourplanner.da;
-    opens at.jp.tourplanner.da to javafx.fxml;
+    exports at.jp.tourplanner.dataaccess;
+    opens at.jp.tourplanner.dataaccess to javafx.fxml;
 
 }

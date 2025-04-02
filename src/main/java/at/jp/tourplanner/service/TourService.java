@@ -3,12 +3,12 @@ package at.jp.tourplanner.service;
 import at.jp.tourplanner.entity.TourEntity;
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
-import at.jp.tourplanner.model.Tour;
-import at.jp.tourplanner.da.StateDataAccess;
+import at.jp.tourplanner.inputmodel.Tour;
+import at.jp.tourplanner.dataaccess.StateDataAccess;
 import at.jp.tourplanner.repository.TourRepositoryORM;
+import at.jp.tourplanner.utils.PropertyValidator;
 import javafx.scene.image.Image;
 
-import java.lang.reflect.Field;
 import java.rmi.AlreadyBoundException;
 import java.util.List;
 import java.util.Optional;
@@ -28,11 +28,11 @@ public class TourService {
         return tourRepository.findAll().stream().map(this::mapEntityToModel).toList();
     }
 
-    public void add(Tour t) throws IllegalAccessException, AlreadyBoundException {
-        hasNullProperties(t);
+    public void add(Tour t) {
+        PropertyValidator.validateOrThrow(t);
 
         if(tourRepository.findByName(t.getTourName()).isPresent()) {
-            throw new AlreadyBoundException("Tour name already exists");
+            throw new RuntimeException("Tour name already exists");
         }
 
         TourEntity te = mapModelToEntity(t);
@@ -48,13 +48,12 @@ public class TourService {
         return stateDataAccess.getSelectedTour();
     }
 
-    public void edit(Tour editedTour) throws IllegalAccessException, AlreadyBoundException
-    {
-        hasNullProperties(editedTour);
+    public void edit(Tour editedTour) {
+        PropertyValidator.validateOrThrow(editedTour);
 
         if(!editedTour.getTourName().equals(stateDataAccess.getSelectedTour().getTourName())
                 && tourRepository.findByName(editedTour.getTourName()).isPresent()) {
-            throw new AlreadyBoundException("Tour name already exists");
+            throw new RuntimeException("Tour name already exists");
         }
 
         TourEntity te = tourRepository.findByName(this.stateDataAccess.getSelectedTour().getTourName()).get();
@@ -81,29 +80,6 @@ public class TourService {
     public Image getPlaceHolderImage()
     {
         return new Image(getClass().getResource("/at/jp/tourplanner/images/mapplaceholder.png").toExternalForm());
-    }
-
-    private void hasNullProperties(Tour tour) throws IllegalAccessException {
-        if (tour == null) throw new IllegalAccessException();
-
-        for (Field field : Tour.class.getDeclaredFields()) {
-            field.setAccessible(true);
-            Object value = field.get(tour);
-
-            if (value instanceof String stringValue) {
-                if (stringValue == null || stringValue.isEmpty()) {
-                    throw new IllegalAccessException();
-                }
-            }
-            else if(value instanceof Float)
-            {
-                float floatValue = (float) value;
-                if(floatValue == 0.0f)
-                {
-                    throw new IllegalAccessException();
-                }
-            }
-        }
     }
 
     private TourEntity mapModelToEntity(Tour t)

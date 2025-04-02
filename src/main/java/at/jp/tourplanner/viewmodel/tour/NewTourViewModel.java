@@ -1,10 +1,8 @@
 package at.jp.tourplanner.viewmodel.tour;
 
-import at.jp.tourplanner.model.Tour;
-import at.jp.tourplanner.model.TourLog;
+import at.jp.tourplanner.inputmodel.Tour;
 import at.jp.tourplanner.service.TourService;
 import at.jp.tourplanner.window.WindowManager;
-import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -35,7 +33,6 @@ public class NewTourViewModel {
         tourStartProperty = new SimpleStringProperty("");
         tourDestinationProperty = new SimpleStringProperty("");
         selectedTransportType = new SimpleObjectProperty<>("Car");
-
     }
 
     public StringProperty tourNameProperty() { return tourNameProperty; }
@@ -55,12 +52,8 @@ public class NewTourViewModel {
 
             tourService.add(newTour);
             windowManager.closeWindow();
-        }catch(IllegalAccessException | AlreadyBoundException e){
-            if(e.getClass() == AlreadyBoundException.class){
-                errorMessageProperty.set("Tour already exists");
-                return;
-            }
-            errorMessageProperty.set("Some inputs might be empty!");
+        } catch (RuntimeException e) {
+            errorMessageProperty.set(e.getMessage());
         }
     }
 

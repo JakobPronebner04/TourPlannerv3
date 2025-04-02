@@ -34,11 +34,11 @@ public class TourMenuView implements Initializable {
     }
 
     public void onAddTourClicked(){
-        viewModel.openNewTourWindow(Windows.NEW_TOUR_WINDOW);
+        viewModel.openNewTourWindow();
     }
 
     public void onEditTourClicked(){
-        viewModel.openNewTourWindow(Windows.EDIT_TOUR_WINDOW);
+        viewModel.openEditTourWindow();
     }
 
     public void onRemoveTourClicked(){
@@ -46,6 +46,6 @@ public class TourMenuView implements Initializable {
     }
 
     public void onTourDetails() {
-        viewModel.openNewTourWindow(Windows.DETAILS_TOUR_WINDOW);
+        viewModel.openDetailsTourWindow();
     }
 }

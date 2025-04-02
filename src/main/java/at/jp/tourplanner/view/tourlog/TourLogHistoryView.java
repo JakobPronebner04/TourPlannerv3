@@ -1,16 +1,16 @@
 package at.jp.tourplanner.view.tourlog;
 
-import at.jp.tourplanner.model.TourLog;
+import at.jp.tourplanner.inputmodel.TourLog;
 import at.jp.tourplanner.utils.ControlsFormatter;
 import at.jp.tourplanner.viewmodel.tourlog.TourLogHistoryViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -26,7 +26,7 @@ public class TourLogHistoryView implements Initializable {
     @FXML
     private TableColumn<TourLog, Integer> rating;
     @FXML
-    private TableColumn<TourLog, Date> dateTime;
+    private TableColumn<TourLog, String> dateTime;
     @FXML
     private TableColumn<TourLog, String> actualTime;
     @FXML

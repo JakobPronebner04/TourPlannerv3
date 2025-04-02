@@ -1,15 +1,26 @@
-package at.jp.tourplanner.model;
+package at.jp.tourplanner.inputmodel;
+
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class TourLog {
+    @NotBlank(message = "Comment should not be blanked!")
     private String comment;
+
+    @Min(value = 0, message = "Minimum allowed value of rating 0!")
+    @Max(value = 5, message = "Maximum allowed value of rating 5!")
     private int rating;
+
+    @Positive(message = "Time must be greater than 0!")
     private float actualTime;
+
+    @Positive(message = "Distance must be greater than 0!")
     private float actualDistance;
-    private String dateTimeStr;
+
     private LocalDateTime dateTime;
+
 
     public TourLog() {
         this.comment = "";
@@ -20,7 +31,6 @@ public class TourLog {
     public String getComment() {
         return comment;
     }
-
     public void setComment(String comment) {
         this.comment = comment;
     }
@@ -28,7 +38,6 @@ public class TourLog {
     public int getRating() {
         return rating;
     }
-
     public void setRating(int rating) {
         this.rating = rating;
     }
@@ -46,14 +55,16 @@ public class TourLog {
     public void setActualDistance(float actualDistance) {
         this.actualDistance = actualDistance;
     }
-    public void setDateTimeStr(LocalDateTime dateTimeStr) {
-        this.dateTime = dateTimeStr;
-        this.dateTimeStr = dateTimeStr.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
+
     public String getDateTimeStr()
     {
-        return this.dateTimeStr;
+        return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
+
     public LocalDateTime getDateTime()
     {
         return this.dateTime;

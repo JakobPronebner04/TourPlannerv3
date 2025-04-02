@@ -2,15 +2,13 @@ package at.jp.tourplanner.viewmodel.tour;
 
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
-import at.jp.tourplanner.model.Tour;
+import at.jp.tourplanner.inputmodel.Tour;
 import at.jp.tourplanner.service.TourService;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import java.util.Objects;
 
 public class TourHistoryViewModel {
     private final EventManager eventManager;

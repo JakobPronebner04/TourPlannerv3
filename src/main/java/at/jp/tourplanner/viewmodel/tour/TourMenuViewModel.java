@@ -32,8 +32,14 @@ public class TourMenuViewModel {
         removeDisabled.set(state);
         detailsDisabled.set(state);
     }
-    public void openNewTourWindow(Windows window){
-            windowManager.openWindow(window);
+    public void openNewTourWindow(){
+            windowManager.openWindow(Windows.NEW_TOUR_WINDOW);
+    }
+    public void openEditTourWindow(){
+        windowManager.openWindow(Windows.EDIT_TOUR_WINDOW);
+    }
+    public void openDetailsTourWindow(){
+        windowManager.openWindow(Windows.DETAILS_TOUR_WINDOW);
     }
     public BooleanProperty editDisabledProperty() {
         return editDisabled;

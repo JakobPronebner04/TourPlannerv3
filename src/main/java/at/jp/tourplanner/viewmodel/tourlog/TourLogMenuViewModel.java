@@ -52,8 +52,14 @@ public class TourLogMenuViewModel {
         return detailsDisabled;
     }
 
-    public void openNewTourLogWindow(Windows window){
-        windowManager.openWindow(window);
+    public void openNewTourLogWindow(){
+        windowManager.openWindow(Windows.NEW_TOURLOG_WINDOW);
+    }
+    public void openEditTourLogWindow(){
+        windowManager.openWindow(Windows.EDIT_TOURLOG_WINDOW);
+    }
+    public void openDetailsTourLogWindow(){
+        windowManager.openWindow(Windows.DETAILS_TOURLOG_WINDOW);
     }
 
     public void removeTourLog()

@@ -33,11 +33,11 @@ public class TourLogMenuView implements Initializable {
         detailsTourLogButton.disableProperty().bind(viewModel.detailsDisabledProperty());
     }
     public void onTourLogAdd() {
-        viewModel.openNewTourLogWindow(Windows.NEW_TOURLOG_WINDOW);
+        viewModel.openNewTourLogWindow();
     }
     public void onTourLogEdit() {
-        viewModel.openNewTourLogWindow(Windows.EDIT_TOURLOG_WINDOW);
+        viewModel.openEditTourLogWindow();
     }
     public void onTourLogRemove() {viewModel.removeTourLog();}
-    public void onTourLogDetails() {viewModel.openNewTourLogWindow(Windows.DETAILS_TOURLOG_WINDOW);}
+    public void onTourLogDetails() {viewModel.openDetailsTourLogWindow();}
 }

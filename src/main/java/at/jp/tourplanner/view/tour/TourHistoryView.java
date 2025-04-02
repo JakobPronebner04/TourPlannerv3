@@ -1,6 +1,6 @@
 package at.jp.tourplanner.view.tour;
 
-import at.jp.tourplanner.model.Tour;
+import at.jp.tourplanner.inputmodel.Tour;
 import at.jp.tourplanner.utils.ControlsFormatter;
 import at.jp.tourplanner.viewmodel.tour.TourHistoryViewModel;
 import javafx.fxml.FXML;

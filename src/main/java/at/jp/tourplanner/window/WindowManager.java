@@ -13,10 +13,11 @@ import java.util.Map;
 public class WindowManager {
     private static WindowManager windowManager;
     private Stage currentStage;
-    private final String windowFolder = "dialogs/";
+    private final String dialogDir;
     private final Map<Windows,String> windowMap;
 
     private WindowManager() {
+        dialogDir = "dialogs/";
         windowMap = new HashMap<>();
         windowMap.put(Windows.NEW_TOUR_WINDOW       ,"newtour-view");
         windowMap.put(Windows.EDIT_TOUR_WINDOW      ,"edittour-view");
@@ -41,7 +42,7 @@ public class WindowManager {
        String fxmlFile = windowMap.get(window);
 
         try {
-            Parent view = FXMLDependencyInjector.load(windowFolder + fxmlFile +".fxml", Locale.ENGLISH);
+            Parent view = FXMLDependencyInjector.load(dialogDir + fxmlFile +".fxml", Locale.ENGLISH);
             if (view != null) {
                 Stage stage = new Stage();
                 stage.setScene(new Scene(view));
@@ -60,7 +61,7 @@ public class WindowManager {
             currentStage.close();
             currentStage = null;
         } else {
-            System.out.println("Failed to close window.");
+            throw new RuntimeException("Failed to close current window!");
         }
     }
 }
