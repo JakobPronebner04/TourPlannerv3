@@ -1,5 +1,6 @@
 package at.jp.tourplanner.service;
 
+import at.jp.tourplanner.dto.Geocode;
 import at.jp.tourplanner.entity.TourEntity;
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
@@ -18,8 +19,10 @@ public class TourService {
     private final EventManager eventManager;
     private final StateDataAccess stateDataAccess;
     private final TourRepositoryORM tourRepository;
+    private final OpenRouteServiceApi openRouteServiceApi;
 
-    public TourService(EventManager eventManager, StateDataAccess stateDataAccess, TourRepositoryORM tourRepository) {
+    public TourService(OpenRouteServiceApi openRouteServiceApi, EventManager eventManager, StateDataAccess stateDataAccess, TourRepositoryORM tourRepository) {
+        this.openRouteServiceApi = openRouteServiceApi;
         this.eventManager = eventManager;
         this.stateDataAccess = stateDataAccess;
         this.tourRepository = tourRepository;
@@ -34,6 +37,12 @@ public class TourService {
         if(tourRepository.findByName(t.getTourName()).isPresent()) {
             throw new RuntimeException("Tour name already exists");
         }
+
+        Optional<Geocode> geocodeStart = openRouteServiceApi.findGeocode(t.getTourStart());
+        geocodeStart.orElseThrow(()->new RuntimeException("Start destination not found"));
+
+        Optional<Geocode> geocodeEnd = openRouteServiceApi.findGeocode(t.getTourStart());
+        geocodeEnd.orElseThrow(()->new RuntimeException("End destination not found"));
 
         TourEntity te = mapModelToEntity(t);
         tourRepository.save(te);

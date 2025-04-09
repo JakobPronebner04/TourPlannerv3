@@ -1,6 +1,8 @@
 package at.jp.tourplanner.viewmodel.tour;
 
+import at.jp.tourplanner.dto.Geocode;
 import at.jp.tourplanner.inputmodel.Tour;
+import at.jp.tourplanner.service.OpenRouteServiceApi;
 import at.jp.tourplanner.service.TourService;
 import at.jp.tourplanner.window.WindowManager;
 import javafx.beans.property.ObjectProperty;
@@ -9,6 +11,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.rmi.AlreadyBoundException;
+import java.util.Optional;
 
 public class NewTourViewModel {
     private final TourService tourService;
@@ -49,7 +52,6 @@ public class NewTourViewModel {
             newTour.setTourStart(tourStartProperty.getValue());
             newTour.setTourDestination(tourDestinationProperty.getValue());
             newTour.setTourTransportType(selectedTransportType.getValue());
-
             tourService.add(newTour);
             windowManager.closeWindow();
         } catch (RuntimeException e) {

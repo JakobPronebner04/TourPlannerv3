@@ -16,7 +16,7 @@ public class PropertyValidator {
 
         if (!violations.isEmpty()) {
             String errorMessages = violations.stream()
-                    .map(v ->v.getMessage())
+                    .map(ConstraintViolation::getMessage)
                     .collect(Collectors.joining("\n"));
             throw new ValidationException("Validation failed: \n" + errorMessages);
         }
