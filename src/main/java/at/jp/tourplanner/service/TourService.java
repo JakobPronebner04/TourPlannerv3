@@ -41,12 +41,14 @@ public class TourService {
         Optional<Geocode> geocodeStart = openRouteServiceApi.findGeocode(t.getTourStart());
         geocodeStart.orElseThrow(()->new RuntimeException("Start destination not found"));
 
-        Optional<Geocode> geocodeEnd = openRouteServiceApi.findGeocode(t.getTourStart());
+        Optional<Geocode> geocodeEnd = openRouteServiceApi.findGeocode(t.getTourDestination());
         geocodeEnd.orElseThrow(()->new RuntimeException("End destination not found"));
 
-        TourEntity te = mapModelToEntity(t);
-        tourRepository.save(te);
-        eventManager.publish(Events.TOURS_CHANGED, "NEW_TOUR");
+        String jsonResponse = openRouteServiceApi.findRouteAsJson(geocodeStart.get(), geocodeEnd.get());
+        System.out.println(jsonResponse);
+        //TourEntity te = mapModelToEntity(t);
+       // tourRepository.save(te);
+        //eventManager.publish(Events.TOURS_CHANGED, "NEW_TOUR");
     }
 
     public void updateSelectedTour(Tour t) {

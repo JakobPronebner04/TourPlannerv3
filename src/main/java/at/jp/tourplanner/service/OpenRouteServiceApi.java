@@ -1,6 +1,7 @@
 package at.jp.tourplanner.service;
 
 import at.jp.tourplanner.dto.Geocode;
+import at.jp.tourplanner.service.openrouteservice.GeocodeMapSearchResponse;
 import at.jp.tourplanner.service.openrouteservice.GeocodeSearchResponse;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class OpenRouteServiceApi implements MapService {
@@ -64,8 +66,38 @@ public class OpenRouteServiceApi implements MapService {
         }
     }
     @Override
-    public List<Geocode> findRoute(Geocode geocodeStart, Geocode geocodeEnd)
+    public String findRouteAsJson(Geocode geocodeStart, Geocode geocodeEnd)
     {
-        
+        String profile = "driving-car";
+        String uri = String.format(MAP_POINTS_SEARCH_URI, profile);
+
+        try {
+            String requestBody = objectMapper.writeValueAsString(
+                    Map.of("coordinates", List.of(
+                            List.of(geocodeStart.getLongitude(), geocodeStart.getLatitude()),
+                            List.of(geocodeEnd.getLongitude(), geocodeEnd.getLatitude())
+                    ))
+            );
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(uri))
+                    .header("Authorization", API_KEY)
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            HttpResponse<String> response = client.send(
+                    request, HttpResponse.BodyHandlers.ofString()
+            );
+            System.out.println(response.body());
+            GeocodeMapSearchResponse geocodeMapSearchResponse = objectMapper.readValue(
+                    response.body(), GeocodeMapSearchResponse.class
+            );
+            System.out.println(geocodeMapSearchResponse.getFeatures().getFirst().getGeometry().getCoordinates()[0]);
+            return response.body();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Could not retrieve route" + e, e);
+        }
     }
 }
