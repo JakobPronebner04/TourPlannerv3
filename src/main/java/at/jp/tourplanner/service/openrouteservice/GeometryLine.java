@@ -2,12 +2,11 @@ package at.jp.tourplanner.service.openrouteservice;
 
 import java.util.List;
 
-public class GeocodeSearchResponse {
+public class GeometryLine {
 
     private String type;
 
-    private List<GeocodeFeature> features;
-
+    private List<double[]> coordinates;
     public String getType() {
         return type;
     }
@@ -16,11 +15,11 @@ public class GeocodeSearchResponse {
         this.type = type;
     }
 
-    public List<GeocodeFeature> getFeatures() {
-        return features;
+    public List<double[]> getCoordinates() {
+        return coordinates;
     }
 
-    public void setFeatures(List<GeocodeFeature> features) {
-        this.features = features;
+    public void setCoordinates(List<double[]> coordinates) {
+        this.coordinates = coordinates;
     }
 }

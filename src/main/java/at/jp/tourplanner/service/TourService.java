@@ -1,6 +1,7 @@
 package at.jp.tourplanner.service;
 
 import at.jp.tourplanner.dto.Geocode;
+import at.jp.tourplanner.entity.GeocodeDirectionsEntity;
 import at.jp.tourplanner.entity.TourEntity;
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
@@ -10,7 +11,6 @@ import at.jp.tourplanner.repository.TourRepositoryORM;
 import at.jp.tourplanner.utils.PropertyValidator;
 import javafx.scene.image.Image;
 
-import java.rmi.AlreadyBoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,12 +43,16 @@ public class TourService {
 
         Optional<Geocode> geocodeEnd = openRouteServiceApi.findGeocode(t.getTourDestination());
         geocodeEnd.orElseThrow(()->new RuntimeException("End destination not found"));
+        String jsonRouteResponse = openRouteServiceApi.findRouteAsJson(geocodeStart.get(), geocodeEnd.get(),t.getTourTransportType());
 
-        String jsonResponse = openRouteServiceApi.findRouteAsJson(geocodeStart.get(), geocodeEnd.get());
-        System.out.println(jsonResponse);
-        //TourEntity te = mapModelToEntity(t);
-       // tourRepository.save(te);
-        //eventManager.publish(Events.TOURS_CHANGED, "NEW_TOUR");
+        GeocodeDirectionsEntity gde = new GeocodeDirectionsEntity();
+        gde.setJsonDirections(jsonRouteResponse);
+
+        TourEntity te = mapModelToEntity(t);
+        te.setGeocodeDirections(gde);
+        tourRepository.save(te);
+
+        eventManager.publish(Events.TOURS_CHANGED, "NEW_TOUR");
     }
 
     public void updateSelectedTour(Tour t) {
@@ -67,6 +71,17 @@ public class TourService {
             throw new RuntimeException("Tour name already exists");
         }
 
+        Optional<Geocode> geocodeStart = openRouteServiceApi.findGeocode(editedTour.getTourStart());
+        geocodeStart.orElseThrow(()->new RuntimeException("Start destination not found"));
+
+        Optional<Geocode> geocodeEnd = openRouteServiceApi.findGeocode(editedTour.getTourDestination());
+        geocodeEnd.orElseThrow(()->new RuntimeException("End destination not found"));
+
+        String jsonRouteResponse = openRouteServiceApi.findRouteAsJson(geocodeStart.get(), geocodeEnd.get(),editedTour.getTourTransportType());
+
+        GeocodeDirectionsEntity gde = new GeocodeDirectionsEntity();
+        gde.setJsonDirections(jsonRouteResponse);
+
         TourEntity te = tourRepository.findByName(this.stateDataAccess.getSelectedTour().getTourName()).get();
 
         te.setName(editedTour.getTourName());
@@ -74,6 +89,8 @@ public class TourService {
         te.setStart(editedTour.getTourStart());
         te.setDestination(editedTour.getTourDestination());
         te.setTransportType(editedTour.getTourTransportType());
+
+        te.setGeocodeDirections(gde);
 
         tourRepository.save(te);
         eventManager.publish(Events.TOURS_CHANGED, "UPDATED_TOUR");

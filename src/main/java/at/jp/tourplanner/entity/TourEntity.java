@@ -21,6 +21,9 @@ public class TourEntity {
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TourLogEntity> tourLogs = new ArrayList<>();
 
+    @OneToOne(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
+    private GeocodeDirectionsEntity geocodeDirections;
+
     public TourEntity() {
         this.tourName = "";
         this.tourDescription = "";
@@ -82,6 +85,14 @@ public class TourEntity {
     public void addTourLog(TourLogEntity log) {
         tourLogs.add(log);
         log.setTour(this);
+    }
+    public GeocodeDirectionsEntity getGeocodeDirections() {
+        return geocodeDirections;
+    }
+
+    public void setGeocodeDirections(GeocodeDirectionsEntity geocodeDirections) {
+        this.geocodeDirections = geocodeDirections;
+        geocodeDirections.setTour(this);
     }
 
    /* public Image getTourImage() {

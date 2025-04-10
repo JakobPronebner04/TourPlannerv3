@@ -34,8 +34,14 @@
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Car"/>
+                        <String fx:value="Truck (Heavy Vehicle)"/>
                         <String fx:value="Bicycle"/>
+                        <String fx:value="Bicycle (Road)"/>
+                        <String fx:value="Bicycle (Mountain)"/>
+                        <String fx:value="Bicycle (E-Bike)"/>
                         <String fx:value="Walking"/>
+                        <String fx:value="Hiking"/>
+                        <String fx:value="Wheelchair Accessible"/>
                     </FXCollections>
                 </items>
             </ChoiceBox>

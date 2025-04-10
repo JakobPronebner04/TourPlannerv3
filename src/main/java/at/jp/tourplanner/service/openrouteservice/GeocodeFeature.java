@@ -1,10 +1,10 @@
 package at.jp.tourplanner.service.openrouteservice;
 
-public class Geometry {
+public class GeocodeFeature {
 
     private String type;
 
-    private double[] coordinates;
+    private GeometryPoint geometry;
 
     public String getType() {
         return type;
@@ -14,11 +14,11 @@ public class Geometry {
         this.type = type;
     }
 
-    public double[] getCoordinates() {
-        return coordinates;
+    public GeometryPoint getGeometry() {
+        return geometry;
     }
 
-    public void setCoordinates(double[] coordinates) {
-        this.coordinates = coordinates;
+    public void setGeometry(GeometryPoint geometry) {
+        this.geometry = geometry;
     }
 }

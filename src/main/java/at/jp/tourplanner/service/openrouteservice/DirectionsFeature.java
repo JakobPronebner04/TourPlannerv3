@@ -1,10 +1,10 @@
 package at.jp.tourplanner.service.openrouteservice;
 
-public class Feature {
+public class DirectionsFeature {
 
     private String type;
 
-    private Geometry geometry;
+    private GeometryLine geometry;
 
     public String getType() {
         return type;
@@ -14,11 +14,11 @@ public class Feature {
         this.type = type;
     }
 
-    public Geometry getGeometry() {
+    public GeometryLine getGeometry() {
         return geometry;
     }
 
-    public void setGeometry(Geometry geometry) {
+    public void setGeometry(GeometryLine geometry) {
         this.geometry = geometry;
     }
 }
