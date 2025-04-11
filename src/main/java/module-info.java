@@ -1,13 +1,13 @@
 module at.jp.tourplanner {
-    requires javafx.controls;
     requires javafx.fxml;
     requires java.rmi;
     requires jakarta.persistence;
     requires org.hibernate.orm.core;
     requires jakarta.validation;
     requires com.fasterxml.jackson.databind;
-    requires java.net.http;
     requires jdk.jshell;
+    requires javafx.web;
+    requires java.net.http;
 
     opens at.jp.tourplanner to javafx.fxml;
     opens at.jp.tourplanner.inputmodel;

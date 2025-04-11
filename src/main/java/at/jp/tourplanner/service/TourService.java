@@ -105,11 +105,6 @@ public class TourService {
         eventManager.publish(Events.TOURS_CHANGED, "REMOVE_TOUR");
     }
 
-    public Image getPlaceHolderImage()
-    {
-        return new Image(getClass().getResource("/at/jp/tourplanner/images/mapplaceholder.png").toExternalForm());
-    }
-
     private TourEntity mapModelToEntity(Tour t)
     {
         TourEntity te = new TourEntity();

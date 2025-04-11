@@ -19,7 +19,6 @@ public class Tour {
     private String tourDestination;
 
     private String tourTransportType;
-    private Image tourImage;
 
     public Tour() {
         this.tourName = "";
@@ -27,7 +26,6 @@ public class Tour {
         this.tourStart = "";
         this.tourDestination = "";
         this.tourTransportType = "";
-        this.tourImage = new Image(getClass().getResource("/at/jp/tourplanner/images/map.png").toExternalForm());
     }
 
     public String getTourName() {
@@ -69,11 +67,4 @@ public class Tour {
         this.tourTransportType = tourTransportType;
     }
 
-    public Image getTourImage() {
-        return tourImage;
-    }
-
-    public void setTourImage(Image tourImage) {
-        this.tourImage = tourImage;
-    }
 }
