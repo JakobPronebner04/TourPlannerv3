@@ -5,7 +5,6 @@ public class DirectionsFeature {
     private String type;
 
     private GeometryLine geometry;
-
     public String getType() {
         return type;
     }

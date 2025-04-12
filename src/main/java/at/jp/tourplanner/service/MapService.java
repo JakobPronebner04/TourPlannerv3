@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface MapService {
     Optional<Geocode> findGeocode(String text);
     String findRouteAsJson(Geocode geocodeStart, Geocode geocodeEnd, String transportType);
+    List<Geocode> getRouteCoordinatesFromJson(String jsonRoute);
 }

@@ -11,6 +11,7 @@ import at.jp.tourplanner.repository.TourRepositoryORM;
 import at.jp.tourplanner.utils.PropertyValidator;
 import javafx.scene.image.Image;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +44,11 @@ public class TourService {
 
         Optional<Geocode> geocodeEnd = openRouteServiceApi.findGeocode(t.getTourDestination());
         geocodeEnd.orElseThrow(()->new RuntimeException("End destination not found"));
-        String jsonRouteResponse = openRouteServiceApi.findRouteAsJson(geocodeStart.get(), geocodeEnd.get(),t.getTourTransportType());
+
+        String jsonRouteResponse = openRouteServiceApi.findRouteAsJson(
+                geocodeStart.get(),
+                geocodeEnd.get(),
+                t.getTourTransportType());
 
         GeocodeDirectionsEntity gde = new GeocodeDirectionsEntity();
         gde.setJsonDirections(jsonRouteResponse);
@@ -126,5 +131,17 @@ public class TourService {
         return t;
     }
 
-
+        public List<Geocode> getRouteGeocodes()
+        {
+            Optional<TourEntity> tour = tourRepository.findByName(this.stateDataAccess.getSelectedTour().getTourName());
+            if(tour.isEmpty()) {
+                return new ArrayList<>();
+            }
+            String jsonRoute = tour.get().getGeocodeDirections().getJsonDirections();
+            List<Geocode> geocodes = openRouteServiceApi.getRouteCoordinatesFromJson(jsonRoute);
+            if(geocodes.isEmpty()) {
+                throw new RuntimeException("Route not found");
+            }
+            return geocodes;
+        }
 }

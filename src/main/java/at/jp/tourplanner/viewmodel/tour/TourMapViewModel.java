@@ -1,45 +1,36 @@
 package at.jp.tourplanner.viewmodel.tour;
 
+import at.jp.tourplanner.dto.Geocode;
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
 import at.jp.tourplanner.service.TourService;
-import javafx.scene.web.WebEngine;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import java.util.List;
 
 public class TourMapViewModel {
 
-    private WebEngine webEngine;
-
+    private final TourService tourService;
     private final EventManager eventManager;
 
-    private final TourService tourService;
+    private final ListProperty<Geocode> routeCoordinates = new SimpleListProperty<>(FXCollections.observableArrayList());
 
     public TourMapViewModel(EventManager eventManager, TourService tourService) {
         this.eventManager = eventManager;
         this.tourService = tourService;
-
-        this.eventManager.subscribe(
-                Events.TOUR_SELECTED, this::onSearchTerm
-        );
+        this.eventManager.subscribe(Events.TOUR_SELECTED, this::onTourSelected);
     }
 
-    public void init() {
-        String html = getClass()
-                .getResource("/at/jp/tourplanner/map.html").toExternalForm();
-        this.webEngine.load(html);
-    }
-
-    private void onSearchTerm(String message) {
-        /*Geocode geocode = searchTermService.getRecentSearch();
-        if (null == geocode) {
+    private void onTourSelected(Boolean isTourSelected) {
+        if (isTourSelected) {
+            routeCoordinates.clear();
             return;
         }
-
-        webEngine.executeScript(
-                String.format("map.setView([%s, %s], 13);", geocode.getLatitude(), geocode.getLongitude())
-        );*/
+        routeCoordinates.setAll(tourService.getRouteGeocodes());
     }
 
-    public void setWebEngine(WebEngine webEngine) {
-        this.webEngine = webEngine;
+    public ListProperty<Geocode> routeCoordinatesProperty() {
+        return routeCoordinates;
     }
 }

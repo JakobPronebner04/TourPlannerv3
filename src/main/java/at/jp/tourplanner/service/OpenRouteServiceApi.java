@@ -11,6 +11,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -61,7 +62,7 @@ public class OpenRouteServiceApi implements MapService {
 
             return Optional.of(geocode);
         } catch (Exception e) {
-            throw new RuntimeException("Something went wrong during api call to get the route! ", e);
+            throw new RuntimeException("Could not find coordinates for " + text);
         }
     }
     @Override
@@ -96,6 +97,25 @@ public class OpenRouteServiceApi implements MapService {
 
         } catch (Exception e) {
             throw new RuntimeException("Could not retrieve route" + e);
+        }
+    }
+    @Override
+    public List<Geocode> getRouteCoordinatesFromJson(String jsonRoute)
+    {
+        List<Geocode> route = new ArrayList<>();
+        try{
+            GeocodeDirectionsSearchResponse gdsr = objectMapper.readValue(jsonRoute,GeocodeDirectionsSearchResponse.class);
+            gdsr.getFeatures().getFirst().getGeometry().getCoordinates()
+                    .forEach(coord -> {
+                        Geocode geocode = new Geocode();
+                        geocode.setLatitude(coord[1]);
+                        geocode.setLongitude(coord[0]);
+                        route.add(geocode);
+                    });
+            return route;
+        }catch(Exception e)
+        {
+            throw new RuntimeException("Could not map Route to Geocodes");
         }
     }
 }
