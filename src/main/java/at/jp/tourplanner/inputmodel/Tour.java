@@ -18,6 +18,9 @@ public class Tour {
     @NotBlank(message = "tourDestination should not be blanked!")
     private String tourDestination;
 
+    private String tourDuration;
+    private String tourDistance;
+
     private String tourTransportType;
 
     public Tour() {
@@ -65,6 +68,19 @@ public class Tour {
     }
     public void setTourTransportType(String tourTransportType) {
         this.tourTransportType = tourTransportType;
+    }
+
+    public void setTourDuration(String tourDuration) {
+        this.tourDuration = tourDuration;
+    }
+    public void setTourDistance(String tourDistance) {
+        this.tourDistance = tourDistance;
+    }
+    public String getTourDuration() {
+        return tourDuration;
+    }
+    public String getTourDistance() {
+        return tourDistance;
     }
 
 }

@@ -5,10 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaDelete;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +48,23 @@ public class TourRepositoryORM implements TourRepository {
         }
 
     }
+    public List<TourEntity> findByFilterTerm(String text, String type) {
+        String pattern = text + "%";
+        String filterAttribute = TourFilterType.fromString(type).getFieldName();
+
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<TourEntity> query = cb.createQuery(TourEntity.class);
+            Root<TourEntity> root = query.from(TourEntity.class);
+
+            query.select(root).where(
+                    cb.like(root.get(filterAttribute), pattern)
+            );
+
+            return entityManager.createQuery(query).getResultList();
+        }
+    }
+
     @Override
     public Optional<TourEntity> findByName(String name) {
         CriteriaBuilder cb = entityManagerFactory.getCriteriaBuilder();

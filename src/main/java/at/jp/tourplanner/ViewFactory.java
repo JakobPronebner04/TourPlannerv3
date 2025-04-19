@@ -4,9 +4,7 @@ package at.jp.tourplanner;
 import at.jp.tourplanner.dataaccess.StateDataAccess;
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.repository.*;
-import at.jp.tourplanner.service.OpenRouteServiceApi;
-import at.jp.tourplanner.service.TourLogService;
-import at.jp.tourplanner.service.TourService;
+import at.jp.tourplanner.service.*;
 import at.jp.tourplanner.view.tour.*;
 import at.jp.tourplanner.view.tourlog.*;
 import at.jp.tourplanner.viewmodel.tour.*;
@@ -21,6 +19,7 @@ public class ViewFactory {
 
     private final TourService tourService;
     private final TourLogService tourLogService;
+    private final MapRendererService mapRendererService;
 
     private final WindowManager windowManager;
 
@@ -38,6 +37,7 @@ public class ViewFactory {
 
         this.tourService = new TourService(openRouteServiceApi,eventManager, stateDataAccess, tourRepository);
         this.tourLogService = new TourLogService(eventManager,tourLogRepository,tourRepository, stateDataAccess);
+        this.mapRendererService = new MapRendererService();
         this.windowManager = WindowManager.getInstance();
     }
 
@@ -84,7 +84,10 @@ public class ViewFactory {
             return new DetailedTourView(new DetailedTourViewModel(tourService,windowManager));
         }
         if(TourMapView.class == viewClass) {
-            return new TourMapView(new TourMapViewModel(eventManager,tourService));
+            return new TourMapView(new TourMapViewModel(eventManager,tourService,mapRendererService));
+        }
+        if(TourSearchView.class == viewClass) {
+            return new TourSearchView(new TourSearchViewModel(tourService));
         }
 
         throw new IllegalArgumentException(

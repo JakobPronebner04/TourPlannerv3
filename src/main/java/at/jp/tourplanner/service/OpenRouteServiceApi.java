@@ -1,6 +1,7 @@
 package at.jp.tourplanner.service;
 
 import at.jp.tourplanner.dto.Geocode;
+import at.jp.tourplanner.dto.RouteInfo;
 import at.jp.tourplanner.service.openrouteservice.GeocodeDirectionsSearchResponse;
 import at.jp.tourplanner.service.openrouteservice.GeocodeSearchResponse;
 import at.jp.tourplanner.service.openrouteservice.TransportProfile;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class OpenRouteServiceApi implements MapService {
+public class OpenRouteServiceApi implements GeoRouting {
 
     private final static String API_KEY =
             "5b3ce3597851110001cf6248945838c073a6485aa146a620e558f97e";
@@ -66,7 +67,7 @@ public class OpenRouteServiceApi implements MapService {
         }
     }
     @Override
-    public String findRouteAsJson(Geocode geocodeStart, Geocode geocodeEnd, String transportType)
+    public Optional<RouteInfo> findRoute(Geocode geocodeStart, Geocode geocodeEnd, String transportType)
     {
         String profile = TransportProfile.fromDisplayName(transportType).getApiProfile();
         String uri = String.format(MAP_POINTS_SEARCH_URI, profile);
@@ -93,10 +94,17 @@ public class OpenRouteServiceApi implements MapService {
                     response.body(), GeocodeDirectionsSearchResponse.class
             );
 
-            return objectMapper.writeValueAsString(geocodeDirectionsSearchResponse);
+            if(geocodeDirectionsSearchResponse.getFeatures().isEmpty()) {
+                return Optional.empty();
+            }
 
+            RouteInfo routeInfo = new RouteInfo();
+            routeInfo.setDistance(geocodeDirectionsSearchResponse.getFeatures().getFirst().getProperties().getSummary().getDistance());
+            routeInfo.setDuration(geocodeDirectionsSearchResponse.getFeatures().getFirst().getProperties().getSummary().getDuration());
+            routeInfo.setJsonRoute(objectMapper.writeValueAsString(geocodeDirectionsSearchResponse));
+            return Optional.of(routeInfo);
         } catch (Exception e) {
-            throw new RuntimeException("Could not retrieve route" + e);
+            throw new RuntimeException("Could not retrieve route because distance exceeded");
         }
     }
     @Override

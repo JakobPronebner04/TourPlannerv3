@@ -24,30 +24,6 @@ public class TourMapView implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        WebEngine webEngine = webViewMap.getEngine();
-        String html = getClass().getResource("/at/jp/tourplanner/map.html").toExternalForm();
-        webEngine.load(html);
-
-        viewModel.routeCoordinatesProperty().addListener((observable, oldVal, newVal) -> {
-            String clearScript = """
-                map.eachLayer(function(layer) {
-                    if (!!layer.toGeoJSON) {
-                        map.removeLayer(layer);
-                    }
-                });
-                map.setView([51.505, -0.09], 13);
-                """;
-            webEngine.executeScript(clearScript);
-
-            if (newVal != null && !newVal.isEmpty()) {
-                StringBuilder scriptBuilder = new StringBuilder("var latlngs = [");
-                for (Geocode g : newVal) {
-                    scriptBuilder.append(String.format(java.util.Locale.ENGLISH, "[%f, %f],", g.getLatitude(), g.getLongitude()));
-                }
-                scriptBuilder.setLength(scriptBuilder.length() - 1);
-                scriptBuilder.append("]; var polyline = L.polyline(latlngs, {color: 'blue'}).addTo(map); map.fitBounds(polyline.getBounds());");
-                webEngine.executeScript(scriptBuilder.toString());
-            }
-        });
+        this.viewModel.initMap(webViewMap.getEngine());
     }
 }

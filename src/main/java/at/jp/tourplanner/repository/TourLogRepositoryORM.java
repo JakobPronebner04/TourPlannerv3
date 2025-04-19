@@ -35,7 +35,6 @@ public class TourLogRepositoryORM implements TourLogRepository {
                     entityManager.createQuery(query).getSingleResultOrNull()
             );
         }
-
     }
 
     @Override

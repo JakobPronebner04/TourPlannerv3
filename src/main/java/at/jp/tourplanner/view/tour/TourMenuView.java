@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -32,7 +33,6 @@ public class TourMenuView implements Initializable {
         removeButton.disableProperty().bind(viewModel.removeDisabledProperty());
         detailsButton.disableProperty().bind(viewModel.detailsDisabledProperty());
     }
-
     public void onAddTourClicked(){
         viewModel.openNewTourWindow();
     }

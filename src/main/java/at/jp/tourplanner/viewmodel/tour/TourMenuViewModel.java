@@ -3,11 +3,15 @@ package at.jp.tourplanner.viewmodel.tour;
 
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
+import at.jp.tourplanner.inputmodel.Tour;
 import at.jp.tourplanner.service.TourService;
 import at.jp.tourplanner.window.WindowManager;
 import at.jp.tourplanner.window.Windows;
+import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class TourMenuViewModel {
 
@@ -32,6 +36,7 @@ public class TourMenuViewModel {
         removeDisabled.set(state);
         detailsDisabled.set(state);
     }
+
     public void openNewTourWindow(){
             windowManager.openWindow(Windows.NEW_TOUR_WINDOW);
     }
@@ -48,7 +53,6 @@ public class TourMenuViewModel {
         return removeDisabled;
     }
     public BooleanProperty detailsDisabledProperty() { return detailsDisabled;}
-
     public void deleteTour()
     {
         tourService.remove();

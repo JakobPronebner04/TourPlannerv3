@@ -1,6 +1,7 @@
 package at.jp.tourplanner.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Formula;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +17,22 @@ public class TourEntity {
     private String tourStart;
     private String tourDestination;
     private String tourTransportType;
-    //private Image tourImage;
+    private float tourDistance;
+    private float tourDuration;
+
+    @Formula(
+            "floor(tourduration / 3600) || 'h ' || " +
+                    "floor(((tourduration)::integer % 3600) / 60) || 'min'"
+    )
+    private String formattedDuration;
+
+    @Formula("floor(tourdistance / 1000) || ' km'")
+    private String formattedDistance;
 
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TourLogEntity> tourLogs = new ArrayList<>();
 
-    @OneToOne(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true,fetch=FetchType.EAGER)
     private GeocodeDirectionsEntity geocodeDirections;
 
     public TourEntity() {
@@ -30,7 +41,6 @@ public class TourEntity {
         this.tourStart = "";
         this.tourDestination = "";
         this.tourTransportType = "";
-        //this.tourImage = new Image(getClass().getResource("/at/jp/tourplanner/images/map.png").toExternalForm());
     }
 
     public UUID getId() {
@@ -39,6 +49,8 @@ public class TourEntity {
     public String getName() {
         return tourName;
     }
+    public String getFormattedDuration()  { return formattedDuration; }
+    public String getFormattedDistance()  { return formattedDistance; }
 
     public void setName(String tourName) {
         this.tourName = tourName;
@@ -75,6 +87,21 @@ public class TourEntity {
         this.tourTransportType = tourTransportType;
     }
 
+    public float getDistance() {
+        return tourDistance;
+    }
+    public void setDistance(float tourDistance) {
+        this.tourDistance = tourDistance;
+    }
+    public float getDuration() {
+        return tourDuration;
+    }
+    public void setDuration(float tourDuration) {
+        this.tourDuration = tourDuration;
+    }
+
+
+
     public void setTourLogs(List<TourLogEntity> tourLogs) {
         this.tourLogs = tourLogs;
     }
@@ -94,12 +121,4 @@ public class TourEntity {
         this.geocodeDirections = geocodeDirections;
         geocodeDirections.setTour(this);
     }
-
-   /* public Image getTourImage() {
-        return tourImage;
-    }
-
-    public void setTourImage(Image tourImage) {
-        this.tourImage = tourImage;
-    }*/
 }

@@ -1,15 +1,16 @@
 package at.jp.tourplanner.service;
 
 import at.jp.tourplanner.dto.Geocode;
+import at.jp.tourplanner.dto.RouteInfo;
 import at.jp.tourplanner.entity.GeocodeDirectionsEntity;
 import at.jp.tourplanner.entity.TourEntity;
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
+import at.jp.tourplanner.inputmodel.FilterTerm;
 import at.jp.tourplanner.inputmodel.Tour;
 import at.jp.tourplanner.dataaccess.StateDataAccess;
 import at.jp.tourplanner.repository.TourRepositoryORM;
 import at.jp.tourplanner.utils.PropertyValidator;
-import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,25 @@ public class TourService {
         this.tourRepository = tourRepository;
     }
     public List<Tour> getTours() {
-        return tourRepository.findAll().stream().map(this::mapEntityToModel).toList();
+
+        Optional<FilterTerm> filterTerm =  this.stateDataAccess.getSelectedFilterTerm();
+        if(filterTerm.isEmpty() || filterTerm.get().getText().isEmpty())
+        {
+            return this.tourRepository.findAll().stream().map(this::mapEntityToModel).toList();
+        }
+        return this.tourRepository.findByFilterTerm(filterTerm.get().getText(),filterTerm.get().getType()).stream().map(this::mapEntityToModel).toList();
+    }
+
+    public void updateSelectedTour(Tour t) {
+        stateDataAccess.updateSelectedTour(t);
+    }
+    public void updateSelectedFilter(FilterTerm filterTerm) {
+        stateDataAccess.updateFilter(filterTerm);
+        eventManager.publish(Events.TOURS_CHANGED, "FILTER_TOURS");
+    }
+    public Tour getSelectedTour()
+    {
+        return stateDataAccess.getSelectedTour();
     }
 
     public void add(Tour t) {
@@ -45,29 +64,24 @@ public class TourService {
         Optional<Geocode> geocodeEnd = openRouteServiceApi.findGeocode(t.getTourDestination());
         geocodeEnd.orElseThrow(()->new RuntimeException("End destination not found"));
 
-        String jsonRouteResponse = openRouteServiceApi.findRouteAsJson(
+        Optional<RouteInfo> routInfo= openRouteServiceApi.findRoute(
                 geocodeStart.get(),
                 geocodeEnd.get(),
                 t.getTourTransportType());
+        routInfo.orElseThrow(()->new RuntimeException("Route not found or distance limit exceeded!"));
 
         GeocodeDirectionsEntity gde = new GeocodeDirectionsEntity();
-        gde.setJsonDirections(jsonRouteResponse);
+        gde.setJsonDirections(routInfo.get().getJsonRoute());
 
         TourEntity te = mapModelToEntity(t);
-        te.setGeocodeDirections(gde);
-        tourRepository.save(te);
+        te.setDistance(routInfo.get().getDistance());
+        te.setDuration(routInfo.get().getDuration());
 
+        te.setGeocodeDirections(gde);
+
+        tourRepository.save(te);
         eventManager.publish(Events.TOURS_CHANGED, "NEW_TOUR");
     }
-
-    public void updateSelectedTour(Tour t) {
-        stateDataAccess.updateSelectedTour(t);
-    }
-    public Tour getSelectedTour()
-    {
-        return stateDataAccess.getSelectedTour();
-    }
-
     public void edit(Tour editedTour) {
         PropertyValidator.validateOrThrow(editedTour);
 
@@ -82,10 +96,11 @@ public class TourService {
         Optional<Geocode> geocodeEnd = openRouteServiceApi.findGeocode(editedTour.getTourDestination());
         geocodeEnd.orElseThrow(()->new RuntimeException("End destination not found"));
 
-        String jsonRouteResponse = openRouteServiceApi.findRouteAsJson(geocodeStart.get(), geocodeEnd.get(),editedTour.getTourTransportType());
+        Optional<RouteInfo> routInfo = openRouteServiceApi.findRoute(geocodeStart.get(), geocodeEnd.get(),editedTour.getTourTransportType());
+        routInfo.orElseThrow(()->new RuntimeException("Route not found or distance limit exceeded!"));
 
         GeocodeDirectionsEntity gde = new GeocodeDirectionsEntity();
-        gde.setJsonDirections(jsonRouteResponse);
+        gde.setJsonDirections(routInfo.get().getJsonRoute());
 
         TourEntity te = tourRepository.findByName(this.stateDataAccess.getSelectedTour().getTourName()).get();
 
@@ -94,13 +109,14 @@ public class TourService {
         te.setStart(editedTour.getTourStart());
         te.setDestination(editedTour.getTourDestination());
         te.setTransportType(editedTour.getTourTransportType());
+        te.setDuration(routInfo.get().getDuration());
+        te.setDistance(routInfo.get().getDistance());
 
         te.setGeocodeDirections(gde);
 
         tourRepository.save(te);
         eventManager.publish(Events.TOURS_CHANGED, "UPDATED_TOUR");
     }
-
     public void remove() {
         Optional<TourEntity> te = this.tourRepository.findByName(stateDataAccess.getSelectedTour().getTourName());
         if(te.isEmpty()) {
@@ -128,20 +144,22 @@ public class TourService {
         t.setTourStart(entity.getStart());
         t.setTourDestination(entity.getDestination());
         t.setTourTransportType(entity.getTransportType());
+        t.setTourDistance(entity.getFormattedDistance());
+        t.setTourDuration(entity.getFormattedDuration());
         return t;
     }
 
-        public List<Geocode> getRouteGeocodes()
-        {
-            Optional<TourEntity> tour = tourRepository.findByName(this.stateDataAccess.getSelectedTour().getTourName());
-            if(tour.isEmpty()) {
-                return new ArrayList<>();
-            }
-            String jsonRoute = tour.get().getGeocodeDirections().getJsonDirections();
-            List<Geocode> geocodes = openRouteServiceApi.getRouteCoordinatesFromJson(jsonRoute);
-            if(geocodes.isEmpty()) {
-                throw new RuntimeException("Route not found");
-            }
-            return geocodes;
+    public List<Geocode> getRouteGeocodes()
+    {
+        Optional<TourEntity> tour = tourRepository.findByName(this.stateDataAccess.getSelectedTour().getTourName());
+        if(tour.isEmpty()) {
+            return new ArrayList<>();
         }
+        String jsonRoute = tour.get().getGeocodeDirections().getJsonDirections();
+        List<Geocode> geocodes = openRouteServiceApi.getRouteCoordinatesFromJson(jsonRoute);
+        if(geocodes.isEmpty()) {
+            throw new RuntimeException("Route not found");
+        }
+        return geocodes;
+    }
 }
