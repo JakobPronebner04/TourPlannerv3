@@ -20,7 +20,7 @@ public class StateDataAccess {
         return selectedTour;
     }
     public Optional<FilterTerm> getSelectedFilterTerm() {
-        if (selectedFilterTerm == null) {
+        if (selectedFilterTerm == null || selectedFilterTerm.getText().isEmpty()) {
             return Optional.empty();
         };
         return Optional.of(selectedFilterTerm);

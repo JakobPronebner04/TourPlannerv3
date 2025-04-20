@@ -9,7 +9,7 @@
                         <Label text="%HeaderTours.label" />
                 </HBox>
                 <VBox style="-fx-padding: 10 0 0 0;">
-                        <fx:include source="toursearch-view.fxml"/>
+                        <fx:include source="tourfilter-view.fxml"/>
                         <fx:include source="tourmenu-view.fxml" />
                         <fx:include source="tourhistory-view.fxml"/>
                 </VBox>

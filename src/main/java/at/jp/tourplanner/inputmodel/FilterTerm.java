@@ -8,6 +8,10 @@ public class FilterTerm {
         text = "";
         type = "";
     }
+    public FilterTerm(String text, String type) {
+        this.text = text;
+        this.type = type;
+    }
 
     public void setText(String text) {
         this.text = text;

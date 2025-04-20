@@ -11,6 +11,7 @@ import at.jp.tourplanner.inputmodel.Tour;
 import at.jp.tourplanner.dataaccess.StateDataAccess;
 import at.jp.tourplanner.repository.TourRepositoryORM;
 import at.jp.tourplanner.utils.PropertyValidator;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class TourService {
     public List<Tour> getTours() {
 
         Optional<FilterTerm> filterTerm =  this.stateDataAccess.getSelectedFilterTerm();
-        if(filterTerm.isEmpty() || filterTerm.get().getText().isEmpty())
+        if(filterTerm.isEmpty())
         {
             return this.tourRepository.findAll().stream().map(this::mapEntityToModel).toList();
         }

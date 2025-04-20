@@ -86,8 +86,8 @@ public class ViewFactory {
         if(TourMapView.class == viewClass) {
             return new TourMapView(new TourMapViewModel(eventManager,tourService,mapRendererService));
         }
-        if(TourSearchView.class == viewClass) {
-            return new TourSearchView(new TourSearchViewModel(tourService));
+        if(TourFilterView.class == viewClass) {
+            return new TourFilterView(new TourFilterViewModel(tourService));
         }
 
         throw new IllegalArgumentException(

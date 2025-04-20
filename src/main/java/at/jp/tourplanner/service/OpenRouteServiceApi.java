@@ -24,7 +24,7 @@ public class OpenRouteServiceApi implements GeoRouting {
 
     private final static String GEOCODE_SEARCH_URI =
             "https://api.openrouteservice.org/geocode/search?api_key=%s&text=%s";
-    private final static String MAP_POINTS_SEARCH_URI =
+    private final static String ROUTE_SEARCH_URI =
             "https://api.openrouteservice.org/v2/directions/%s/geojson";
 
     private final HttpClient client;
@@ -70,7 +70,7 @@ public class OpenRouteServiceApi implements GeoRouting {
     public Optional<RouteInfo> findRoute(Geocode geocodeStart, Geocode geocodeEnd, String transportType)
     {
         String profile = TransportProfile.fromDisplayName(transportType).getApiProfile();
-        String uri = String.format(MAP_POINTS_SEARCH_URI, profile);
+        String uri = String.format(ROUTE_SEARCH_URI, profile);
 
         try {
             String requestBody = objectMapper.writeValueAsString(
@@ -104,7 +104,7 @@ public class OpenRouteServiceApi implements GeoRouting {
             routeInfo.setJsonRoute(objectMapper.writeValueAsString(geocodeDirectionsSearchResponse));
             return Optional.of(routeInfo);
         } catch (Exception e) {
-            throw new RuntimeException("Could not retrieve route because distance exceeded");
+            throw new RuntimeException("Could not retrieve route.");
         }
     }
     @Override
