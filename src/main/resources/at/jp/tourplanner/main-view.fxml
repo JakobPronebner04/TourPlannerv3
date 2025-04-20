@@ -21,6 +21,7 @@
                         <Label text="%HeaderTourLogs.label"/>
                 </HBox>
                 <VBox style="-fx-padding: 10 0 0 0;">
+                        <fx:include source="tourlogfilter-view.fxml"/>
                         <fx:include source="tourlogmenu-view.fxml"/>
                         <fx:include source="tourloghistory-view.fxml"/>
                 </VBox>

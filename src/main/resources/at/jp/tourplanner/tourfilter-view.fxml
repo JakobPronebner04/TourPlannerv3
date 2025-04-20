@@ -9,7 +9,7 @@
 <VBox xmlns="http://javafx.com/javafx/17.0.6"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="at.jp.tourplanner.view.tour.TourFilterView">
-    <TextField fx:id="filterInput" promptText="%search.prompt"/>
+    <TextField fx:id="filterInput" promptText="%searchTour.prompt"/>
     <ChoiceBox fx:id="filterTypeChoiceBox" prefWidth="150" value="TourName">
         <items>
             <FXCollections fx:factory="observableArrayList">

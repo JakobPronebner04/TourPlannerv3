@@ -89,6 +89,9 @@ public class ViewFactory {
         if(TourFilterView.class == viewClass) {
             return new TourFilterView(new TourFilterViewModel(tourService));
         }
+        if(TourLogFilterView.class == viewClass) {
+            return new TourLogFilterView(new TourLogFilterViewModel(tourLogService,eventManager));
+        }
 
         throw new IllegalArgumentException(
                 "Unknown view class: " + viewClass

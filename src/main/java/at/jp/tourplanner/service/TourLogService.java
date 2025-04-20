@@ -5,6 +5,7 @@ import at.jp.tourplanner.entity.TourEntity;
 import at.jp.tourplanner.entity.TourLogEntity;
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
+import at.jp.tourplanner.inputmodel.FilterTerm;
 import at.jp.tourplanner.inputmodel.TourLog;
 import at.jp.tourplanner.repository.*;
 import at.jp.tourplanner.utils.PropertyValidator;
@@ -29,6 +30,10 @@ public class TourLogService {
     public void updateSelectedTourLog(TourLog tl) {
         stateDataAccess.updateSelectedTourLog(tl);
     }
+    public void updateSelectedFilter(FilterTerm filterTerm) {
+        stateDataAccess.updateTourLogFilter(filterTerm);
+        eventManager.publish(Events.TOURLOGS_CHANGED, "FILTER_TOURLOGS");
+    }
     public TourLog getSelectedTourLog() {
         return stateDataAccess.getSelectedTourLog();
     }
@@ -38,8 +43,16 @@ public class TourLogService {
         if (selectedTourEntity.isEmpty()) return new ArrayList<>();
 
         UUID tourId = selectedTourEntity.get().getId();
-
-        return tourLogRepository.findByTourId(tourId).stream()
+        Optional<FilterTerm> filterTerm =  this.stateDataAccess.getSelectedTourLogFilterTerm();
+        if (filterTerm.isEmpty()) {
+            return tourLogRepository.findByTourId(tourId).stream()
+                    .map(this::mapEntityToModel)
+                    .toList();
+        }
+        return tourLogRepository.findByFilterTermAndTourId(
+                tourId,
+                filterTerm.get().getText(),
+                filterTerm.get().getType()).stream()
                 .map(this::mapEntityToModel)
                 .toList();
     }

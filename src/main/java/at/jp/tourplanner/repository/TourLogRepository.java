@@ -18,6 +18,7 @@ public interface TourLogRepository {
     List<TourLogEntity> deleteAll();
 
     List<TourLogEntity> findByTourId(UUID tourId);
+    List<TourLogEntity> findByFilterTermAndTourId(UUID tourId,String text,String type);
 
     Optional<TourLogEntity> findByLocalDate(LocalDateTime localDateTime);
 }

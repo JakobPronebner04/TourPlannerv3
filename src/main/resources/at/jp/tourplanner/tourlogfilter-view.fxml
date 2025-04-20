@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<VBox xmlns="http://javafx.com/javafx/17.0.6"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="at.jp.tourplanner.view.tourlog.TourLogFilterView">
+    <TextField fx:id="filterInput" promptText="%searchTourLog.prompt"/>
+    <ChoiceBox fx:id="filterTypeChoiceBox" prefWidth="150" value="TourLogComment">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="TourLogComment"/>
+                <String fx:value="TourLogRating"/>
+                <String fx:value="TourLogNeededTime"/>
+                <String fx:value="TourLogDistance"/>
+            </FXCollections>
+        </items>
+    </ChoiceBox>
+    <HBox>
+        <Button fx:id="filterTourLogButton" onAction="#onFilterTourLogClicked" text="%searchTourLog.button" prefWidth = "86" />
+        <Button fx:id="showAllTourLogsButton" onAction="#onShowAllTourLogsClicked" text = "%allTourLogs.button" prefWidth="84"/>
+    </HBox>
+</VBox>

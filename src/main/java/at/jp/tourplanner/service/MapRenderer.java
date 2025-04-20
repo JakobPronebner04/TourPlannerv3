@@ -5,7 +5,7 @@ import at.jp.tourplanner.dto.Geocode;
 import java.util.List;
 
 public interface MapRenderer {
-    void draw(List<Geocode> coords);
-    void clear();
-    void loadInitial();
+    String getDrawScript(List<Geocode> coords);
+    String getClearScript();
+    String getInitialState();
 }

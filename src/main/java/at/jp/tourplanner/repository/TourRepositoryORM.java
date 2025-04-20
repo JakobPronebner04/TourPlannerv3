@@ -48,6 +48,7 @@ public class TourRepositoryORM implements TourRepository {
         }
 
     }
+    @Override
     public List<TourEntity> findByFilterTerm(String text, String type) {
         String pattern = text + "%";
         String filterAttribute = TourFilterType.fromString(type).getFieldName();
@@ -64,6 +65,7 @@ public class TourRepositoryORM implements TourRepository {
             return entityManager.createQuery(query).getResultList();
         }
     }
+
 
     @Override
     public Optional<TourEntity> findByName(String name) {

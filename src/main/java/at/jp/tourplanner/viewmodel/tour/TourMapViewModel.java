@@ -12,6 +12,7 @@ public class TourMapViewModel {
     private final TourService tourService;
     private final EventManager eventManager;
     private final MapRendererService mapRendererService;
+    private WebEngine webEngine;
 
     public TourMapViewModel(EventManager eventManager, TourService tourService, MapRendererService mapRendererService) {
         this.eventManager = eventManager;
@@ -21,13 +22,13 @@ public class TourMapViewModel {
     }
 
     private void onTourSelected(Boolean deselected) {
-        mapRendererService.clear();
+        webEngine.executeScript(mapRendererService.getClearScript());
         if(!deselected) {
-            mapRendererService.draw(tourService.getRouteGeocodes());
+            webEngine.executeScript(mapRendererService.getDrawScript(tourService.getRouteGeocodes()));
         }
     }
     public void initMap(WebEngine webEngine) {
-        mapRendererService.setWebEngine(webEngine);
-        mapRendererService.loadInitial();
+        this.webEngine = webEngine;
+        webEngine.load(mapRendererService.getInitialState());
     }
 }

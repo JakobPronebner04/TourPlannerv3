@@ -11,7 +11,6 @@ import at.jp.tourplanner.inputmodel.Tour;
 import at.jp.tourplanner.dataaccess.StateDataAccess;
 import at.jp.tourplanner.repository.TourRepositoryORM;
 import at.jp.tourplanner.utils.PropertyValidator;
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ public class TourService {
     }
     public List<Tour> getTours() {
 
-        Optional<FilterTerm> filterTerm =  this.stateDataAccess.getSelectedFilterTerm();
+        Optional<FilterTerm> filterTerm =  this.stateDataAccess.getSelectedTourFilterTerm();
         if(filterTerm.isEmpty())
         {
             return this.tourRepository.findAll().stream().map(this::mapEntityToModel).toList();
@@ -44,7 +43,7 @@ public class TourService {
         stateDataAccess.updateSelectedTour(t);
     }
     public void updateSelectedFilter(FilterTerm filterTerm) {
-        stateDataAccess.updateFilter(filterTerm);
+        stateDataAccess.updateTourFilter(filterTerm);
         eventManager.publish(Events.TOURS_CHANGED, "FILTER_TOURS");
     }
     public Tour getSelectedTour()

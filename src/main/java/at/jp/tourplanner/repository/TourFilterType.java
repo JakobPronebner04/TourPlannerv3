@@ -19,7 +19,6 @@ public enum TourFilterType {
         return fieldName;
     }
 
-    // Optional: safer lookup by string
     public static TourFilterType fromString(String text) {
         for (TourFilterType type : TourFilterType.values()) {
             if (type.name().equalsIgnoreCase(text)) {

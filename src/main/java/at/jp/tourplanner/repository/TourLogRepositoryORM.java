@@ -4,10 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaDelete;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -112,6 +109,52 @@ public class TourLogRepositoryORM implements TourLogRepository {
             return em.createQuery(query).getResultList();
         }
     }
+
+    @Override
+    public List<TourLogEntity> findByFilterTermAndTourId(UUID tourId, String text, String type) {
+        String filterAttribute = TourLogFilterType.fromString(type).getFieldName();
+
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<TourLogEntity> query = cb.createQuery(TourLogEntity.class);
+            Root<TourLogEntity> root = query.from(TourLogEntity.class);
+
+            Predicate tourIdPredicate = cb.equal(root.get("tour").get("id"), tourId);
+            Predicate filterPredicate;
+
+            switch (filterAttribute) {
+                case "actualTime":
+                case "actualDistance":
+                    try {
+                        Float floatValue = Float.parseFloat(text);
+                        filterPredicate = cb.equal(root.get(filterAttribute), floatValue);
+                    } catch (NumberFormatException e) {
+                        throw new RuntimeException("Text muss eine gültige Zahl für " + filterAttribute + " sein.");
+                    }
+                    break;
+
+                case "rating":
+                    try {
+                        Integer intValue = Integer.parseInt(text);
+                        filterPredicate = cb.equal(root.get(filterAttribute), intValue);
+                    } catch (NumberFormatException e) {
+                        throw new RuntimeException("Text muss eine gültige Ganzzahl für 'rating' sein.");
+                    }
+                    break;
+
+                default:
+                    String pattern = text + "%";
+                    filterPredicate = cb.like(root.get(filterAttribute), pattern);
+                    break;
+            }
+
+            query.select(root).where(cb.and(tourIdPredicate, filterPredicate));
+
+            return entityManager.createQuery(query).getResultList();
+        }
+    }
+
+
 
     @Override
     public Optional<TourLogEntity> findByLocalDate(LocalDateTime localDateTime) {
