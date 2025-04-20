@@ -10,6 +10,7 @@
                 </HBox>
                 <VBox style="-fx-padding: 10 0 0 0;">
                         <fx:include source="tourfilter-view.fxml"/>
+                        <Region prefHeight="30"/>
                         <fx:include source="tourmenu-view.fxml" />
                         <fx:include source="tourhistory-view.fxml"/>
                 </VBox>
@@ -22,6 +23,7 @@
                 </HBox>
                 <VBox style="-fx-padding: 10 0 0 0;">
                         <fx:include source="tourlogfilter-view.fxml"/>
+                        <Region prefHeight="30"/>
                         <fx:include source="tourlogmenu-view.fxml"/>
                         <fx:include source="tourloghistory-view.fxml"/>
                 </VBox>
