@@ -18,6 +18,7 @@
                 <String fx:value="TourLogDifficulty"/>
                 <String fx:value="TourLogNeededTime"/>
                 <String fx:value="TourLogDistance"/>
+                <String fx:value="AllTourLogFields"/>
             </FXCollections>
         </items>
     </ChoiceBox>

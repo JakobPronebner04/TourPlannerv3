@@ -17,7 +17,8 @@ public class TourEntity {
     private String tourStart;
     private String tourDestination;
     private String tourTransportType;
-    private String popularity;
+    private int popularity;
+    private int childFriendliness;
     private float tourDistance;
     private float tourDuration;
 
@@ -56,43 +57,41 @@ public class TourEntity {
     public void setName(String tourName) {
         this.tourName = tourName;
     }
-
     public String getDescription() {
         return tourDescription;
     }
-
     public void setDescription(String tourDescription) {
         this.tourDescription = tourDescription;
     }
-
     public String getStart() {
         return tourStart;
     }
-
     public void setStart(String tourStart) {
         this.tourStart = tourStart;
     }
-
     public String getDestination() {
         return tourDestination;
     }
-
     public void setDestination(String tourDestination) {
         this.tourDestination = tourDestination;
     }
-
     public String getTransportType() {
         return tourTransportType;
     }
     public void setTransportType(String tourTransportType) {
         this.tourTransportType = tourTransportType;
     }
-
-    public String getPopularity() {
+    public int getPopularity() {
         return popularity;
     }
-    public void setPopularity(String popularity) {
+    public void setPopularity(int popularity) {
         this.popularity = popularity;
+    }
+    public int getChildFriendliness() {
+        return childFriendliness;
+    }
+    public void setChildFriendliness(int childFriendliness) {
+        this.childFriendliness = childFriendliness;
     }
     public float getDistance() {
         return tourDistance;

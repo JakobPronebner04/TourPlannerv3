@@ -7,9 +7,7 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class TourRepositoryORM implements TourRepository {
     private final EntityManagerFactory entityManagerFactory;
@@ -50,7 +48,6 @@ public class TourRepositoryORM implements TourRepository {
     }
     @Override
     public List<TourEntity> findByFilterTerm(String text, String type) {
-        String pattern = text + "%";
         String filterAttribute = TourFilterType.fromString(type).getFieldName();
 
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
@@ -58,13 +55,64 @@ public class TourRepositoryORM implements TourRepository {
             CriteriaQuery<TourEntity> query = cb.createQuery(TourEntity.class);
             Root<TourEntity> root = query.from(TourEntity.class);
 
-            query.select(root).where(
-                    cb.like(root.get(filterAttribute), pattern)
-            );
+            Predicate filterPredicate;
+
+            switch (filterAttribute) {
+                case "popularity":
+                case "childFriendliness":
+                    try {
+                        Integer intValue = Integer.parseInt(text);
+                        filterPredicate = cb.equal(root.get(filterAttribute), intValue);
+                    } catch (NumberFormatException e) {
+                        return Collections.emptyList();
+                    }
+                    break;
+
+                default:
+                    String pattern = text + "%";
+                    filterPredicate = cb.like(root.get(filterAttribute), pattern);
+                    break;
+            }
+
+            query.select(root).where(filterPredicate);
+            return entityManager.createQuery(query).getResultList();
+        }
+    }
+
+    @Override
+    public List<TourEntity> findByFilterTermFullText(String text) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<TourEntity> query = cb.createQuery(TourEntity.class);
+            Root<TourEntity> root = query.from(TourEntity.class);
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            try {
+                Integer intValue = Integer.parseInt(text);
+                predicates.add(cb.equal(root.get("popularity"), intValue));
+                predicates.add(cb.equal(root.get("childFriendliness"), intValue));
+            } catch (NumberFormatException ignored) {}
+
+            String pattern = "%" + text + "%";
+            predicates.add(cb.like(root.get("tourName"), pattern));
+            predicates.add(cb.like(root.get("tourDescription"), pattern));
+            predicates.add(cb.like(root.get("tourStart"), pattern));
+            predicates.add(cb.like(root.get("tourDestination"), pattern));
+            predicates.add(cb.like(root.get("tourTransportType"), pattern));
+            predicates.add(cb.like(root.get("formattedDistance"), pattern));
+            predicates.add(cb.like(root.get("formattedDuration"), pattern));
+
+            Predicate fullSearchPredicate = cb.or(predicates.toArray(new Predicate[0]));
+
+            query.select(root).where(fullSearchPredicate);
 
             return entityManager.createQuery(query).getResultList();
         }
     }
+
+
+
 
 
     @Override

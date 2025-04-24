@@ -20,6 +20,9 @@
                 <String fx:value="TourTransportType"/>
                 <String fx:value="TourDistance"/>
                 <String fx:value="TourDuration"/>
+                <String fx:value="TourChildFriendliness"/>
+                <String fx:value="TourPopularity"/>
+                <String fx:value="AllTourFields"/>
             </FXCollections>
         </items>
     </ChoiceBox>

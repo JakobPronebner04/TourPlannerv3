@@ -30,11 +30,15 @@ public class TourService {
         this.tourRepository = tourRepository;
     }
     public List<Tour> getTours() {
-
         Optional<FilterTerm> filterTerm =  this.stateDataAccess.getSelectedTourFilterTerm();
         if(filterTerm.isEmpty())
         {
             return this.tourRepository.findAll().stream().map(this::mapEntityToModel).toList();
+        }
+
+        if(filterTerm.get().getType().equals("AllTourFields"))
+        {
+            return this.tourRepository.findByFilterTermFullText(filterTerm.get().getText()).stream().map(this::mapEntityToModel).toList();
         }
         return this.tourRepository.findByFilterTerm(filterTerm.get().getText(),filterTerm.get().getType()).stream().map(this::mapEntityToModel).toList();
     }
@@ -136,6 +140,7 @@ public class TourService {
         te.setDestination(t.getTourDestination());
         te.setTransportType(t.getTourTransportType());
         te.setPopularity(t.getPopularity());
+        te.setChildFriendliness(t.getChildFriendliness());
         return te;
     }
 
@@ -149,6 +154,7 @@ public class TourService {
         t.setTourDistance(entity.getFormattedDistance());
         t.setTourDuration(entity.getFormattedDuration());
         t.setPopularity(entity.getPopularity());
+        t.setChildFriendliness(entity.getChildFriendliness());
         return t;
     }
 }

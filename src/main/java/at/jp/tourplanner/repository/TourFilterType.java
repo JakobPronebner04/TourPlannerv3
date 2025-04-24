@@ -7,6 +7,8 @@ public enum TourFilterType {
     TourDestinationLocation("tourDestination"),
     TourTransportType("tourTransportType"),
     TourDistance("formattedDistance"),
+    TourPopularity("popularity"),
+    TourChildFriendliness("childFriendliness"),
     TourDuration("formattedDuration");
 
     private final String fieldName;

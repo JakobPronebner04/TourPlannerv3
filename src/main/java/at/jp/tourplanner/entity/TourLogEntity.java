@@ -18,7 +18,7 @@ public class TourLogEntity {
     private float actualDistance;
     private LocalDateTime dateTime;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "tour_id", nullable = false)
     private TourEntity tour;
 

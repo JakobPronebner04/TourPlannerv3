@@ -19,4 +19,5 @@ public interface TourRepository {
 
     List<TourEntity> deleteAll();
     List<TourEntity> findByFilterTerm(String text,String type);
+    List<TourEntity> findByFilterTermFullText(String text);
 }

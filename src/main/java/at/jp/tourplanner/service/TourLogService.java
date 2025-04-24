@@ -49,6 +49,16 @@ public class TourLogService {
                     .map(this::mapEntityToModel)
                     .toList();
         }
+        if(filterTerm.get().getType().equals("AllTourLogFields"))
+        {
+            return tourLogRepository.findByTourIdAndTextFullSearch(
+                            tourId,
+                            filterTerm.get().getText())
+                    .stream()
+                    .map(this::mapEntityToModel)
+                    .toList();
+        }
+
         return tourLogRepository.findByFilterTermAndTourId(
                 tourId,
                 filterTerm.get().getText(),
@@ -67,13 +77,11 @@ public class TourLogService {
             throw new RuntimeException("No tour has been selected!");
         }
 
-        TourEntity tourEntity = selectedTourEntity.get();
 
         TourLogEntity entity = new TourLogEntity();
-
         mapModelToEntity(entity,tl);
-        entity.setTour(tourEntity);
 
+        entity.setTour(selectedTourEntity.get());
         tourLogRepository.save(entity);
 
         eventManager.publish(Events.TOURLOGS_CHANGED, "NEW_TOURLOG");
@@ -89,7 +97,6 @@ public class TourLogService {
         }
         mapModelToEntity(selectedTourLogEntity.get(), tl);
         tourLogRepository.save(selectedTourLogEntity.get());
-
         eventManager.publish(Events.TOURLOGS_CHANGED, "EDITED_TOURLOG");
     }
 
@@ -97,8 +104,8 @@ public class TourLogService {
         Optional<TourLogEntity> selectedTourLogEntity =
                 tourLogRepository.findByLocalDate(stateDataAccess.getSelectedTourLog().getDateTime());
         if(selectedTourLogEntity.isEmpty()) throw new RuntimeException("No tour has been selected!");
-
         tourLogRepository.delete(selectedTourLogEntity.get().getId());
+
         eventManager.publish(Events.TOURLOGS_CHANGED, "REMOVED_TOURLOG");
     }
 
@@ -122,6 +129,54 @@ public class TourLogService {
         entity.setDifficulty(model.getDifficulty());
         entity.setActualTime(model.getActualTime());
         entity.setActualDistance(model.getActualDistance());
+    }
+    public void computeAverageValues() {
+        Optional<TourEntity> tourEntity = tourRepository.findByName(stateDataAccess.getSelectedTour().getTourName());
+        if (tourEntity.isEmpty()) throw new RuntimeException("No tour has been selected!");
+
+        List<TourLogEntity> tourLogEntities = tourEntity.get().getTourLogs();
+        if (tourLogEntities.isEmpty())
+        {
+            tourEntity.get().setChildFriendliness(5);
+            tourEntity.get().setPopularity(0);
+            return;
+        }
+
+        double sumDifficulty = 0;
+        double sumTime = 0;
+        double sumDistance = 0;
+        int logCount = tourLogEntities.size();
+
+        for (TourLogEntity log : tourLogEntities) {
+            sumDifficulty += log.getDifficulty();
+            sumTime += log.getActualTime();
+            sumDistance += log.getActualDistance();
+        }
+
+        double avgDifficulty = sumDifficulty / logCount;
+        double avgTime = sumTime / logCount;
+        double avgDistance = sumDistance / logCount;
+
+        int points = 0;
+
+        if (avgDifficulty <= 0.5) {
+            points += 4;
+        } else if (avgDifficulty <= 1.5) {
+            points += 2;
+        }
+
+        if (avgTime < 2.0f) {
+            points += 3;
+        }
+
+        if (avgDistance < 5.0f) {
+            points += 3;
+        }
+        tourEntity.get().setChildFriendliness(points);
+        tourEntity.get().setPopularity(tourLogEntities.size());
+
+        tourRepository.save(tourEntity.get());
+        eventManager.publish(Events.TOURS_CHANGED,"ADDED_COMPUTED_VALUES");
     }
 
 }

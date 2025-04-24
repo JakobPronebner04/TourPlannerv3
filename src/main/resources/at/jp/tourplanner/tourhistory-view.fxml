@@ -10,13 +10,15 @@
             <Label text="%tourHistoryPlaceHolder.label" />
         </placeholder>
         <columns>
-            <TableColumn fx:id="colName" text="%TourName.label" prefWidth="120"/>
-            <TableColumn fx:id="colDescription" text="%TourDesc.label" prefWidth="150"/>
+            <TableColumn fx:id="colName" text="%TourName.label" prefWidth="100"/>
+            <TableColumn fx:id="colDescription" text="%TourDesc.label" prefWidth="120"/>
             <TableColumn fx:id="colStart" text="%TourSrc.label" prefWidth="120"/>
-            <TableColumn fx:id="colDestination" text="%TourDest.label" prefWidth="130"/>
+            <TableColumn fx:id="colDestination" text="%TourDest.label" prefWidth="100"/>
             <TableColumn fx:id="colTransportType" text="%TourTransport.label" prefWidth="100"/>
             <TableColumn fx:id="colDuration" text="%TourDuration.label" prefWidth="75"/>
             <TableColumn fx:id="colDistance" text="%TourDistance.label" prefWidth="75"/>
+            <TableColumn fx:id="colPopularity" text="%TourPopularity.label" prefWidth="75"/>
+            <TableColumn fx:id="colChildfriendliness" text="%TourChildfriendliness.label" prefWidth="80"/>
         </columns>
     </TableView>
 </HBox>

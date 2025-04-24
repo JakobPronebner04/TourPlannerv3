@@ -8,9 +8,7 @@ import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class TourLogRepositoryORM implements TourLogRepository {
     private final EntityManagerFactory entityManagerFactory;
@@ -54,34 +52,28 @@ public class TourLogRepositoryORM implements TourLogRepository {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             EntityTransaction transaction = entityManager.getTransaction();
             transaction.begin();
-            if (find(entity.getId()).isEmpty()) {
-                entityManager.persist(entity);
-            } else {
-                entity = entityManager.merge(entity);
-            }
+            entity = entityManager.merge(entity);
             transaction.commit();
             return entity;
         }
     }
     @Override
     public TourLogEntity delete(UUID id) {
-        try (EntityManager em = entityManagerFactory.createEntityManager()) {
-            EntityTransaction tx = em.getTransaction();
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            EntityTransaction tx = entityManager.getTransaction();
             tx.begin();
 
-            TourLogEntity log = em.find(TourLogEntity.class, id);
+            TourLogEntity log = entityManager.find(TourLogEntity.class, id);
             if (log != null) {
                 TourEntity tour = log.getTour();
                 tour.getTourLogs().remove(log);
-                em.merge(tour);
+                entityManager.merge(tour);
             }
 
             tx.commit();
             return log;
         }
     }
-
-
 
     @Override
     public List<TourLogEntity> deleteAll() {
@@ -133,7 +125,7 @@ public class TourLogRepositoryORM implements TourLogRepository {
                         Float floatValue = Float.parseFloat(text);
                         filterPredicate = cb.equal(root.get(filterAttribute), floatValue);
                     } catch (NumberFormatException e) {
-                        throw new RuntimeException("Text muss eine gültige Zahl für " + filterAttribute + " sein.");
+                        return Collections.emptyList();
                     }
                     break;
 
@@ -143,7 +135,7 @@ public class TourLogRepositoryORM implements TourLogRepository {
                         Integer intValue = Integer.parseInt(text);
                         filterPredicate = cb.equal(root.get(filterAttribute), intValue);
                     } catch (NumberFormatException e) {
-                        throw new RuntimeException("Text muss eine gültige Ganzzahl für 'rating' sein.");
+                        return Collections.emptyList();
                     }
                     break;
 
@@ -158,6 +150,39 @@ public class TourLogRepositoryORM implements TourLogRepository {
             return entityManager.createQuery(query).getResultList();
         }
     }
+    @Override
+    public List<TourLogEntity> findByTourIdAndTextFullSearch(UUID tourId, String text) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<TourLogEntity> query = cb.createQuery(TourLogEntity.class);
+            Root<TourLogEntity> root = query.from(TourLogEntity.class);
+
+            Predicate tourIdPredicate = cb.equal(root.get("tour").get("id"), tourId);
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            try {
+                Float floatValue = Float.parseFloat(text);
+                predicates.add(cb.equal(root.get("actualTime"), floatValue));
+                predicates.add(cb.equal(root.get("actualDistance"), floatValue));
+            } catch (NumberFormatException ignored) {}
+
+            try {
+                Integer intValue = Integer.parseInt(text);
+                predicates.add(cb.equal(root.get("rating"), intValue));
+                predicates.add(cb.equal(root.get("difficulty"), intValue));
+            } catch (NumberFormatException ignored) {}
+
+            String pattern = "%" + text + "%";
+            predicates.add(cb.like(root.get("comment"), pattern));
+
+            Predicate combinedFilter = cb.or(predicates.toArray(new Predicate[0]));
+            query.select(root).where(cb.and(tourIdPredicate, combinedFilter));
+
+            return entityManager.createQuery(query).getResultList();
+        }
+    }
+
 
 
 
