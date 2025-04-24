@@ -4,6 +4,8 @@ import at.jp.tourplanner.inputmodel.FilterTerm;
 import at.jp.tourplanner.inputmodel.Tour;
 import at.jp.tourplanner.inputmodel.TourLog;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Optional;
 
 public class StateDataAccess {
@@ -11,8 +13,12 @@ public class StateDataAccess {
     private Tour selectedTour;
     private FilterTerm selectedTourFilterTerm;
     private FilterTerm selectedTourLogFilterTerm;
+    private BufferedImage selectedImage;
 
     public StateDataAccess() {
+    }
+    public BufferedImage getSelectedImage() {
+        return selectedImage;
     }
     public TourLog getSelectedTourLog() {
         return selectedTourLog;
@@ -34,7 +40,9 @@ public class StateDataAccess {
         };
         return Optional.of(selectedTourLogFilterTerm);
     }
-
+    public void updateSelectedImage(BufferedImage selectedImage) {
+        this.selectedImage = selectedImage;
+    }
     public void updateSelectedTour(Tour newSelectedTour)
     {
         selectedTour = newSelectedTour;

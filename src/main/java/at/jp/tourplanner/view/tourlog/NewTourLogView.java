@@ -23,6 +23,8 @@ public class NewTourLogView implements Initializable {
     @FXML
     private Slider ratingSlider;
     @FXML
+    private Slider difficultySlider;
+    @FXML
     private Text errorMessage;
 
     public NewTourLogView(NewTourLogViewModel viewModel) {
@@ -35,6 +37,7 @@ public class NewTourLogView implements Initializable {
         actualTimeInput.textProperty().bindBidirectional(viewModel.tourLogActualTimeProperty());
         actualDistanceInput.textProperty().bindBidirectional(viewModel.tourLogActualDistanceProperty());
         ratingSlider.valueProperty().bindBidirectional(viewModel.tourLogRatingProperty());
+        difficultySlider.valueProperty().bindBidirectional(viewModel.tourLogDifficultyProperty());
         errorMessage.textProperty().bind(viewModel.errorMessageProperty());
         ControlsFormatter.setTextFieldFormatFloat(actualTimeInput);
         ControlsFormatter.setTextFieldFormatFloat(actualDistanceInput);

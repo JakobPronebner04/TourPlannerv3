@@ -26,6 +26,8 @@ public class TourLogHistoryView implements Initializable {
     @FXML
     private TableColumn<TourLog, Integer> rating;
     @FXML
+    private TableColumn<TourLog, Integer> difficulty;
+    @FXML
     private TableColumn<TourLog, String> dateTime;
     @FXML
     private TableColumn<TourLog, String> actualTime;
@@ -43,6 +45,7 @@ public class TourLogHistoryView implements Initializable {
         actualDistance.setCellValueFactory(new PropertyValueFactory<>("actualDistance"));
         comment.setCellValueFactory(new PropertyValueFactory<>("comment"));
         rating.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        difficulty.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
 
         ControlsFormatter.setTableColumnCutOff(comment);
 

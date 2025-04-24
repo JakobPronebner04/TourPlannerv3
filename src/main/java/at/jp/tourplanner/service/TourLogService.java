@@ -96,9 +96,10 @@ public class TourLogService {
     public void remove() {
         Optional<TourLogEntity> selectedTourLogEntity =
                 tourLogRepository.findByLocalDate(stateDataAccess.getSelectedTourLog().getDateTime());
+        if(selectedTourLogEntity.isEmpty()) throw new RuntimeException("No tour has been selected!");
 
-        tourLogRepository.delete(selectedTourLogEntity.get());
-        eventManager.publish(Events.TOURLOGS_CHANGED, "EDITED_TOURLOG");
+        tourLogRepository.delete(selectedTourLogEntity.get().getId());
+        eventManager.publish(Events.TOURLOGS_CHANGED, "REMOVED_TOURLOG");
     }
 
 
@@ -109,6 +110,7 @@ public class TourLogService {
         tourLog.setActualTime(tle.getActualTime());
         tourLog.setComment(tle.getComment());
         tourLog.setRating(tle.getRating());
+        tourLog.setDifficulty(tle.getDifficulty());
         tourLog.setDateTime(tle.getDateTime());
         return tourLog;
     }
@@ -117,6 +119,7 @@ public class TourLogService {
     {
         entity.setComment(model.getComment());
         entity.setRating(model.getRating());
+        entity.setDifficulty(model.getDifficulty());
         entity.setActualTime(model.getActualTime());
         entity.setActualDistance(model.getActualDistance());
     }

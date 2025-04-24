@@ -5,6 +5,7 @@ import at.jp.tourplanner.viewmodel.tourlog.DetailedTourLogViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 
 import java.net.URL;
 import java.util.ResourceBundle;

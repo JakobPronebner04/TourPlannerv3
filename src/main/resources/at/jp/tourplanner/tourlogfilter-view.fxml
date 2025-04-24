@@ -15,6 +15,7 @@
             <FXCollections fx:factory="observableArrayList">
                 <String fx:value="TourLogComment"/>
                 <String fx:value="TourLogRating"/>
+                <String fx:value="TourLogDifficulty"/>
                 <String fx:value="TourLogNeededTime"/>
                 <String fx:value="TourLogDistance"/>
             </FXCollections>

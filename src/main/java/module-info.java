@@ -8,6 +8,8 @@ module at.jp.tourplanner {
     requires jdk.jshell;
     requires javafx.web;
     requires java.net.http;
+    requires javafx.swing;
+    requires org.apache.pdfbox;
 
     opens at.jp.tourplanner to javafx.fxml;
     opens at.jp.tourplanner.inputmodel;

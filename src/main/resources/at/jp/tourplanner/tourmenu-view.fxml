@@ -11,4 +11,5 @@
     <Button fx:id="editButton" onAction="#onEditTourClicked" text="%editTour.button" prefWidth="75"/>
     <Button fx:id="removeButton" onAction="#onRemoveTourClicked" text="%removeTour.button"/>
     <Button fx:id="detailsButton" onAction="#onTourDetails" text="%showTourDetails.button"/>
+    <Button fx:id="exportButton" onAction="#onMapExport" text="%exportTour.button"/>
 </HBox>

@@ -15,6 +15,7 @@ public class EditTourLogViewModel {
     private final StringProperty actualDistanceProperty;
     private final StringProperty commentProperty;
     private final IntegerProperty ratingProperty;
+    private final IntegerProperty difficultyProperty;
     private final StringProperty errorMessageProperty;
 
     public EditTourLogViewModel(TourLogService tourLogService, WindowManager windowManager) {
@@ -26,6 +27,7 @@ public class EditTourLogViewModel {
         this.actualDistanceProperty = new SimpleStringProperty(Float.toString(selectedTourLog.getActualDistance()));
         this.commentProperty = new SimpleStringProperty(selectedTourLog.getComment());
         this.ratingProperty = new SimpleIntegerProperty(selectedTourLog.getRating());
+        this.difficultyProperty = new SimpleIntegerProperty(selectedTourLog.getDifficulty());
     }
 
     public StringProperty tourLogCommentProperty() {
@@ -35,11 +37,12 @@ public class EditTourLogViewModel {
     public IntegerProperty tourLogRatingProperty() {
         return ratingProperty;
     }
-
+    public IntegerProperty tourLogDifficultyProperty() {
+        return difficultyProperty;
+    }
     public StringProperty errorMessageProperty() {
         return errorMessageProperty;
     }
-
     public StringProperty tourLogActualTimeProperty() {return actualTimeProperty;}
     public StringProperty tourLogActualDistanceProperty() {return actualDistanceProperty;}
 
@@ -50,6 +53,7 @@ public class EditTourLogViewModel {
             updatedTourLog.setActualTime(Float.parseFloat(actualTimeProperty.getValue()));
             updatedTourLog.setActualDistance(Float.parseFloat(actualDistanceProperty.getValue()));
             updatedTourLog.setRating(ratingProperty.get());
+            updatedTourLog.setDifficulty(difficultyProperty.get());
 
             tourLogService.edit(updatedTourLog);
             windowManager.closeWindow();

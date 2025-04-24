@@ -15,6 +15,7 @@ public class NewTourLogViewModel {
     private final StringProperty actualDistanceProperty;
     private final StringProperty commentProperty;
     private final IntegerProperty ratingProperty;
+    private final IntegerProperty difficultyProperty;
 
     private final StringProperty errorMessageProperty;
 
@@ -25,6 +26,7 @@ public class NewTourLogViewModel {
         this.actualDistanceProperty = new SimpleStringProperty("");
         this.commentProperty = new SimpleStringProperty("");
         this.ratingProperty = new SimpleIntegerProperty(0);
+        this.difficultyProperty = new SimpleIntegerProperty(0);
         this.errorMessageProperty = new SimpleStringProperty("");
     }
 
@@ -35,6 +37,7 @@ public class NewTourLogViewModel {
     public IntegerProperty tourLogRatingProperty() {
         return ratingProperty;
     }
+    public IntegerProperty tourLogDifficultyProperty() { return difficultyProperty; }
 
     public StringProperty errorMessageProperty() {
         return errorMessageProperty;
@@ -48,10 +51,9 @@ public class NewTourLogViewModel {
 
             newTourLog.setComment(commentProperty.get());
             newTourLog.setRating(ratingProperty.get());
-
+            newTourLog.setDifficulty(difficultyProperty.get());
             newTourLog.setActualTime(Float.parseFloat(actualTimeProperty.getValue()));
             newTourLog.setActualDistance(Float.parseFloat(actualDistanceProperty.getValue()));
-
             tourLogService.add(newTourLog);
             windowManager.closeWindow();
         }catch(NumberFormatException e) {

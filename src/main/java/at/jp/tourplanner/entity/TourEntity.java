@@ -17,6 +17,7 @@ public class TourEntity {
     private String tourStart;
     private String tourDestination;
     private String tourTransportType;
+    private String popularity;
     private float tourDistance;
     private float tourDuration;
 
@@ -29,7 +30,7 @@ public class TourEntity {
     @Formula("floor(tourdistance / 1000) || ' km'")
     private String formattedDistance;
 
-    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true, fetch=FetchType.EAGER)
     private List<TourLogEntity> tourLogs = new ArrayList<>();
 
     @OneToOne(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true,fetch=FetchType.EAGER)
@@ -87,6 +88,12 @@ public class TourEntity {
         this.tourTransportType = tourTransportType;
     }
 
+    public String getPopularity() {
+        return popularity;
+    }
+    public void setPopularity(String popularity) {
+        this.popularity = popularity;
+    }
     public float getDistance() {
         return tourDistance;
     }

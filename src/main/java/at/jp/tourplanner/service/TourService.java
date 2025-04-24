@@ -111,6 +111,7 @@ public class TourService {
         te.setTransportType(editedTour.getTourTransportType());
         te.setDuration(routInfo.get().getDuration());
         te.setDistance(routInfo.get().getDistance());
+        te.setPopularity(editedTour.getPopularity());
 
         te.setGeocodeDirections(gde);
 
@@ -134,6 +135,7 @@ public class TourService {
         te.setStart(t.getTourStart());
         te.setDestination(t.getTourDestination());
         te.setTransportType(t.getTourTransportType());
+        te.setPopularity(t.getPopularity());
         return te;
     }
 
@@ -146,20 +148,7 @@ public class TourService {
         t.setTourTransportType(entity.getTransportType());
         t.setTourDistance(entity.getFormattedDistance());
         t.setTourDuration(entity.getFormattedDuration());
+        t.setPopularity(entity.getPopularity());
         return t;
-    }
-
-    public List<Geocode> getRouteGeocodes()
-    {
-        Optional<TourEntity> tour = tourRepository.findByName(this.stateDataAccess.getSelectedTour().getTourName());
-        if(tour.isEmpty()) {
-            return new ArrayList<>();
-        }
-        String jsonRoute = tour.get().getGeocodeDirections().getJsonDirections();
-        List<Geocode> geocodes = openRouteServiceApi.getRouteCoordinatesFromJson(jsonRoute);
-        if(geocodes.isEmpty()) {
-            throw new RuntimeException("Route not found");
-        }
-        return geocodes;
     }
 }

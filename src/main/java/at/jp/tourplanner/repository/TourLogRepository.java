@@ -13,7 +13,7 @@ public interface TourLogRepository {
 
     TourLogEntity save(TourLogEntity entity);
 
-    TourLogEntity delete(TourLogEntity entity);
+    TourLogEntity delete(UUID id);
 
     List<TourLogEntity> deleteAll();
 

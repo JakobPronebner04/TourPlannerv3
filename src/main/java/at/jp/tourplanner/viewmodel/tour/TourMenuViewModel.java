@@ -21,6 +21,7 @@ public class TourMenuViewModel {
     private final BooleanProperty editDisabled = new SimpleBooleanProperty(true);
     private final BooleanProperty removeDisabled = new SimpleBooleanProperty(true);
     private final BooleanProperty detailsDisabled = new SimpleBooleanProperty(true);
+    private final BooleanProperty exportDisabled = new SimpleBooleanProperty(true);
 
     public TourMenuViewModel(EventManager eventManager, TourService tourService, WindowManager windowManager) {
         this.tourService = tourService;
@@ -35,6 +36,7 @@ public class TourMenuViewModel {
         editDisabled.set(state);
         removeDisabled.set(state);
         detailsDisabled.set(state);
+        exportDisabled.set(state);
     }
 
     public void openNewTourWindow(){
@@ -52,9 +54,17 @@ public class TourMenuViewModel {
     public BooleanProperty removeDisabledProperty() {
         return removeDisabled;
     }
+    public BooleanProperty exportDisabledProperty() {
+        return exportDisabled;
+    }
     public BooleanProperty detailsDisabledProperty() { return detailsDisabled;}
     public void deleteTour()
     {
         tourService.remove();
+    }
+
+    public void exportTour()
+    {
+        this.eventManager.publish(Events.TOUR_EXPORT,"TOUR_EXPORT");
     }
 }

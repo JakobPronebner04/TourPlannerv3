@@ -12,6 +12,9 @@ public class TourLog {
     @Min(value = 0, message = "Minimum allowed value of rating 0!")
     @Max(value = 5, message = "Maximum allowed value of rating 5!")
     private int rating;
+    @Min(value = 0, message = "Minimum allowed value of difficulty 0!")
+    @Max(value = 5, message = "Maximum allowed value of difficulty 5!")
+    private int difficulty;
 
     @Positive(message = "Time must be greater than 0!")
     private float actualTime;
@@ -25,6 +28,7 @@ public class TourLog {
     public TourLog() {
         this.comment = "";
         this.rating = 0;
+        this.difficulty = 0;
         this.actualTime = 0;
         this.actualDistance = 0;
     }
@@ -40,6 +44,13 @@ public class TourLog {
     }
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
     }
 
     public float getActualTime() {

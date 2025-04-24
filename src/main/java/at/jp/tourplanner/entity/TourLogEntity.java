@@ -13,6 +13,7 @@ public class TourLogEntity {
     private UUID id;
     private String comment;
     private int rating;
+    private int difficulty;
     private float actualTime;
     private float actualDistance;
     private LocalDateTime dateTime;
@@ -30,6 +31,7 @@ public class TourLogEntity {
     public TourLogEntity() {
         this.comment = "";
         this.rating = 0;
+        this.difficulty = 0;
         this.actualTime = 0;
         this.actualDistance = 0;
     }
@@ -56,6 +58,13 @@ public class TourLogEntity {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
     }
 
     public float getActualTime() {

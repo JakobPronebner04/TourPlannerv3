@@ -3,8 +3,10 @@ package at.jp.tourplanner.repository;
 public enum TourLogFilterType {
     TourLogComment("comment"),
     TourLogRating("rating"),
+    TourLogDifficulty("difficulty"),
     TourLogNeededTime("actualTime"),
     TourLogDistance("actualDistance");
+
 
     private final String fieldName;
 

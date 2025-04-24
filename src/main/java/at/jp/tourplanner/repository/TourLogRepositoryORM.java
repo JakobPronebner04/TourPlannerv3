@@ -1,4 +1,5 @@
 package at.jp.tourplanner.repository;
+import at.jp.tourplanner.entity.TourEntity;
 import at.jp.tourplanner.entity.TourLogEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -62,22 +63,25 @@ public class TourLogRepositoryORM implements TourLogRepository {
             return entity;
         }
     }
-
     @Override
-    public TourLogEntity delete(TourLogEntity entity) {
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            EntityTransaction transaction = entityManager.getTransaction();
-            transaction.begin();
+    public TourLogEntity delete(UUID id) {
+        try (EntityManager em = entityManagerFactory.createEntityManager()) {
+            EntityTransaction tx = em.getTransaction();
+            tx.begin();
 
-            TourLogEntity toRemove = entityManager.find(TourLogEntity.class, entity.getId());
-            if (toRemove != null) {
-                entityManager.remove(toRemove);
+            TourLogEntity log = em.find(TourLogEntity.class, id);
+            if (log != null) {
+                TourEntity tour = log.getTour();
+                tour.getTourLogs().remove(log);
+                em.merge(tour);
             }
 
-            transaction.commit();
-            return toRemove;
+            tx.commit();
+            return log;
         }
     }
+
+
 
     @Override
     public List<TourLogEntity> deleteAll() {
@@ -134,6 +138,7 @@ public class TourLogRepositoryORM implements TourLogRepository {
                     break;
 
                 case "rating":
+                    case "difficulty":
                     try {
                         Integer intValue = Integer.parseInt(text);
                         filterPredicate = cb.equal(root.get(filterAttribute), intValue);

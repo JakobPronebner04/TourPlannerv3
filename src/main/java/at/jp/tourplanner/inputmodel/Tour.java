@@ -18,6 +18,8 @@ public class Tour {
     @NotBlank(message = "tourDestination should not be blanked!")
     private String tourDestination;
 
+    private String popularity;
+
     private String tourDuration;
     private String tourDistance;
 
@@ -29,6 +31,7 @@ public class Tour {
         this.tourStart = "";
         this.tourDestination = "";
         this.tourTransportType = "";
+        this.popularity = "Not popular";
     }
 
     public String getTourName() {
@@ -70,6 +73,12 @@ public class Tour {
         this.tourTransportType = tourTransportType;
     }
 
+    public String getPopularity() {
+        return popularity;
+    }
+    public void setPopularity(String popularity) {
+        this.popularity = popularity;
+    }
     public void setTourDuration(String tourDuration) {
         this.tourDuration = tourDuration;
     }

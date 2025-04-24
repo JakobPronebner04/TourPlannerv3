@@ -14,7 +14,7 @@
             <property name="jakarta.persistence.jdbc.user" value="swen2"/>
             <property name="jakarta.persistence.jdbc.password" value="swen2"/>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
         </properties>
     </persistence-unit>
 </persistence>

@@ -16,8 +16,9 @@
             <TableColumn fx:id="dateTime" text="%TourLogDateTime.label" prefWidth="120"/>
             <TableColumn fx:id="actualTime" text="%TourLogActualTime.label" prefWidth="100"/>
             <TableColumn fx:id="actualDistance" text="%TourLogActualDistance.label" prefWidth="100"/>
-            <TableColumn fx:id="comment" text="%TourLogComment.label" prefWidth="220"/>
+            <TableColumn fx:id="comment" text="%TourLogComment.label" prefWidth="150"/>
             <TableColumn fx:id="rating" text="%TourLogRating.label" prefWidth="50"/>
+            <TableColumn fx:id="difficulty" text="%TourLogDifficulty.label" prefWidth="100"/>
         </columns>
     </TableView>
 

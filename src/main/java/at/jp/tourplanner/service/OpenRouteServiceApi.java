@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class OpenRouteServiceApi implements GeoRouting {
 
@@ -67,8 +68,7 @@ public class OpenRouteServiceApi implements GeoRouting {
         }
     }
     @Override
-    public Optional<RouteInfo> findRoute(Geocode geocodeStart, Geocode geocodeEnd, String transportType)
-    {
+    public Optional<RouteInfo> findRoute(Geocode geocodeStart, Geocode geocodeEnd, String transportType) {
         String profile = TransportProfile.fromDisplayName(transportType).getApiProfile();
         String uri = String.format(ROUTE_SEARCH_URI, profile);
 
@@ -87,43 +87,31 @@ public class OpenRouteServiceApi implements GeoRouting {
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
 
-            HttpResponse<String> response = client.send(
-                    request, HttpResponse.BodyHandlers.ofString()
-            );
-            GeocodeDirectionsSearchResponse geocodeDirectionsSearchResponse = objectMapper.readValue(
-                    response.body(), GeocodeDirectionsSearchResponse.class
-            );
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            GeocodeDirectionsSearchResponse rsp = objectMapper.readValue(response.body(), GeocodeDirectionsSearchResponse.class);
 
-            if(geocodeDirectionsSearchResponse.getFeatures().isEmpty()) {
+            if (rsp.getFeatures().isEmpty()) {
                 return Optional.empty();
             }
 
+            List<double[]> raw = rsp.getFeatures().getFirst()
+                    .getGeometry()
+                    .getCoordinates();
+
+            List<double[]> swappedCoords = raw.stream()
+                    .map(pt -> new double[]{ pt[1], pt[0] })
+                    .collect(Collectors.toList());
+
             RouteInfo routeInfo = new RouteInfo();
-            routeInfo.setDistance(geocodeDirectionsSearchResponse.getFeatures().getFirst().getProperties().getSummary().getDistance());
-            routeInfo.setDuration(geocodeDirectionsSearchResponse.getFeatures().getFirst().getProperties().getSummary().getDuration());
-            routeInfo.setJsonRoute(objectMapper.writeValueAsString(geocodeDirectionsSearchResponse));
+            routeInfo.setDistance(rsp.getFeatures().getFirst().getProperties().getSummary().getDistance());
+            routeInfo.setDuration(rsp.getFeatures().getFirst().getProperties().getSummary().getDuration());
+
+            routeInfo.setJsonRoute(objectMapper.writeValueAsString(swappedCoords));
+
             return Optional.of(routeInfo);
         } catch (Exception e) {
-            throw new RuntimeException("Could not retrieve route.");
+            throw new RuntimeException("Could not retrieve route.", e);
         }
     }
-    @Override
-    public List<Geocode> getRouteCoordinatesFromJson(String jsonRoute)
-    {
-        List<Geocode> route = new ArrayList<>();
-        try{
-            GeocodeDirectionsSearchResponse gdsr = objectMapper.readValue(jsonRoute,GeocodeDirectionsSearchResponse.class);
-            gdsr.getFeatures().getFirst().getGeometry().getCoordinates()
-                    .forEach(coord -> {
-                        Geocode geocode = new Geocode();
-                        geocode.setLatitude(coord[1]);
-                        geocode.setLongitude(coord[0]);
-                        route.add(geocode);
-                    });
-            return route;
-        }catch(Exception e)
-        {
-            throw new RuntimeException("Could not map Route to Geocodes");
-        }
-    }
+
 }
