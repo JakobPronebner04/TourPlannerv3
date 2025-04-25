@@ -82,7 +82,7 @@ public class ViewFactory {
             return new DetailedTourLogView(new DetailedTourLogViewModel(tourLogService,windowManager));
         }
         if(DetailedTourView.class == viewClass) {
-            return new DetailedTourView(new DetailedTourViewModel(tourService,windowManager,eventManager));
+            return new DetailedTourView(new DetailedTourViewModel(tourService,mapRendererService,windowManager,eventManager));
         }
         if(TourMapView.class == viewClass) {
             return new TourMapView(new TourMapViewModel(eventManager,tourService,mapRendererService,exportService));

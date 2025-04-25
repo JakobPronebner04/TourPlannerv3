@@ -1,26 +1,49 @@
 package at.jp.tourplanner.viewmodel.tour;
 
 import at.jp.tourplanner.event.EventManager;
+import at.jp.tourplanner.service.MapRendererService;
 import at.jp.tourplanner.service.TourService;
 import at.jp.tourplanner.window.WindowManager;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.concurrent.Worker;
 import javafx.scene.image.Image;
+import javafx.scene.web.WebEngine;
 
 public class DetailedTourViewModel {
     private final TourService tourService;
+    private final MapRendererService mapRendererService;
+    private WebEngine webEngine;
     private final WindowManager windowManager;
     private final EventManager eventManager;
     private final StringProperty tourDescription;
 
-    public DetailedTourViewModel(TourService tourService, WindowManager windowManager, EventManager eventManager) {
+    public DetailedTourViewModel(TourService tourService,MapRendererService mapRendererService, WindowManager windowManager, EventManager eventManager) {
         this.tourService = tourService;
+        this.mapRendererService = mapRendererService;
         this.windowManager = windowManager;
         this.eventManager = eventManager;
         this.tourDescription = new SimpleStringProperty(tourService.getSelectedTour().getTourDescription());
     }
+    public void initMap(WebEngine engine) {
+        this.webEngine = engine;
+
+        engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+            if (newState == Worker.State.SUCCEEDED) {
+                engine.executeScript(mapRendererService.getClearScript());
+                engine.executeScript(mapRendererService.getDrawScript());
+            }
+        });
+
+        if (engine.getLoadWorker().getState() == Worker.State.SUCCEEDED) {
+            engine.reload();
+        } else {
+            engine.load(mapRendererService.getInitialState());
+        }
+    }
+
 
     public StringProperty tourDescriptionProperty() {
         return tourDescription;
