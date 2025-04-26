@@ -40,7 +40,7 @@ public class TourMapViewModel {
         snapshotProvider.requestSnapshot(writableImage -> {
             BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
             try{
-                exportService.exportSingleTourAsPDF(bufferedImage,"test");
+                exportService.exportSingleTourAsPDF(bufferedImage);
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }

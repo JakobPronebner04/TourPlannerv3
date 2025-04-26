@@ -15,9 +15,13 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 public class ExportService {
     private final TourRepositoryORM tourRepository;
@@ -28,7 +32,7 @@ public class ExportService {
         this.stateDataAccess = stateDataAccess;
     }
 
-    public void exportSingleTourAsPDF(BufferedImage image, String outputPdf) throws IOException {
+    public void exportSingleTourAsPDF(BufferedImage image) throws IOException {
         Optional<TourEntity> tourOpt = tourRepository
                 .findByName(stateDataAccess.getSelectedTour().getTourName());
 
@@ -76,8 +80,13 @@ public class ExportService {
                     }
                 }
             }
-
-            document.save(outputPdf);
+            Path imagesDir = Paths.get("singletours");
+            if (Files.notExists(imagesDir)) {
+                Files.createDirectories(imagesDir);
+            }
+            String fileName = UUID.randomUUID() + ".pdf";
+            Path filePath = imagesDir.resolve(fileName);
+            document.save(filePath.toFile());
         }
     }
 
