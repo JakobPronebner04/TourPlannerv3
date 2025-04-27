@@ -49,9 +49,6 @@ public class TourLogHistoryViewModel {
     public void onTourLogsChanged(String message) {
         tourLogHistory.clear();
         tourLogHistory.addAll(tourLogService.getTourLogs());
-        if(message.equals("FILTER_TOURLOGS")) return;
-        tourLogService.computeAverageValues();
-
     }
     public void onTourSelectedChanged(boolean state) {
             tourLogTableDisabled.set(state);

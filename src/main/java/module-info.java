@@ -4,12 +4,13 @@ module at.jp.tourplanner {
     requires jakarta.persistence;
     requires org.hibernate.orm.core;
     requires jakarta.validation;
-    requires com.fasterxml.jackson.databind;
     requires jdk.jshell;
     requires javafx.web;
     requires java.net.http;
     requires javafx.swing;
     requires org.apache.pdfbox;
+    requires com.fasterxml.jackson.datatype.jsr310;
+    requires com.fasterxml.jackson.databind;
 
     opens at.jp.tourplanner to javafx.fxml;
     opens at.jp.tourplanner.inputmodel;
@@ -34,5 +35,6 @@ module at.jp.tourplanner {
     opens at.jp.tourplanner.entity to org.hibernate.orm.core;
     exports at.jp.tourplanner.dataaccess;
     opens at.jp.tourplanner.dataaccess to javafx.fxml;
+    exports at.jp.tourplanner.service.importexport;
 
 }

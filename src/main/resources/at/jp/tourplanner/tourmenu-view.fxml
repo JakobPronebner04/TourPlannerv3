@@ -4,12 +4,25 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox xmlns="http://javafx.com/javafx/17.0.6"
+<HBox spacing="60" xmlns="http://javafx.com/javafx/17.0.6"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="at.jp.tourplanner.view.tour.TourMenuView">
-    <Button fx:id="addButton" onAction="#onAddTourClicked" text="%addTour.button" prefWidth="75"/>
-    <Button fx:id="editButton" onAction="#onEditTourClicked" text="%editTour.button" prefWidth="75"/>
-    <Button fx:id="removeButton" onAction="#onRemoveTourClicked" text="%removeTour.button"/>
-    <Button fx:id="detailsButton" onAction="#onTourDetails" text="%showTourDetails.button"/>
-    <Button fx:id="exportButton" onAction="#onMapExport" text="%exportTour.button"/>
+
+    <HBox spacing="0">
+        <Button fx:id="addButton" onAction="#onAddTourClicked" text="%addTour.button" prefWidth="90"/>
+        <Button fx:id="editButton" onAction="#onEditTourClicked" text="%editTour.button" prefWidth="90"/>
+        <Button fx:id="removeButton" onAction="#onRemoveTourClicked" text="%removeTour.button" prefWidth="90"/>
+    </HBox>
+
+    <HBox spacing="0">
+        <Button fx:id="detailsButton" onAction="#onTourDetails" text="%showTourDetails.button" prefWidth="120"/>
+    </HBox>
+
+    <HBox spacing="0">
+        <Button fx:id="importTourButton" onAction="#onImportTour" text="%importTour.button" prefWidth="90"/>
+        <Button fx:id="exportTourButton" onAction="#onExportTour" text="%exportTour.button" prefWidth="90"/>
+        <Button fx:id="exportAsPDFButton" onAction="#onMapExport" text="%exportTourPDF.button" prefWidth="120"/>
+    </HBox>
+
 </HBox>
+

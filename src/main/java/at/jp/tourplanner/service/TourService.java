@@ -131,7 +131,7 @@ public class TourService {
         eventManager.publish(Events.TOURS_CHANGED, "REMOVE_TOUR");
     }
 
-    private TourEntity mapModelToEntity(Tour t)
+    public TourEntity mapModelToEntity(Tour t)
     {
         TourEntity te = new TourEntity();
         te.setName(t.getTourName());

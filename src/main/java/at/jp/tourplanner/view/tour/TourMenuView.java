@@ -1,12 +1,10 @@
 package at.jp.tourplanner.view.tour;
 
 import at.jp.tourplanner.viewmodel.tour.TourMenuViewModel;
-import at.jp.tourplanner.window.Windows;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -23,7 +21,12 @@ public class TourMenuView implements Initializable {
     @FXML
     private Button detailsButton;
     @FXML
-    private Button exportButton;
+    private Button exportAsPDFButton;
+
+    @FXML
+    private Button exportTourButton;
+    @FXML
+    private Button importTourButton;
 
     public TourMenuView(TourMenuViewModel viewModel) {
         this.viewModel = viewModel;
@@ -34,7 +37,8 @@ public class TourMenuView implements Initializable {
         editButton.disableProperty().bind(viewModel.editDisabledProperty());
         removeButton.disableProperty().bind(viewModel.removeDisabledProperty());
         detailsButton.disableProperty().bind(viewModel.detailsDisabledProperty());
-        exportButton.disableProperty().bind(viewModel.exportDisabledProperty());
+        exportAsPDFButton.disableProperty().bind(viewModel.exportDisabledProperty());
+        exportTourButton.disableProperty().bind(viewModel.exportDisabledProperty());
     }
     public void onAddTourClicked(){
         viewModel.openNewTourWindow();
@@ -52,6 +56,23 @@ public class TourMenuView implements Initializable {
         viewModel.openDetailsTourWindow();
     }
     public void onMapExport() {
-        viewModel.exportTour();
+        viewModel.exportTourAsPDF();
+    }
+    public void onExportTour()
+    {
+        viewModel.exportTourAsJson();
+    }
+    public void onImportTour() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("JSON Datei auswählen");
+
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("JSON Dateien (*.json)", "*.json")
+        );
+
+        var selectedFile = fileChooser.showOpenDialog(addButton.getScene().getWindow());
+        if (selectedFile != null) {
+            viewModel.fileChosen(selectedFile.getAbsolutePath());
+        }
     }
 }

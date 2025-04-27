@@ -21,6 +21,7 @@ public class ViewFactory {
     private final TourLogService tourLogService;
     private final MapRendererService mapRendererService;
     private final ExportService exportService;
+    private final ImportService importService;
     private final WindowManager windowManager;
 
     private final StateDataAccess stateDataAccess;
@@ -39,6 +40,7 @@ public class ViewFactory {
         this.tourLogService = new TourLogService(eventManager,tourLogRepository,tourRepository, stateDataAccess);
         this.mapRendererService = new MapRendererService(tourRepository,stateDataAccess);
         this.exportService = new ExportService(tourRepository,stateDataAccess);
+        this.importService = new ImportService(tourService,tourLogService,tourRepository,openRouteServiceApi);
         this.windowManager = WindowManager.getInstance();
     }
 
@@ -53,7 +55,7 @@ public class ViewFactory {
     public Object create(Class<?> viewClass) {
 
         if (TourMenuView.class == viewClass) {
-            return new TourMenuView(new TourMenuViewModel(eventManager,tourService,windowManager));
+            return new TourMenuView(new TourMenuViewModel(eventManager,tourService,importService,exportService,windowManager));
         }
         if(NewTourView.class == viewClass) {
             return new NewTourView(new NewTourViewModel(tourService,windowManager));

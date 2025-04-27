@@ -83,8 +83,7 @@ public class TourLogService {
 
         entity.setTour(selectedTourEntity.get());
         tourLogRepository.save(entity);
-
-        eventManager.publish(Events.TOURLOGS_CHANGED, "NEW_TOURLOG");
+        computeAverageValues(tourRepository.findByName(stateDataAccess.getSelectedTour().getTourName()).get());
     }
 
     public void edit(TourLog tl) {
@@ -97,7 +96,7 @@ public class TourLogService {
         }
         mapModelToEntity(selectedTourLogEntity.get(), tl);
         tourLogRepository.save(selectedTourLogEntity.get());
-        eventManager.publish(Events.TOURLOGS_CHANGED, "EDITED_TOURLOG");
+        computeAverageValues(tourRepository.findByName(stateDataAccess.getSelectedTour().getTourName()).get());
     }
 
     public void remove() {
@@ -105,8 +104,7 @@ public class TourLogService {
                 tourLogRepository.findByLocalDate(stateDataAccess.getSelectedTourLog().getDateTime());
         if(selectedTourLogEntity.isEmpty()) throw new RuntimeException("No tour has been selected!");
         tourLogRepository.delete(selectedTourLogEntity.get().getId());
-
-        eventManager.publish(Events.TOURLOGS_CHANGED, "REMOVED_TOURLOG");
+        computeAverageValues(tourRepository.findByName(stateDataAccess.getSelectedTour().getTourName()).get());
     }
 
 
@@ -130,18 +128,30 @@ public class TourLogService {
         entity.setActualTime(model.getActualTime());
         entity.setActualDistance(model.getActualDistance());
     }
-    public void computeAverageValues() {
-        Optional<TourEntity> tourEntity = tourRepository.findByName(stateDataAccess.getSelectedTour().getTourName());
-        if (tourEntity.isEmpty()) throw new RuntimeException("No tour has been selected!");
+    public TourLogEntity mapModelToEntity(TourLog model)
+    {
+        TourLogEntity entity = new TourLogEntity();
+        entity.setComment(model.getComment());
+        entity.setRating(model.getRating());
+        entity.setDifficulty(model.getDifficulty());
+        entity.setActualTime(model.getActualTime());
+        entity.setActualDistance(model.getActualDistance());
+        return entity;
+    }
 
-        List<TourLogEntity> tourLogEntities = tourEntity.get().getTourLogs();
+    public void computeAverageValues(TourEntity tourEntity) {
+
+        List<TourLogEntity> tourLogEntities = tourEntity.getTourLogs();
         if (tourLogEntities.isEmpty())
         {
-            tourEntity.get().setChildFriendliness(5);
-            tourEntity.get().setPopularity(0);
+            tourEntity.setChildFriendliness(0);
+            tourEntity.setPopularity(0);
+            tourRepository.save(tourEntity);
+            eventManager.publish(Events.TOURS_CHANGED,"ADDED_COMPUTED_VALUES");
             return;
         }
 
+        int points = 0;
         double sumDifficulty = 0;
         double sumTime = 0;
         double sumDistance = 0;
@@ -157,8 +167,6 @@ public class TourLogService {
         double avgTime = sumTime / logCount;
         double avgDistance = sumDistance / logCount;
 
-        int points = 0;
-
         if (avgDifficulty <= 0.5) {
             points += 4;
         } else if (avgDifficulty <= 1.5) {
@@ -172,10 +180,9 @@ public class TourLogService {
         if (avgDistance < 5.0f) {
             points += 3;
         }
-        tourEntity.get().setChildFriendliness(points);
-        tourEntity.get().setPopularity(tourLogEntities.size());
-
-        tourRepository.save(tourEntity.get());
+        tourEntity.setChildFriendliness(points);
+        tourEntity.setPopularity(tourLogEntities.size());
+        tourRepository.save(tourEntity);
         eventManager.publish(Events.TOURS_CHANGED,"ADDED_COMPUTED_VALUES");
     }
 
