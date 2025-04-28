@@ -13,7 +13,6 @@ import java.util.UUID;
 public class TourEntity {
     @Id
     @GeneratedValue
-    @JsonIgnore
     private UUID id;
     private String tourName;
     private String tourDescription;
@@ -28,19 +27,15 @@ public class TourEntity {
     @Formula("floor(tourduration / 3600) || 'h ' || " +
              "floor(((tourduration)::integer % 3600) / 60) || 'min'"
     )
-    @JsonIgnore
     private String formattedDuration;
 
     @Formula("floor(tourdistance / 1000) || ' km'")
-    @JsonIgnore
     private String formattedDistance;
 
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true, fetch=FetchType.EAGER)
-    @JsonManagedReference
     private List<TourLogEntity> tourLogs = new ArrayList<>();
 
     @OneToOne(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true,fetch=FetchType.EAGER)
-    @JsonIgnore
     private GeocodeDirectionsEntity geocodeDirections;
 
     public TourEntity() {

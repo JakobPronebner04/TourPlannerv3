@@ -12,19 +12,16 @@ public class TourLogEntity {
 
     @Id
     @GeneratedValue
-    @JsonIgnore
     private UUID id;
     private String comment;
     private int rating;
     private int difficulty;
     private float actualTime;
     private float actualDistance;
-    @JsonIgnore
     private LocalDateTime dateTime;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "tour_id", nullable = false)
-    @JsonBackReference
     private TourEntity tour;
 
     @PrePersist

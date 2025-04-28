@@ -45,5 +45,4 @@ public class MapRendererService implements MapRenderer{
         scriptBuilder.append("; var polyline = L.polyline(latlngs, {color: 'blue'}).addTo(map); map.fitBounds(polyline.getBounds());");
         return scriptBuilder.toString();
     }
-
 }

@@ -245,8 +245,15 @@ public class ExportService {
         tour.setTourTransportType(tourEntity.getTransportType());
 
         TourImportExport exportData = getTourImportExport(tourEntity, tour);
-        File outputFile = new File(UUID.randomUUID() + ".json");
-        objectMapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, exportData);
+
+        Path imagesDir = Paths.get("jsonExportedTours");
+        if (Files.notExists(imagesDir)) {
+            Files.createDirectories(imagesDir);
+        }
+        String fileName = UUID.randomUUID() + ".json";
+        Path filePath = imagesDir.resolve(fileName);
+
+        objectMapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), exportData);
     }
 
     private static TourImportExport getTourImportExport(TourEntity tourEntity, Tour tour) {
@@ -263,50 +270,4 @@ public class ExportService {
 
         return new TourImportExport(tour, tourLogs);
     }
-
-
-    /*public void importSingleTourJson(String path) throws IOException {
-            File inputFile = new File(path);
-
-            TourEntity importedTour = objectMapper.readValue(inputFile, TourEntity.class);
-            Tour t = new Tour();
-            t.setTourName(importedTour.getName());
-            t.setTourDescription(importedTour.getDescription());
-            t.setTourStart(importedTour.getStart());
-            t.setTourDestination(importedTour.getDestination());
-
-            PropertyValidator.validateOrThrow(t);
-
-            Optional<Geocode> geocodeStart = openRouteServiceApi.findGeocode(t.getTourStart());
-            geocodeStart.orElseThrow(()->new RuntimeException("Start destination not found"));
-
-            Optional<Geocode> geocodeEnd = openRouteServiceApi.findGeocode(t.getTourDestination());
-            geocodeEnd.orElseThrow(()->new RuntimeException("End destination not found"));
-
-            Optional<RouteInfo> routInfo= openRouteServiceApi.findRoute(
-                    geocodeStart.get(),
-                    geocodeEnd.get(),
-                    t.getTourTransportType());
-            routInfo.orElseThrow(()->new RuntimeException("Route not found or distance limit exceeded!"));
-
-            GeocodeDirectionsEntity gde = new GeocodeDirectionsEntity();
-            gde.setJsonDirections(routInfo.get().getJsonRoute());
-
-            TourEntity te = mapModelToEntity(t);
-            te.setDistance(routInfo.get().getDistance());
-            te.setDuration(routInfo.get().getDuration());
-
-            te.setGeocodeDirections(gde);
-
-            t.setTourTransportType(importedTour.getTransportType());
-            if (importedTour.getTourLogs() != null) {
-                for (TourLogEntity log : importedTour.getTourLogs()) {
-                    log.setTour(importedTour);
-                }
-            }
-
-            //tourRepository.save(importedTour);
-    }*/
-
-
 }
