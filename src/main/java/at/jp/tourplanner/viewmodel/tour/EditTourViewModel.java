@@ -1,13 +1,19 @@
 package at.jp.tourplanner.viewmodel.tour;
 
+import at.jp.tourplanner.exception.ErrorHandlingMode;
+import at.jp.tourplanner.exception.ExceptionHandler;
 import at.jp.tourplanner.inputmodel.Tour;
+import at.jp.tourplanner.service.ExceptionService;
 import at.jp.tourplanner.service.TourService;
 import at.jp.tourplanner.window.WindowManager;
+import at.jp.tourplanner.window.Windows;
 import javafx.beans.property.*;
-
-import java.rmi.AlreadyBoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class EditTourViewModel {
+    private static final Logger LOGGER = LogManager.getLogger();
+    private final ExceptionService exceptionService;
     private final TourService tourService;
     private final WindowManager windowManager;
     private final StringProperty errorMessageProperty;
@@ -18,7 +24,8 @@ public class EditTourViewModel {
     private final ObjectProperty<String> tourTransportTypeProperty;
     private final Tour updatedTour;
 
-    public EditTourViewModel(TourService tourService, WindowManager windowManager) {
+    public EditTourViewModel(TourService tourService,ExceptionService exceptionService, WindowManager windowManager) {
+        this.exceptionService = exceptionService;
         this.tourService = tourService;
         this.windowManager = windowManager;
         Tour selectedTour = tourService.getSelectedTour();
@@ -52,9 +59,11 @@ public class EditTourViewModel {
             updatedTour.setTourTransportType(tourTransportTypeProperty.getValue());
 
             tourService.edit(updatedTour);
-            windowManager.closeWindow();
-        } catch (RuntimeException e) {
-            errorMessageProperty.set(e.getMessage());
+            LOGGER.info("Tour edited");
+            windowManager.closeWindow(Windows.EDIT_TOUR_WINDOW);
+        } catch (Exception e) {
+            LOGGER.error(e);
+            exceptionService.updateCurrentExceptionMessage(e);
         }
     }
 }

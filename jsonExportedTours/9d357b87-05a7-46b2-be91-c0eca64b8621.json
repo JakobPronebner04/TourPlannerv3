@@ -1,0 +1,10 @@
+{
+  "tour" : {
+    "tourName" : "Jakobs Tour",
+    "tourDescription" : "Test",
+    "tourStart" : "Vienna",
+    "tourDestination" : "Graz",
+    "tourTransportType" : "Car"
+  },
+  "tourLogs" : [ ]
+}

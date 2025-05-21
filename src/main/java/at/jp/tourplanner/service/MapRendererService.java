@@ -3,6 +3,7 @@ package at.jp.tourplanner.service;
 import at.jp.tourplanner.dataaccess.StateDataAccess;
 import at.jp.tourplanner.dto.Geocode;
 import at.jp.tourplanner.entity.TourEntity;
+import at.jp.tourplanner.exception.TourNotFoundException;
 import at.jp.tourplanner.repository.TourRepositoryORM;
 import javafx.scene.web.WebEngine;
 
@@ -37,9 +38,8 @@ public class MapRendererService implements MapRenderer{
     public String getDrawScript() {
         Optional<TourEntity> tour = tourRepository.findByName(this.stateDataAccess.getSelectedTour().getTourName());
         if(tour.isEmpty()) {
-            throw new RuntimeException("Coordinates not found!");
+            throw new TourNotFoundException("Tour not found!");
         }
-
         StringBuilder scriptBuilder = new StringBuilder("var latlngs = ");
         scriptBuilder.append(tour.get().getGeocodeDirections().getJsonDirections());
         scriptBuilder.append("; var polyline = L.polyline(latlngs, {color: 'blue'}).addTo(map); map.fitBounds(polyline.getBounds());");

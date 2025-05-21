@@ -5,13 +5,13 @@ import at.jp.tourplanner.entity.TourEntity;
 import at.jp.tourplanner.entity.TourLogEntity;
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
+import at.jp.tourplanner.exception.TourLogNotFoundException;
+import at.jp.tourplanner.exception.TourNotFoundException;
 import at.jp.tourplanner.inputmodel.FilterTerm;
 import at.jp.tourplanner.inputmodel.TourLog;
 import at.jp.tourplanner.repository.*;
 import at.jp.tourplanner.utils.PropertyValidator;
 import jakarta.validation.ValidationException;
-
-import java.rmi.NotBoundException;
 import java.util.*;
 
 public class TourLogService {
@@ -74,10 +74,8 @@ public class TourLogService {
         Optional<TourEntity> selectedTourEntity =
                 tourRepository.findByName(stateDataAccess.getSelectedTour().getTourName());
         if (selectedTourEntity.isEmpty()) {
-            throw new RuntimeException("No tour has been selected!");
+            throw new TourNotFoundException("No tour found!");
         }
-
-
         TourLogEntity entity = new TourLogEntity();
         mapModelToEntity(entity,tl);
 
@@ -92,7 +90,7 @@ public class TourLogService {
         Optional<TourLogEntity> selectedTourLogEntity =
                 tourLogRepository.findByLocalDate(stateDataAccess.getSelectedTourLog().getDateTime());
         if (selectedTourLogEntity.isEmpty()) {
-            throw new RuntimeException("No tour has been selected!");
+            throw new TourNotFoundException("No tour found!");
         }
         mapModelToEntity(selectedTourLogEntity.get(), tl);
         tourLogRepository.save(selectedTourLogEntity.get());
@@ -102,7 +100,7 @@ public class TourLogService {
     public void remove() {
         Optional<TourLogEntity> selectedTourLogEntity =
                 tourLogRepository.findByLocalDate(stateDataAccess.getSelectedTourLog().getDateTime());
-        if(selectedTourLogEntity.isEmpty()) throw new RuntimeException("No tour has been selected!");
+        if(selectedTourLogEntity.isEmpty()) throw new TourLogNotFoundException("No tourlog found!");
         tourLogRepository.delete(selectedTourLogEntity.get().getId());
         computeAverageValues(tourRepository.findByName(stateDataAccess.getSelectedTour().getTourName()).get());
     }

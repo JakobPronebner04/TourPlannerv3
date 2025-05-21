@@ -1,6 +1,5 @@
 package at.jp.tourplanner.inputmodel;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
@@ -22,7 +21,6 @@ public class TourLog {
 
     @Positive(message = "Distance must be greater than 0!")
     private float actualDistance;
-    @JsonIgnore
     private LocalDateTime dateTime;
 
 
@@ -71,7 +69,6 @@ public class TourLog {
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
-    @JsonIgnore
     public String getDateTimeStr()
     {
         if (dateTime == null) {

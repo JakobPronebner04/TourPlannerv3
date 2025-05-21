@@ -5,8 +5,10 @@ import at.jp.tourplanner.dataaccess.StateDataAccess;
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.repository.*;
 import at.jp.tourplanner.service.*;
+import at.jp.tourplanner.view.ExceptionView;
 import at.jp.tourplanner.view.tour.*;
 import at.jp.tourplanner.view.tourlog.*;
+import at.jp.tourplanner.viewmodel.ExceptionViewModel;
 import at.jp.tourplanner.viewmodel.tour.*;
 import at.jp.tourplanner.viewmodel.tourlog.*;
 import at.jp.tourplanner.window.WindowManager;
@@ -18,11 +20,13 @@ public class ViewFactory {
     private final EventManager eventManager;
 
     private final TourService tourService;
+    private final ExceptionService exceptionService;
     private final TourLogService tourLogService;
     private final MapRendererService mapRendererService;
     private final ExportService exportService;
     private final ImportService importService;
     private final WindowManager windowManager;
+    private final ConfigManager configManager;
 
     private final StateDataAccess stateDataAccess;
     private final TourRepositoryORM tourRepository;
@@ -30,18 +34,20 @@ public class ViewFactory {
     private final OpenRouteServiceApi openRouteServiceApi;
 
     private ViewFactory() {
+        this.configManager = new ConfigManager();
         this.eventManager = new EventManager();
         this.tourRepository = new TourRepositoryORM();
         this.tourLogRepository = new TourLogRepositoryORM();
         this.stateDataAccess = new StateDataAccess();
-        this.openRouteServiceApi = new OpenRouteServiceApi();
+        this.openRouteServiceApi = new OpenRouteServiceApi(configManager);
 
         this.tourService = new TourService(openRouteServiceApi,eventManager, stateDataAccess, tourRepository);
         this.tourLogService = new TourLogService(eventManager,tourLogRepository,tourRepository, stateDataAccess);
         this.mapRendererService = new MapRendererService(tourRepository,stateDataAccess);
         this.exportService = new ExportService(tourRepository,stateDataAccess);
         this.importService = new ImportService(tourService,tourLogService,tourRepository,openRouteServiceApi);
-        this.windowManager = WindowManager.getInstance();
+        this.exceptionService = new ExceptionService(stateDataAccess,eventManager);
+        this.windowManager = new WindowManager(eventManager);
     }
 
     public static ViewFactory getInstance() {
@@ -55,16 +61,16 @@ public class ViewFactory {
     public Object create(Class<?> viewClass) {
 
         if (TourMenuView.class == viewClass) {
-            return new TourMenuView(new TourMenuViewModel(eventManager,tourService,importService,exportService,windowManager));
+            return new TourMenuView(new TourMenuViewModel(eventManager,exceptionService,tourService,importService,exportService,windowManager));
         }
         if(NewTourView.class == viewClass) {
-            return new NewTourView(new NewTourViewModel(tourService,windowManager));
+            return new NewTourView(new NewTourViewModel(tourService,exceptionService,windowManager));
         }
         if(TourHistoryView.class == viewClass) {
             return new TourHistoryView(new TourHistoryViewModel(eventManager,tourService));
         }
         if(EditTourView.class == viewClass) {
-            return new EditTourView(new EditTourViewModel(tourService,windowManager));
+            return new EditTourView(new EditTourViewModel(tourService,exceptionService,windowManager));
         }
         if(TourLogMenuView.class == viewClass) {
             return new TourLogMenuView(new TourLogMenuViewModel(eventManager,tourLogService,windowManager));
@@ -84,16 +90,19 @@ public class ViewFactory {
             return new DetailedTourLogView(new DetailedTourLogViewModel(tourLogService,windowManager));
         }
         if(DetailedTourView.class == viewClass) {
-            return new DetailedTourView(new DetailedTourViewModel(tourService,mapRendererService,windowManager,eventManager));
+            return new DetailedTourView(new DetailedTourViewModel(tourService,exceptionService,mapRendererService,windowManager,eventManager));
         }
         if(TourMapView.class == viewClass) {
-            return new TourMapView(new TourMapViewModel(eventManager,tourService,mapRendererService,exportService));
+            return new TourMapView(new TourMapViewModel(eventManager,exceptionService,tourService,mapRendererService,exportService));
         }
         if(TourFilterView.class == viewClass) {
             return new TourFilterView(new TourFilterViewModel(tourService));
         }
         if(TourLogFilterView.class == viewClass) {
             return new TourLogFilterView(new TourLogFilterViewModel(tourLogService,eventManager));
+        }
+        if(ExceptionView.class == viewClass) {
+            return new ExceptionView(new ExceptionViewModel(exceptionService));
         }
 
         throw new IllegalArgumentException(

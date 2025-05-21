@@ -5,6 +5,10 @@ import at.jp.tourplanner.dto.RouteInfo;
 import at.jp.tourplanner.entity.GeocodeDirectionsEntity;
 import at.jp.tourplanner.entity.TourEntity;
 import at.jp.tourplanner.entity.TourLogEntity;
+import at.jp.tourplanner.exception.DuplicateTourNameException;
+import at.jp.tourplanner.exception.GeocodingException;
+import at.jp.tourplanner.exception.RoutingException;
+import at.jp.tourplanner.exception.TourImportException;
 import at.jp.tourplanner.inputmodel.Tour;
 import at.jp.tourplanner.inputmodel.TourLog;
 import at.jp.tourplanner.repository.TourLogRepository;
@@ -40,28 +44,34 @@ public class ImportService {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public void importSingleTour(String path) throws IOException {
+    public void importSingleTour(String path){
         File inputFile = new File(path);
-        TourImportExport importData = objectMapper.readValue(inputFile, TourImportExport.class);
+        TourImportExport importData;
+        try {
+            importData = objectMapper.readValue(inputFile, TourImportExport.class);
+        } catch (IOException e) {
+            throw new TourImportException("Issue while importing file: " + path);
+        }
+
 
         Tour importedTour = importData.getTour();
         PropertyValidator.validateOrThrow(importedTour);
 
         if(tourRepository.findByName(importedTour.getTourName()).isPresent()) {
-            throw new RuntimeException("Tour name already exists");
+            throw new DuplicateTourNameException("Tour name already exists!");
         }
 
         Optional<Geocode> geocodeStart = openRouteServiceApi.findGeocode(importedTour.getTourStart());
-        geocodeStart.orElseThrow(()->new RuntimeException("Start destination not found"));
+        geocodeStart.orElseThrow(()->new GeocodingException("Start destination not found"));
 
         Optional<Geocode> geocodeEnd = openRouteServiceApi.findGeocode(importedTour.getTourDestination());
-        geocodeEnd.orElseThrow(()->new RuntimeException("End destination not found"));
+        geocodeEnd.orElseThrow(()->new GeocodingException("End destination not found"));
 
         Optional<RouteInfo> routInfo= openRouteServiceApi.findRoute(
                 geocodeStart.get(),
                 geocodeEnd.get(),
                 importedTour.getTourTransportType());
-        routInfo.orElseThrow(()->new RuntimeException("Route not found or distance limit exceeded!"));
+        routInfo.orElseThrow(()->new RoutingException("Route not found or distance limit exceeded!"));
 
         GeocodeDirectionsEntity gde = new GeocodeDirectionsEntity();
         gde.setJsonDirections(routInfo.get().getJsonRoute());

@@ -14,6 +14,7 @@ public class StateDataAccess {
     private FilterTerm selectedTourFilterTerm;
     private FilterTerm selectedTourLogFilterTerm;
     private BufferedImage selectedImage;
+    private String exceptionMessage;
 
     public StateDataAccess() {
     }
@@ -25,6 +26,9 @@ public class StateDataAccess {
     }
     public Tour getSelectedTour() {
         return selectedTour;
+    }
+    public String getException(){
+        return exceptionMessage;
     }
 
     public Optional<FilterTerm> getSelectedTourFilterTerm() {
@@ -39,6 +43,9 @@ public class StateDataAccess {
             return Optional.empty();
         };
         return Optional.of(selectedTourLogFilterTerm);
+    }
+    public void updateException(String eMessage) {
+        exceptionMessage = eMessage;
     }
     public void updateSelectedImage(BufferedImage selectedImage) {
         this.selectedImage = selectedImage;

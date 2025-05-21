@@ -3,6 +3,9 @@ package at.jp.tourplanner.viewmodel.tour;
 
 import at.jp.tourplanner.event.EventManager;
 import at.jp.tourplanner.event.Events;
+import at.jp.tourplanner.exception.ErrorHandlingMode;
+import at.jp.tourplanner.exception.ExceptionHandler;
+import at.jp.tourplanner.service.ExceptionService;
 import at.jp.tourplanner.service.ExportService;
 import at.jp.tourplanner.service.ImportService;
 import at.jp.tourplanner.service.TourService;
@@ -10,11 +13,14 @@ import at.jp.tourplanner.window.WindowManager;
 import at.jp.tourplanner.window.Windows;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 public class TourMenuViewModel {
-
+    private static final Logger LOGGER = LogManager.getLogger();
+    private final ExceptionService exceptionService;
     private final TourService tourService;
     private final ExportService exportService;
     private final ImportService importService;
@@ -25,7 +31,8 @@ public class TourMenuViewModel {
     private final BooleanProperty detailsDisabled = new SimpleBooleanProperty(true);
     private final BooleanProperty exportDisabled = new SimpleBooleanProperty(true);
 
-    public TourMenuViewModel(EventManager eventManager, TourService tourService, ImportService importService, ExportService exportService, WindowManager windowManager) {
+    public TourMenuViewModel(EventManager eventManager,ExceptionService exceptionService, TourService tourService, ImportService importService, ExportService exportService, WindowManager windowManager) {
+        this.exceptionService = exceptionService;
         this.tourService = tourService;
         this.exportService = exportService;
         this.importService = importService;
@@ -71,21 +78,20 @@ public class TourMenuViewModel {
        try
        {
            importService.importSingleTour(filename);
-       }catch(IOException e) {
-          System.err.println(e.getMessage());
+           LOGGER.info("Imported new tour from: " + filename);
+       }catch(Exception e) {
+           LOGGER.error(e);
+           exceptionService.updateCurrentExceptionMessage(e);
        }
 
     }
     public void exportTourAsJson(){
         try{
             exportService.exportSingleTourAsJSON();
-        }catch(IOException | RuntimeException e) {
-            if(e.getClass().equals(IOException.class))
-            {
-                System.err.println(e.getMessage());
-                return;
-            }
-            System.err.println(e.getMessage());
+            LOGGER.info("Exported Tour as JSON");
+        }catch(Exception e) {
+            LOGGER.error(e);
+            exceptionService.updateCurrentExceptionMessage(e);
         }
     }
 

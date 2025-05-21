@@ -1,6 +1,5 @@
 package at.jp.tourplanner.inputmodel;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import javafx.scene.image.Image;
 
@@ -19,13 +18,9 @@ public class Tour {
     @NotBlank(message = "tourDestination should not be blanked!")
     private String tourDestination;
 
-    @JsonIgnore
     private int popularity;
-    @JsonIgnore
     private int childFriendliness;
-    @JsonIgnore
     private String tourDuration;
-    @JsonIgnore
     private String tourDistance;
 
     private String tourTransportType;

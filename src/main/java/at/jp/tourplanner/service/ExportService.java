@@ -1,6 +1,7 @@
 package at.jp.tourplanner.service;
 
 import at.jp.tourplanner.dataaccess.StateDataAccess;
+import at.jp.tourplanner.exception.TourNotFoundException;
 import at.jp.tourplanner.service.importexport.TourImportExport;
 import at.jp.tourplanner.entity.TourEntity;
 import at.jp.tourplanner.entity.TourLogEntity;
@@ -45,6 +46,8 @@ public class ExportService {
     public void exportSingleTourAsPDF(BufferedImage image) throws IOException {
         Optional<TourEntity> tourOpt = tourRepository
                 .findByName(stateDataAccess.getSelectedTour().getTourName());
+
+        if(tourOpt.isEmpty()) throw new TourNotFoundException("Tour not found!");
 
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
@@ -222,18 +225,10 @@ public class ExportService {
         return y;
     }
 
-    /*public void exportSingleTourAsJSON() throws IOException {
-        Optional<TourEntity> tourOpt = tourRepository
-                .findByName(stateDataAccess.getSelectedTour().getTourName());
-        if(tourOpt.isEmpty()) throw new RuntimeException("Could not find tour");
-
-        File outputFile = new File(UUID.randomUUID() + ".json");
-        objectMapper.writeValue(outputFile,tourOpt.get());
-    }*/
     public void exportSingleTourAsJSON() throws IOException {
         Optional<TourEntity> tourOpt = tourRepository
                 .findByName(stateDataAccess.getSelectedTour().getTourName());
-        if (tourOpt.isEmpty()) throw new RuntimeException("Could not find tour");
+        if (tourOpt.isEmpty()) throw new TourNotFoundException("Tour not found!");
 
         TourEntity tourEntity = tourOpt.get();
 

@@ -7,5 +7,6 @@ public enum Events {
     TOURLOG_SELECTED,
     TOURLOGS_CHANGED,
     TOURS_EDITED,
-    TOUR_EXPORT
+    TOUR_EXPORT,
+    EXCEPTION_THROWN
 }

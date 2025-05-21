@@ -1,12 +1,14 @@
 package at.jp.tourplanner.viewmodel.tourlog;
 
+import at.jp.tourplanner.exception.ErrorHandlingMode;
+import at.jp.tourplanner.exception.ExceptionHandler;
 import at.jp.tourplanner.inputmodel.TourLog;
 import at.jp.tourplanner.service.TourLogService;
 import at.jp.tourplanner.window.WindowManager;
+import at.jp.tourplanner.window.Windows;
 import jakarta.validation.ValidationException;
 import javafx.beans.property.*;
 
-import java.rmi.NotBoundException;
 
 public class EditTourLogViewModel {
     private final TourLogService tourLogService;
@@ -56,11 +58,13 @@ public class EditTourLogViewModel {
             updatedTourLog.setDifficulty(difficultyProperty.get());
 
             tourLogService.edit(updatedTourLog);
-            windowManager.closeWindow();
+            windowManager.closeWindow(Windows.EDIT_TOURLOG_WINDOW);
         }catch(NumberFormatException e) {
+
             errorMessageProperty.set("Time and Distance should not be emtpy!");
-        }catch(RuntimeException e) {
-            errorMessageProperty.set(e.getMessage());
+        }catch(Exception e){
+            String msg = ExceptionHandler.handle(e, ErrorHandlingMode.LOG_ONLY);
+            errorMessageProperty.set(msg);
         }
     }
 }

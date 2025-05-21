@@ -2,6 +2,7 @@ package at.jp.tourplanner.viewmodel.tourlog;
 
 import at.jp.tourplanner.service.TourLogService;
 import at.jp.tourplanner.window.WindowManager;
+import at.jp.tourplanner.window.Windows;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -22,6 +23,6 @@ public class DetailedTourLogViewModel {
     }
 
     public void close() {
-        windowManager.closeWindow();
+        windowManager.closeWindow(Windows.DETAILS_TOURLOG_WINDOW);
     }
 }
