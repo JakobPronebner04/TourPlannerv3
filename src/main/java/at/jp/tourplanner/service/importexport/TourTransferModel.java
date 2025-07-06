@@ -5,13 +5,13 @@ import at.jp.tourplanner.inputmodel.TourLog;
 
 import java.util.List;
 
-public class TourImportExport {
+public class TourTransferModel {
     private Tour tour;
     private List<TourLog> tourLogs;
 
-    public TourImportExport() {}
+    public TourTransferModel() {}
 
-    public TourImportExport(Tour tour, List<TourLog> tourLogs) {
+    public TourTransferModel(Tour tour, List<TourLog> tourLogs) {
         this.tour = tour;
         this.tourLogs = tourLogs;
     }

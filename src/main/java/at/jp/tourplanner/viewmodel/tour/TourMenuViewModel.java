@@ -30,6 +30,7 @@ public class TourMenuViewModel {
     private final BooleanProperty removeDisabled = new SimpleBooleanProperty(true);
     private final BooleanProperty detailsDisabled = new SimpleBooleanProperty(true);
     private final BooleanProperty exportDisabled = new SimpleBooleanProperty(true);
+    private final BooleanProperty exportSummaryDisabled = new SimpleBooleanProperty(true);
 
     public TourMenuViewModel(EventManager eventManager,ExceptionService exceptionService, TourService tourService, ImportService importService, ExportService exportService, WindowManager windowManager) {
         this.exceptionService = exceptionService;
@@ -38,8 +39,12 @@ public class TourMenuViewModel {
         this.importService = importService;
         this.windowManager = windowManager;
         this.eventManager = eventManager;
+        exportSummaryDisabled.set(tourService.getTours().isEmpty());
         this.eventManager.subscribe(
                 Events.TOUR_SELECTED, this::onTourSelectedChanged
+        );
+        this.eventManager.subscribe(
+                Events.TOURS_CHANGED,this::onToursChanged
         );
     }
 
@@ -49,6 +54,11 @@ public class TourMenuViewModel {
         detailsDisabled.set(state);
         exportDisabled.set(state);
     }
+
+    public void onToursChanged(String state) {
+        exportSummaryDisabled.set(tourService.getTours().isEmpty());
+    }
+
 
     public void openNewTourWindow(){
             windowManager.openWindow(Windows.NEW_TOUR_WINDOW);
@@ -68,6 +78,10 @@ public class TourMenuViewModel {
     public BooleanProperty exportDisabledProperty() {
         return exportDisabled;
     }
+    public BooleanProperty exportSummaryDisabledProperty() {
+        return exportSummaryDisabled;
+    }
+
     public BooleanProperty detailsDisabledProperty() { return detailsDisabled;}
     public void deleteTour()
     {
@@ -89,6 +103,17 @@ public class TourMenuViewModel {
         try{
             exportService.exportSingleTourAsJSON();
             LOGGER.info("Exported Tour as JSON");
+        }catch(Exception e) {
+            LOGGER.error(e);
+            exceptionService.updateCurrentExceptionMessage(e);
+        }
+    }
+
+    public void exportTourSummary()
+    {
+        try{
+            exportService.exportStatisticalSummaryReport();
+            LOGGER.info("Exported statistical summary report of tours");
         }catch(Exception e) {
             LOGGER.error(e);
             exceptionService.updateCurrentExceptionMessage(e);

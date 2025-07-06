@@ -444,10 +444,12 @@ Eine einzigartige Funktion der Anwendung ist das Smart Tour-Matching-System, das
     - Unit-Tests: 15h
     - Integration-Tests: 10h
     - UI-Tests: 5h
+	
+
 
 ## 9. Git-Repository
 ### Repository-Informationen
-- **URL:** `https://github.com/username/TourPlannerV3`
+- **URL:** `https://github.com/JakobPronebner04/TourPlannerv3`
 - **Branches:**
     - `main`: Produktionscode
     - `develop`: Entwicklungszweig

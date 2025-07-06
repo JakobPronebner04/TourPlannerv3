@@ -17,7 +17,7 @@ public class ExceptionService {
     }
     public void updateCurrentExceptionMessage(Exception e){
         stateDataAccess.updateException(e.getMessage());
-        eventManager.publish(Events.EXCEPTION_THROWN, "FILTER_TOURS");
+        eventManager.publish(Events.EXCEPTION_THROWN, "NEW_EXCEPTION");
     }
 
 }

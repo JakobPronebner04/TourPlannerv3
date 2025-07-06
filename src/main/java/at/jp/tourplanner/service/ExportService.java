@@ -2,12 +2,13 @@ package at.jp.tourplanner.service;
 
 import at.jp.tourplanner.dataaccess.StateDataAccess;
 import at.jp.tourplanner.exception.TourNotFoundException;
-import at.jp.tourplanner.service.importexport.TourImportExport;
+import at.jp.tourplanner.service.importexport.TourTransferModel;
 import at.jp.tourplanner.entity.TourEntity;
 import at.jp.tourplanner.entity.TourLogEntity;
 import at.jp.tourplanner.inputmodel.Tour;
 import at.jp.tourplanner.inputmodel.TourLog;
 import at.jp.tourplanner.repository.TourRepositoryORM;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -22,7 +23,6 @@ import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,7 +40,8 @@ public class ExportService {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .enable(SerializationFeature.INDENT_OUTPUT)
                 .registerModule(new JavaTimeModule())
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
     public void exportSingleTourAsPDF(BufferedImage image) throws IOException {
@@ -97,11 +98,109 @@ public class ExportService {
             if (Files.notExists(imagesDir)) {
                 Files.createDirectories(imagesDir);
             }
-            String fileName = UUID.randomUUID() + ".pdf";
+            String fileName =  tourOpt.get().getName()+ UUID.randomUUID() + ".pdf";
             Path filePath = imagesDir.resolve(fileName);
             document.save(filePath.toFile());
         }
     }
+
+    public void exportStatisticalSummaryReport() throws IOException {
+        List<TourEntity> allTours = tourRepository.findAll();
+
+        if (allTours.isEmpty()) {
+            throw new TourNotFoundException("No tours available for summary export.");
+        }
+
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.A4);
+        document.addPage(page);
+
+        PDPageContentStream content = new PDPageContentStream(document, page);
+        try {
+            float margin = 50;
+            float startX = margin;
+            float startY = page.getMediaBox().getHeight() - margin;
+            float padding = 10;
+            float currentY = startY;
+
+            PDType1Font titleFont = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
+            PDType1Font bodyFont = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
+            float titleFontSize = 16;
+            float bodyFontSize = 12;
+            float lineHeight = bodyFontSize * 1.5f;
+
+            content.setFont(bodyFont, bodyFontSize);
+
+            content.beginText();
+            content.setFont(titleFont, titleFontSize + 2);
+            content.newLineAtOffset(startX, currentY);
+            content.showText("Tour Summary Statistics Report");
+            content.endText();
+            currentY -= (titleFontSize + 10);
+
+            for (TourEntity tour : allTours) {
+                if (currentY < margin + 100) {
+                    content.close();
+                    page = new PDPage(PDRectangle.A4);
+                    document.addPage(page);
+                    content = new PDPageContentStream(document, page);
+                    currentY = page.getMediaBox().getHeight() - margin;
+                }
+
+                content.beginText();
+                content.setFont(titleFont, titleFontSize);
+                content.newLineAtOffset(startX, currentY);
+                content.showText("Tour: " + tour.getName());
+                content.endText();
+                currentY -= lineHeight;
+
+                List<TourLogEntity> logs = tour.getTourLogs();
+
+                if (logs.isEmpty()) {
+                    content.beginText();
+                    content.setFont(bodyFont, bodyFontSize);
+                    content.newLineAtOffset(startX, currentY);
+                    content.showText("  No logs available for this tour.");
+                    content.endText();
+                    currentY -= lineHeight * 2;
+                    continue;
+                }
+
+                double avgTime = logs.stream().mapToDouble(TourLogEntity::getActualTime).average().orElse(0.0);
+                double avgDistance = logs.stream().mapToDouble(TourLogEntity::getActualDistance).average().orElse(0.0);
+                double avgRating = logs.stream().mapToDouble(TourLogEntity::getRating).average().orElse(0.0);
+
+                Map<String, String> stats = new LinkedHashMap<>();
+                stats.put("Popularity [Amount of tourlogs]",String.format("%d",tour.getPopularity()));
+                stats.put("  Average Duration [h]", String.format("%.2f", avgTime));
+                stats.put("  Average Distance [km]", String.format("%.2f", avgDistance));
+                stats.put("  Average Rating", String.format("%.2f", avgRating));
+
+                for (Map.Entry<String, String> entry : stats.entrySet()) {
+                    content.beginText();
+                    content.setFont(bodyFont, bodyFontSize);
+                    content.newLineAtOffset(startX, currentY);
+                    content.showText(entry.getKey() + ": " + entry.getValue());
+                    content.endText();
+                    currentY -= lineHeight;
+                }
+
+                currentY -= lineHeight;
+            }
+        } finally {
+            content.close();
+            Path outputDir = Paths.get("summaryReports");
+            if (Files.notExists(outputDir)) {
+                Files.createDirectories(outputDir);
+            }
+
+            String fileName = "TourSummaryReport_" + UUID.randomUUID() + ".pdf";
+            Path filePath = outputDir.resolve(fileName);
+            document.save(filePath.toFile());
+            document.close();
+        }
+    }
+
 
     private Map<String, String> getTourAttributes(TourEntity tour) {
         Map<String, String> attributes = new LinkedHashMap<>();
@@ -239,7 +338,7 @@ public class ExportService {
         tour.setTourDestination(tourEntity.getDestination());
         tour.setTourTransportType(tourEntity.getTransportType());
 
-        TourImportExport exportData = getTourImportExport(tourEntity, tour);
+        TourTransferModel exportData = getTourTransferModel(tourEntity, tour);
 
         Path imagesDir = Paths.get("jsonExportedTours");
         if (Files.notExists(imagesDir)) {
@@ -251,7 +350,7 @@ public class ExportService {
         objectMapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), exportData);
     }
 
-    private static TourImportExport getTourImportExport(TourEntity tourEntity, Tour tour) {
+    private static TourTransferModel getTourTransferModel(TourEntity tourEntity, Tour tour) {
         List<TourLog> tourLogs = new ArrayList<>();
         for (TourLogEntity logEntity : tourEntity.getTourLogs()) {
             TourLog log = new TourLog();
@@ -263,6 +362,6 @@ public class ExportService {
             tourLogs.add(log);
         }
 
-        return new TourImportExport(tour, tourLogs);
+        return new TourTransferModel(tour, tourLogs);
     }
 }

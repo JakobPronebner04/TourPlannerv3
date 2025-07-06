@@ -26,6 +26,8 @@ public class TourMenuView implements Initializable {
     @FXML
     private Button exportTourButton;
     @FXML
+    private Button exportTourSummaryButton;
+    @FXML
     private Button importTourButton;
 
     public TourMenuView(TourMenuViewModel viewModel) {
@@ -39,6 +41,7 @@ public class TourMenuView implements Initializable {
         detailsButton.disableProperty().bind(viewModel.detailsDisabledProperty());
         exportAsPDFButton.disableProperty().bind(viewModel.exportDisabledProperty());
         exportTourButton.disableProperty().bind(viewModel.exportDisabledProperty());
+        exportTourSummaryButton.disableProperty().bind(viewModel.exportSummaryDisabledProperty());
     }
     public void onAddTourClicked(){
         viewModel.openNewTourWindow();
@@ -55,12 +58,17 @@ public class TourMenuView implements Initializable {
     public void onTourDetails() {
         viewModel.openDetailsTourWindow();
     }
+
     public void onMapExport() {
         viewModel.exportTourAsPDF();
     }
     public void onExportTour()
     {
         viewModel.exportTourAsJson();
+    }
+    public void onExportSummary()
+    {
+        viewModel.exportTourSummary();
     }
     public void onImportTour() {
         FileChooser fileChooser = new FileChooser();

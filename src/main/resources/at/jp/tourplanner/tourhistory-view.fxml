@@ -18,7 +18,7 @@
             <TableColumn fx:id="colDuration" text="%TourDuration.label" prefWidth="75"/>
             <TableColumn fx:id="colDistance" text="%TourDistance.label" prefWidth="75"/>
             <TableColumn fx:id="colPopularity" text="%TourPopularity.label" prefWidth="75"/>
-            <TableColumn fx:id="colChildfriendliness" text="%TourChildfriendliness.label" prefWidth="100"/>
+            <TableColumn fx:id="colChildfriendliness" text="%TourChildfriendliness.label" prefWidth="120"/>
         </columns>
     </TableView>
 </HBox>

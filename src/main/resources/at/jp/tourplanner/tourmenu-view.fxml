@@ -4,24 +4,61 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox spacing="60" xmlns="http://javafx.com/javafx/17.0.6"
+<HBox spacing="30" xmlns="http://javafx.com/javafx/17.0.6"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="at.jp.tourplanner.view.tour.TourMenuView">
 
     <HBox spacing="0">
-        <Button fx:id="addButton" onAction="#onAddTourClicked" text="%addTour.button" prefWidth="90"/>
-        <Button fx:id="editButton" onAction="#onEditTourClicked" text="%editTour.button" prefWidth="90"/>
-        <Button fx:id="removeButton" onAction="#onRemoveTourClicked" text="%removeTour.button" prefWidth="90"/>
+        <Button fx:id="addButton" onAction="#onAddTourClicked" text="%addTour.button" prefWidth="90">
+            <tooltip>
+                <Tooltip text="%addTour.button"/>
+            </tooltip>
+        </Button>
+        <Button fx:id="editButton" onAction="#onEditTourClicked" text="%editTour.button" prefWidth="90">
+            <tooltip>
+                <Tooltip text="%editTour.button"/>
+            </tooltip>
+        </Button>
+
+        <Button fx:id="removeButton" onAction="#onRemoveTourClicked" text="%removeTour.button" prefWidth="90">
+            <tooltip>
+                <Tooltip text="%removeTour.button"/>
+            </tooltip>
+        </Button>
     </HBox>
 
     <HBox spacing="0">
-        <Button fx:id="detailsButton" onAction="#onTourDetails" text="%showTourDetails.button" prefWidth="120"/>
+        <Button fx:id="detailsButton" onAction="#onTourDetails" text="%showTourDetails.button" prefWidth="120">
+            <tooltip>
+                <Tooltip text="%showTourDetails.button"/>
+            </tooltip>
+        </Button>
     </HBox>
 
     <HBox spacing="0">
-        <Button fx:id="importTourButton" onAction="#onImportTour" text="%importTour.button" prefWidth="90"/>
-        <Button fx:id="exportTourButton" onAction="#onExportTour" text="%exportTour.button" prefWidth="90"/>
-        <Button fx:id="exportAsPDFButton" onAction="#onMapExport" text="%exportTourPDF.button" prefWidth="120"/>
+        <Button fx:id="importTourButton" onAction="#onImportTour" text="%importTour.button" prefWidth="90">
+            <tooltip>
+                <Tooltip text="%importTour.button"/>
+            </tooltip>
+        </Button>
+
+        <Button fx:id="exportTourButton" onAction="#onExportTour" text="%exportTour.button" prefWidth="90">
+            <tooltip>
+                <Tooltip text="%exportTour.button"/>
+            </tooltip>
+        </Button>
+
+        <Button fx:id="exportAsPDFButton" onAction="#onMapExport" text="%exportTourPDF.button" prefWidth="120">
+            <tooltip>
+                <Tooltip text="%exportTourPDF.button"/>
+            </tooltip>
+        </Button>
+
+        <Button fx:id="exportTourSummaryButton" onAction="#onExportSummary" text="%exportTourSummaryPDF.button" prefWidth="120">
+            <tooltip>
+                <Tooltip text="%exportTourSummaryPDF.button"/>
+            </tooltip>
+        </Button>
     </HBox>
 
 </HBox>
