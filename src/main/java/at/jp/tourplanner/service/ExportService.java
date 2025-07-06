@@ -98,7 +98,7 @@ public class ExportService {
             if (Files.notExists(imagesDir)) {
                 Files.createDirectories(imagesDir);
             }
-            String fileName =  tourOpt.get().getName()+ UUID.randomUUID() + ".pdf";
+            String fileName =  tourOpt.get().getName() + "_" + UUID.randomUUID() + ".pdf";
             Path filePath = imagesDir.resolve(fileName);
             document.save(filePath.toFile());
         }

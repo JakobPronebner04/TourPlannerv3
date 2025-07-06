@@ -22,7 +22,6 @@ public class Tour {
     private int childFriendliness;
     private String tourDuration;
     private String tourDistance;
-
     private String tourTransportType;
 
     public Tour() {

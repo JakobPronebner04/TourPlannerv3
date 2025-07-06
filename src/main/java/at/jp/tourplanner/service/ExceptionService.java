@@ -19,5 +19,4 @@ public class ExceptionService {
         stateDataAccess.updateException(e.getMessage());
         eventManager.publish(Events.EXCEPTION_THROWN, "NEW_EXCEPTION");
     }
-
 }

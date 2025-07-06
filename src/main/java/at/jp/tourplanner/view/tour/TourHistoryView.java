@@ -8,8 +8,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 
+import java.io.File;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class TourHistoryView implements Initializable {
@@ -57,7 +61,7 @@ public class TourHistoryView implements Initializable {
         colChildfriendliness.setCellValueFactory(new PropertyValueFactory<>("childFriendliness"));
 
         viewModel.selectedTour().bind(tourHistoryTable.getSelectionModel().selectedItemProperty());
-
         tourHistoryTable.setItems(viewModel.getTourHistory());
     }
+
 }

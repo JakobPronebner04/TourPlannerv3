@@ -30,16 +30,31 @@
 <div id="map"></div>
 
 <script>
+    var streets = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    });
+
+    var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19,
+        attribution: 'Tiles &copy; Esri'
+    });
+
     var map = L.map('map', {
         center: [51.505, -0.09],
         zoom: 13,
+        layers: [streets],
         zoomControl: false,
         attributionControl: false
     });
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19
-    }).addTo(map);
+    var baseMaps = {
+        "Straße": streets,
+        "Satellit": satellite
+    };
+
+    L.control.layers(baseMaps).addTo(map);
 </script>
+
 </body>
 </html>
