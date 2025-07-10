@@ -378,50 +378,21 @@ UI -> Benutzer: Erfolgsbestätigung anzeigen
        assertEquals(tour, log.getTour());
    }
 ```
-## 7. Einzigartige Funktion
-### Smart Tour-Matching
-Eine einzigartige Funktion der Anwendung ist das Smart Tour-Matching-System, das Benutzern basierend auf ihren bisherigen Touren und Präferenzen neue Touren vorschlägt.
-#### Funktionsweise
-1. **Datenanalyse:**
-    - Analyse der abgeschlossenen Touren des Benutzers
-    - Berücksichtigung von Bewertungen und Schwierigkeitsgraden
 
-2. **Algorithmus:**
-    - Ähnlichkeitsberechnung basierend auf mehreren Faktoren:
-        - Distanz
-        - Dauer
-        - Geographische Nähe
-        - Höhenprofil
-        - Bewertungen anderer Benutzer
-
-3. **Vorschlagssystem:**
-    - Integration in die Benutzeroberfläche
-    - Personalisierte Vorschläge auf dem Dashboard
-    - Möglichkeit zur direkten Übernahme vorgeschlagener Touren
-
-4. **Feedback-Schleife:**
-    - Kontinuierliche Verbesserung der Vorschläge
-    - Lernen aus Benutzeraktionen
-
-#### Technische Umsetzung
-- Machine Learning Algorithmus für Ähnlichkeitsberechnung
-- Caching-System für schnelle Vorschläge
-- Integration mit der OpenRouteService API für neue Tourenvorschläge
-
-## 8. Zeiterfassung
+## 7. Zeiterfassung
 ### Gesamtprojektdauer
-- **Gesamtstunden:** 200 Stunden
+- **Gesamtstunden:** 150 Stunden
 
 ### Aufschlüsselung nach Phasen
 
 | Phase | Stunden | Prozent |
-| --- | --- | --- |
-| Anforderungsanalyse & Planung | 20 | 10% |
-| Architekturdesign | 30 | 15% |
-| UI-Implementierung | 50 | 25% |
-| Backend-Implementierung | 60 | 30% |
-| Testing & Bugfixing | 30 | 15% |
-| Dokumentation | 10 | 5% |
+| --- |---------| --- |
+| Anforderungsanalyse & Planung | 20      | 10% |
+| Architekturdesign | 30      | 15% |
+| UI-Implementierung | 30      | 25% |
+| Backend-Implementierung | 40      | 30% |
+| Testing & Bugfixing | 20      | 15% |
+| Dokumentation | 10      | 5% |
 ### Detaillierte Zeitaufwände
 - **Architektur:**
     - MVVM-Framework: 15h
@@ -445,12 +416,13 @@ Eine einzigartige Funktion der Anwendung ist das Smart Tour-Matching-System, das
     - Integration-Tests: 10h
     - UI-Tests: 5h
 	
-## 9. Feature
-### Using System Language as standard (2 different languages possible) 
+## 8. Feature
+### Language Options
+Using System Language as standard (2 different languages possible) 
 
-## 10. Git-Repository
+## 9. Git-Repository
 ### Repository-Informationen
-- **URL:** `https://github.com/JakobPronebner04/TourPlannerv3`
+- **URL:** `https://github.com/JakobPronebner04/TourPlanner`
 - **Branches:**
     - `main`: Produktionscode
     - `develop`: Entwicklungszweig
